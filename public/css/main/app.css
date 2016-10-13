@@ -1,0 +1,44 @@
+body {
+  background: #521852;
+}
+
+.card {
+  background: #2e232e;
+  margin: 10px;
+  padding: 5px 20px;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.menu-bars {
+  font-size: 30px;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.nav-ul li a {
+  color: #fff;
+  font-size: 1.3em;
+}
+
+.nav-ul li a:hover {
+  background-color: #521852;
+  border-radius: 30px;
+}
+
+.nav-ul li a i {
+  margin-right: 10px;
+}
+
+.nav-logo{
+    height: 40px;
+    position: absolute;
+    right: 30px;
+    padding-top: 5px;
+}
+
+.navbar-toggle{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
