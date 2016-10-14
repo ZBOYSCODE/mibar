@@ -9,5 +9,10 @@
 	    'action'        =>  'index'
 	));
 
+	$router->add('menu', array(
+	    'controller'    =>  'menu',
+	    'action'        =>  'index'
+	));
+
     
 	return $router;

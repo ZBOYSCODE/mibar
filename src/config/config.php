@@ -27,6 +27,7 @@ return new \Phalcon\Config([
     'noAuth'        => [         
         'session'   => array('*'    =>  true),
         'welcome'   => array('*'    =>  true),
+        'menu'   => array('*'    =>  true),
         'prueba'    => array('*'    =>  true),
         'test'      => array('*'    =>  true)
     ],
