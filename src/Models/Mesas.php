@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Mesas extends \Phalcon\Mvc\Model
 {

@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class ProducPromoPedidos extends \Phalcon\Mvc\Model
 {

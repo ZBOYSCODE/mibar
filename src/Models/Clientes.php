@@ -1,4 +1,6 @@
 <?php
+namespace App\Models;
+
 
 use Phalcon\Mvc\Model\Validator\Email as Email;
 
@@ -63,7 +65,7 @@ class Clientes extends \Phalcon\Mvc\Model
      */
     public function validation()
     {
-        $this->validate(
+        /*$this->validate(
             new Email(
                 [
                     'field'    => 'email',
@@ -74,7 +76,7 @@ class Clientes extends \Phalcon\Mvc\Model
 
         if ($this->validationHasFailed() == true) {
             return false;
-        }
+        }*/
 
         return true;
     }

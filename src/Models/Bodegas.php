@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Bodegas extends \Phalcon\Mvc\Model
 {

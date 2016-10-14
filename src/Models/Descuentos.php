@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Descuentos extends \Phalcon\Mvc\Model
 {

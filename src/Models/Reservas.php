@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Reservas extends \Phalcon\Mvc\Model
 {

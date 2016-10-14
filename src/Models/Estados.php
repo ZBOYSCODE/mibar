@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Estados extends \Phalcon\Mvc\Model
 {

@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Pedidos extends \Phalcon\Mvc\Model
 {
