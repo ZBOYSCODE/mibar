@@ -19,14 +19,14 @@ class TestController extends ControllerBase
 
         $param = [ 
                    0 => 
-                       ['user_id' => 1, 
+                       ['cuenta_id' => 1, 
                        'producto_id' => 1,
                        'precio' => 1500,
                        'cantidad' => 2,
                        'comentario' => 'Sin hielo',
                        'es_promocion' => false], 
                    1 => 
-                       ['user_id' => 1, 
+                       ['cuenta_id' => 1, 
                        'producto_id' => 2,
                        'precio' => 2000,
                        'cantidad' => 1,

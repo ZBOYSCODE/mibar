@@ -78,7 +78,7 @@
 
                     }
 
-                    $pedido->cuenta_id = $val["user_id"];
+                    $pedido->cuenta_id = $val["cuenta_id"];
                     $pedido->precio = $val["precio"];
                     $pedido->comentario = $val["comentario"];
                     $pedido->estado_id = 1;
