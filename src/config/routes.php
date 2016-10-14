@@ -14,5 +14,15 @@
 	    'action'        =>  'index'
 	));
 
+	$router->add('/login', array(
+	    'controller'    =>  'acceso',
+	    'action'        =>  'login'
+	));
+
+	$router->add('/logout', array(
+        'controller'    =>  'acceso',
+        'action'        =>  'logout'
+    ));
+
     
 	return $router;
