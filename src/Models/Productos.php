@@ -1,0 +1,94 @@
+<?php
+
+class Productos extends \Phalcon\Mvc\Model
+{
+
+    /**
+     *
+     * @var integer
+     * @Primary
+     * @Identity
+     * @Column(type="integer", length=11, nullable=false)
+     */
+    public $id;
+
+    /**
+     *
+     * @var string
+     * @Column(type="string", length=50, nullable=false)
+     */
+    public $nombre;
+
+    /**
+     *
+     * @var string
+     * @Column(type="string", nullable=false)
+     */
+    public $precio;
+
+    /**
+     *
+     * @var string
+     * @Column(type="string", length=250, nullable=false)
+     */
+    public $descripcion;
+
+    /**
+     *
+     * @var integer
+     * @Column(type="integer", length=11, nullable=false)
+     */
+    public $categoria_id;
+
+    /**
+     *
+     * @var string
+     * @Column(type="string", length=50, nullable=false)
+     */
+    public $codigo;
+
+    /**
+     * Initialize method for model.
+     */
+    public function initialize()
+    {
+        $this->hasMany('id', 'Pedidos', 'producto_id', ['alias' => 'Pedidos']);
+        $this->hasMany('id', 'ProdPromo', 'producto_id', ['alias' => 'ProdPromo']);
+        $this->hasMany('id', 'ProducPromoPedidos', 'producto_id', ['alias' => 'ProducPromoPedidos']);
+        $this->hasMany('id', 'Stock', 'producto_id', ['alias' => 'Stock']);
+        $this->belongsTo('categoria_id', 'CategoriaProductos', 'id', ['alias' => 'CategoriaProductos']);
+    }
+
+    /**
+     * Returns table name mapped in the model.
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'productos';
+    }
+
+    /**
+     * Allows to query a set of records that match the specified conditions
+     *
+     * @param mixed $parameters
+     * @return Productos[]
+     */
+    public static function find($parameters = null)
+    {
+        return parent::find($parameters);
+    }
+
+    /**
+     * Allows to query the first record that match the specified conditions
+     *
+     * @param mixed $parameters
+     * @return Productos
+     */
+    public static function findFirst($parameters = null)
+    {
+        return parent::findFirst($parameters);
+    }
+
+}
