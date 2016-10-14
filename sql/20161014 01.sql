@@ -15,3 +15,7 @@ INSERT INTO `mibar`.`roles` (`id`, `nombre`) VALUES ('3', 'bar');
 INSERT INTO `mibar`.`roles` (`id`, `nombre`) VALUES ('4', 'cocina');
 INSERT INTO `mibar`.`roles` (`id`, `nombre`) VALUES ('5', 'mesero');
 INSERT INTO `mibar`.`roles` (`id`, `nombre`) VALUES ('6', 'cliente');
+
+
+ALTER TABLE `mibar`.`cuentas` 
+DROP COLUMN `pedido_id`;
