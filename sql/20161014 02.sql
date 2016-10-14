@@ -1,4 +1,4 @@
-/* NULLS */
+/* NULLS y CAMBIO COLUMNA */
 
 ALTER TABLE `mibar`.`pedidos`
 CHANGE COLUMN `producto_id` `producto_id` int(11) NULL DEFAULT NULL;
@@ -9,6 +9,9 @@ CHANGE COLUMN `promocion_id` `promocion_id` int(11) NULL DEFAULT NULL;
 ALTER TABLE `mibar`.`cuentas`
   CHANGE COLUMN `funcionario_id` `funcionario_id` int(11) NULL DEFAULT NULL;
 
+ALTER TABLE `mibar`.`pedidos`
+  CHANGE COLUMN `comentario` `comentario` varchar(50) NULL DEFAULT NULL  
+
 ALTER TABLE `mibar`.`cuentas`
   CHANGE COLUMN `pago_id` `pago_id` int(11) NULL DEFAULT NULL;  
 
@@ -16,6 +19,12 @@ ALTER TABLE `mibar`.`cuentas`
   CHANGE COLUMN `estado` `estado` tinyint(1) NULL DEFAULT 0;
 
 ALTER TABLE `mibar`.`productos`
+  CHANGE COLUMN `precio` `precio` int(11) NOT NULL DEFAULT 0;  
+
+ALTER TABLE `mibar`.`promociones`
+  CHANGE COLUMN `nombre` `nombre` varchar(11) NOT NULL DEFAULT '';  
+
+ALTER TABLE `mibar`.`promociones`
   CHANGE COLUMN `precio` `precio` int(11) NOT NULL DEFAULT 0;  
 
 
@@ -36,6 +45,10 @@ INSERT INTO `mibar`.`mesas` SET `numero`=3,`seccion`='1',`funcionario_id`=1,`est
 /* BAR */
 
 INSERT INTO `mibar`.`bares` SET `id`=1,`nombre`='ZentaBar';
+
+/* TIPO PROMO */
+
+INSERT INTO `mibar`.`tipo_promo` SET `id`=1,`nombre`='2x1';
 
 
 /*TABLA SUBCATEGORIA*/
@@ -96,3 +109,7 @@ ADD CONSTRAINT `fk_cuentas_bar`
   REFERENCES `mibar`.`bares` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+
+

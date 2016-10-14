@@ -3,7 +3,7 @@
      * Modelo de negocio PedidoBSN
      *
      * Acá se encuentra todo el modelo de negocios relacionado
-     * a la creación de turnos, configuraciones, etc
+     * a la creación de pedidos
      *
      * @package      MiBar
      * @subpackage   Pedido Business
@@ -16,6 +16,8 @@
     
     use Phalcon\Mvc\User\Plugin;
     use App\Models\Pedidos;
+    use App\Models\ProducPromoPedidos;
+    use App\Models\Promociones;
     
     /**
      * Modelo de negocio
@@ -62,6 +64,12 @@
 
             foreach ($param as $val) {
 
+                if($val["es_promocion"]){
+
+
+
+                } 
+
                 // Cantidad de productos o promos pedidas
                 for ($i=0; $i < $val["cantidad"] ; $i++) { 
 
@@ -79,7 +87,7 @@
                     }
 
                     $pedido->cuenta_id = $val["cuenta_id"];
-                    $pedido->precio = $val["precio"];
+                    $pedido->precio = $val["precio"]/$val["cantidad"];
                     $pedido->comentario = $val["comentario"];
                     $pedido->estado_id = 1;
 
@@ -87,6 +95,10 @@
 
                     if(!$result)
                         return false;
+
+                    if($val["es_promocion"]){
+                        $this->createProductoPromoPedido();
+                    }                    
                 }
             }
 
@@ -145,6 +157,15 @@
                 return $pedido->id;
             }
         }
+
+        /**
+         * Crea un ProductoPromoPedido
+         *
+         * @author osanmartin
+         * @param $param = Array u objeto seteado previamente.
+         *
+         * @return boolean
+         */                
 
     }
 

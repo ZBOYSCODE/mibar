@@ -21,18 +21,35 @@ class TestController extends ControllerBase
                    0 => 
                        ['cuenta_id' => 1, 
                        'producto_id' => 1,
-                       'precio' => 1500,
+                       'precio' => 3500,
                        'cantidad' => 2,
                        'comentario' => 'Sin hielo',
                        'es_promocion' => false], 
                    1 => 
                        ['cuenta_id' => 1, 
                        'producto_id' => 2,
-                       'precio' => 2000,
+                       'precio' => 6000,
                        'cantidad' => 1,
                        'comentario' => '',
                        'es_promocion' => false]                  
                ];
+
+        $param = [ 
+                   0 => 
+                       ['cuenta_id' => 1, 
+                       'producto_id' => 1,
+                       'precio' => 6000,
+                       'cantidad' => 1,
+                       'comentario' => '',
+                       'es_promocion' => true], 
+                   1 => 
+                       ['cuenta_id' => 1, 
+                       'producto_id' => 2,
+                       'precio' => 10000,
+                       'cantidad' => 2,
+                       'comentario' => '',
+                       'es_promocion' => true]                  
+               ];               
 
         $pedidoBsn = new PedidoBSN();
         $result = $pedidoBsn->createOrder($param);
