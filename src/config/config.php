@@ -3,9 +3,9 @@ return new \Phalcon\Config([
     'database' => [
         'adapter'  => 'Mysql',
        'host'      => '64.79.70.108',
-       'username'  => 'newzmed',
-       'password'  => 'n3wzm3d#.',
-       'dbname'    => 'new-zmed'
+       'username'  => 'testing',
+       'password'  => 'Z3nt1#.',
+       'dbname'    => 'mibar'
     ],
     'application' => [
         'controllersDir'    => APP_DIR.'/controllers/',
