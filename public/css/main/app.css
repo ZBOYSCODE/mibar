@@ -7,18 +7,7 @@ body, html {
   width: 100%;
 }
 
-.card {
-  background: #2e232e;
-  margin: 10px;
-  padding: 5px 20px;
-  color: #fff;
-  border-radius: 4px;
-}
-
-.full-card{
-  min-height: 100%;
-  position: relative;
-}
+/* Navs */
 
 .menu-bars {
   font-size: 30px;
@@ -52,21 +41,67 @@ body, html {
   margin-bottom: 0 !important;
 }
 
+/* Card Layouts */
+
+.card {
+  background: #2e232e;
+  margin: 10px;
+  padding: 5px 20px;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.full-card{
+  min-height: 100%;
+  position: relative;
+}
+
+/* Buttons */
+
+.btn-main{
+  background-color: #521852;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+.btn-main:hover{
+  color: #fff;
+  background-color: #d65cc0;
+}
+
+.btn-secondary{
+  background-color: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+.btn-secondary:hover{
+  background-color: #521852;
+  color: #fff;
+}
+
+/* Paddings & Margins */
+
+.section-content{
+  margin-top: 75px;
+}
+
+.no-col-padding{
+  padding-right: 0px;
+  padding-left:  0px;
+}
+
+
+
+
 /* ========== WELCOME PAGE ===========*/
+
 .wel-card-content{
   margin: 0;
 }
 
 .wel-top-buttons button{
-  background-color: transparent;
-  border: 2px solid #fff;
   margin-right: 5px;
-  color: #fff;
-}
-
-.wel-top-buttons button:hover{
-  background-color: #521852;
-  color: #fff;
 }
 
 .wel-top-buttons{
@@ -101,9 +136,6 @@ body, html {
 }
 
 .wel-access-button button{
-  background-color: #521852;
-  border: 2px solid #fff;
-  color: #fff;
   font-size: 1.5em;
   margin-bottom: 60px;
 }
@@ -124,6 +156,15 @@ body, html {
 .wel-footer p{
   color: #fff;
   font-size: 1em;
+}
+
+/* ========== MENU =========== */
+.menu-types{
+  margin: 20px 10px;
+}
+
+.menu-type-item{
+  margin: 5px;
 }
 
 /* ========== MEDIAQUERIES ===========*/

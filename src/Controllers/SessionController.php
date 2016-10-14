@@ -30,9 +30,6 @@ class SessionController extends ControllerBase
 
         }
 
-
-        	
-
     }
 
     /**

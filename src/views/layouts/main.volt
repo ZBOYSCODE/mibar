@@ -32,13 +32,10 @@
 
         {{ partial("partials/nav_main") }}
 
-        <div class="clearfix">
-            <div class="container-fluid">
+        
 
                 {% block content %}{% endblock %}
 
-            </div>
-        </div>
 
         {# JS GENERICAS #}
         {{ javascript_include('js/main/jquery-2.2.0.min.js') }}

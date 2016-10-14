@@ -1,6 +1,6 @@
 <header>
      <nav class="navbar navbar-fixed-top">
-        <div class="container-fluid card">
+        <div class="card">
             <div class="navbar-header">
                 <button class="navbar-toggle pull-left" data-toggle="collapse" data-target="#menu">
                     <i class="menu-bars fa fa-bars" aria-hidden="true"></i>                   
