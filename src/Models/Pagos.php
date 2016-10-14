@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Pagos extends \Phalcon\Mvc\Model
 {

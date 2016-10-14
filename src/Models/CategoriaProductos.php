@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class CategoriaProductos extends \Phalcon\Mvc\Model
 {

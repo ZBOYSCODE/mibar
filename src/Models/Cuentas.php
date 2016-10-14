@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Cuentas extends \Phalcon\Mvc\Model
 {

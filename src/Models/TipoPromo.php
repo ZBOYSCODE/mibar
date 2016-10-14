@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class TipoPromo extends \Phalcon\Mvc\Model
 {

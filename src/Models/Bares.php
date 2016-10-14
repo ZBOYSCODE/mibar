@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 
 class Bares extends \Phalcon\Mvc\Model
 {
