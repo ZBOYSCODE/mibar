@@ -18,12 +18,20 @@
 			<div class="row text-center">
 				<h1 class="wel-title">¡Bienvenido!</h1>
 				<h3>Por Favor, ingresa tu nombre</h3>
-				<div class="form-group">
-					<input id="wel-username" class="form-control wel-username" type="text">
-				</div>
-				<div class="wel-access-button">
-					<button id="wel-access-button" class="btn" type="submit">ACCEDER</button>
-				</div>
+
+				<p> <?php $this->flashSession->output() ?></p>
+
+				<form action="acceso/login" method='POST'>
+					
+					<div class="form-group">
+						<input id="wel-username" name="wel-username" class="form-control wel-username" type="text">
+					</div>
+					<div class="wel-access-button">
+						<button id="wel-access-button" class="btn" type="submit">ACCEDER</button>
+					</div>
+				
+				</form>
+					
 			</div>
 			<div class="row wel-wrapper-footer">
 				<div class="wel-footer">
