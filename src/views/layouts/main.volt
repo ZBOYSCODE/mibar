@@ -6,23 +6,25 @@
 
         <title>{{ config.appTitle }}</title>
 
-        <meta name="viewport"       content="width=device-width, initial-scale=1.0">
+        <meta name="viewport"       content="width=device-width, minimum-scale=1, maximum-scale=1">
         <meta name="description"    content={{ '"' ~ config.appName  ~ '"' }} >
         <meta name="author"         content={{ '"' ~ config.appAutor  ~ '"' }}>
 
         <link rel="shortcut icon" href="{{ url("img/favicon.ico") }}">
 
-        {# CSS GENERICAS #}
+          {# CSS GENERICAS #}
         {{ stylesheet_link('css/plugins/bootstrap/bootstrap.min.css') }}
         {{ stylesheet_link('css/plugins/bootstrap/bootstrap-theme.min.css') }}
         {{ stylesheet_link('css/main/jquery-ui.min.css') }}
         {{ stylesheet_link('css/main/font-awesome.min.css') }}
+        {{ stylesheet_link('css/plugins/datepicker-custom.css') }}
         {{ stylesheet_link('css/plugins/nprogress.css') }}
         {{ stylesheet_link('css/plugins/animate.css') }}
-        {{ stylesheet_link('css/plugins/sweetalert2.min.css') }}
         
         {# CSS CUSTOM #}
         {{ stylesheet_link('css/main/app.css') }}
+        {{ stylesheet_link('css/pages/_components/timetable.css') }}
+        {{ stylesheet_link('css/pages/mobileedit/particular.css') }}
         {{ assets.outputCss() }}
 
     </head>
