@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 use App\Business\PedidoBSN;
-
+use App\Business\ProductoBSN;
 
 
 class TestController extends ControllerBase
@@ -59,4 +59,12 @@ class TestController extends ControllerBase
 
     }
 
+    public function getProductDetailsAction() {
+        $productBSN = new ProductoBSN();
+
+        $result = $productBSN->getProductDetails(5);
+        //var_dump($result);
+
+        echo $result->id;
+    }
 }
