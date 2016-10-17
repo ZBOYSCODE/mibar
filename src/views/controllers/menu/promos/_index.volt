@@ -148,6 +148,14 @@
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MIS PEDIDOS</h4>
 			    </div>
+			    <div class="row user-details card">
+			    	<div class="col-xs-2 col-md-2">
+			    		{{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
+			    	</div>
+			    	<div class="col-xs-10 col-md-10">
+			    		<p>Orlando San Martín</p>
+			    	</div>
+			    </div>
 			    <div class="modal-body">
 			      <!-- Products -->
 			        <div class="card">
@@ -206,6 +214,16 @@
 				      		</div>
 				      	</div>
 			        </div>
+			    </div>
+			    <div class="total card">
+			    	<div class="row">
+			    		<div class="col-xs-6 col-md-6">
+			    			<p><b> Total a Pagar: </b></p>
+			    		</div>
+			    		<div class="col-xs-6 col-md-6">
+			    			<p><b><i class="fa fa-usd"></i> 32.000</b></p>
+			    		</div>
+			    	</div>
 			    </div>
 			    <div class="modal-footer card">
 			      <button id="Send-Products" type="button" class="btn btn-main">ENVIAR PEDIDO</button>
