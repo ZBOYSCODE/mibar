@@ -1,6 +1,4 @@
 <?php
-
-
     /**
      * Modelo de negocio Productos
      *
@@ -28,43 +26,43 @@
      *
      * @author zenta group
      */
-class ProductoBSN extends Plugin
-{
-    /**
-     *
-     * @var array
-     */
-    public 	$error;
+    class ProductoBSN extends Plugin
+    {
+        /**
+         *
+         * @var array
+         */
+        public 	$error;
 
-    public function getProductDetails($param) {
-        if (!is_int($param) and sizeof($param) == 0) {
-            $this->error[] = $this->errors->MISSING_PARAMETERS;
+        public function getProductDetails($param) {
+            if (!is_int($param) and sizeof($param) == 0) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+            if (is_int($param)) {
+                $result = Productos::findFirstById($param);
+                if (sizeof($result) == 0) {
+                    $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                    return false;
+                }
+                return $result;
+            }
+            if (is_array($param)) {
+                $where = "id in (" .$param[0] . ")";
+                for ($i = 1; $i < sizeof($param) - 1; $i++) {
+                    $where = str_replace(')', ', ' . $param[$i] . ')', $where);
+                }
+                $result = Productos::find($where);
+                if ($result->count() == 0) {
+                    $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                    return false;
+                }
+                return $result;
+            }
+
+            $this->error[] = $this->errors->UNKNOW;
             return false;
         }
-        if (is_int($param)) {
-            $result = Productos::findFirstById($param);
-            if (sizeof($result) == 0) {
-                $this->error[] = $this->errors->NO_RECORDS_FOUND;
-                return false;
-            }
-            return $result;
-        }
-        if (is_array($param)) {
-            $where = "id in (" .$param[0] . ")";
-            for ($i = 1; $i < sizeof($param) - 1; $i++) {
-                $where = str_replace(')', ', ' . $param[$i] . ')', $where);
-            }
-            $result = Productos::find($where);
-            if ($result->count() == 0) {
-                $this->error[] = $this->errors->NO_RECORDS_FOUND;
-                return false;
-            }
-            return $result;
-        }
-
-        $this->error[] = $this->errors->UNKNOW;
-        return false;
-    }
 
         /**
          * Lista de categorias
@@ -174,56 +172,3 @@ class ProductoBSN extends Plugin
         }
 
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 45030a74dc88559ec24041d8265c9504c1d26f2a

@@ -56,8 +56,8 @@ class Productos extends \Phalcon\Mvc\Model
         $this->hasMany('id', __NAMESPACE__.'\Pedidos', 'producto_id', ['alias' => 'Pedidos']);
         $this->hasMany('id', __NAMESPACE__.'\ProdPromo', 'producto_id', ['alias' => 'ProdPromo']);
         $this->hasMany('id', __NAMESPACE__.'\ProducPromoPedidos', 'producto_id', ['alias' => 'ProducPromoPedidos']);
-        $this->hasMany('id', 'Stock', __NAMESPACE__.'\producto_id', ['alias' => 'Stock']);
-        $this->belongsTo('categoria_id', __NAMESPACE__.'\CategoriaProductos', 'id', ['alias' => 'CategoriaProductos']);
+        $this->hasMany('id', __NAMESPACE__.'\Stock', 'producto_id', ['alias' => 'Stock']);
+        $this->belongsTo('subcategoria_id', __NAMESPACE__.'\SubcategoriaProductos', 'id', ['alias' => 'SubcategoriaProductos']);
     }
 
     /**
