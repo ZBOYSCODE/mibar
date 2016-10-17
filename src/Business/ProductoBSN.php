@@ -36,13 +36,20 @@ class ProductoBSN extends Plugin
      */
     public 	$error;
 
+    /**
+     * @author jcocina
+     * @param $param    array   id => int
+     *                  opcionalmente puede ser una lista de ints
+     *                  array(1, 2, 3)
+     * @return bool false en caso de error
+     */
     public function getProductDetails($param) {
-        if (!is_int($param) and sizeof($param) == 0) {
+        if ((!isset($param['id']) or !is_int($param['id'])) and sizeof($param) == 0) {
             $this->error[] = $this->errors->MISSING_PARAMETERS;
             return false;
         }
-        if (is_int($param)) {
-            $result = Productos::findFirstById($param);
+        if (isset($param['id']) and is_int($param['id'])) {
+            $result = Productos::findFirstById($param['id']);
             if (sizeof($result) == 0) {
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
                 return false;
@@ -173,57 +180,4 @@ class ProductoBSN extends Plugin
             return $productos;
         }
 
-    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 45030a74dc88559ec24041d8265c9504c1d26f2a

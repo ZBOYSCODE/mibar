@@ -62,7 +62,7 @@ class TestController extends ControllerBase
     public function getProductDetailsAction() {
         $productBSN = new ProductoBSN();
 
-        $result = $productBSN->getProductDetails(5);
+        $result = $productBSN->getProductDetails(array('id' => 5));
         //var_dump($result);
 
         echo $result->id;
