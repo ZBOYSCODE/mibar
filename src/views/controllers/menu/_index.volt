@@ -7,7 +7,7 @@
 	<section class="section-content-top">
    		<div class="row menu-types">
    			<div class="col-xs-4 col-sm-4 no-col-padding">
-   				<div class="menu-type-item card">
+   				<div class="menu-type-item card" data-url="menu/changeMenu" data-categoria="0">
 	   				<button>
 	   					{{ image("img/icons/promos.png", "alt":"Promos", "class":"img-responsive") }}
 	   					<p>PROMOS</p>
@@ -15,7 +15,7 @@
    				</div>
    			</div>
    			<div class="col-xs-4 col-sm-4 no-col-padding">
-   				<div class="menu-type-item card">
+   				<div class="menu-type-item card" data-url="menu/changeMenu" data-categoria="1">
    					<button>
    				    	{{ image("img/icons/drink2-icon.png", "alt":"Bebidas", "class":"img-responsive") }}
    						<p>BEBIDAS</p>
@@ -23,7 +23,7 @@
    				</div>
    			</div>
    			<div class="col-xs-4 col-sm-4 no-col-padding">
-   				<div class="menu-type-item card">
+   				<div class="menu-type-item card" data-url="menu/changeMenu" data-categoria="2">
    					<button>
    				    	{{ image("img/icons/catering-icon.png", "alt":"Comidas", "class":"img-responsive") }}
    						<p>COMIDAS</p>
