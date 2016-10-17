@@ -20,6 +20,8 @@
         {{ stylesheet_link('css/plugins/datepicker-custom.css') }}
         {{ stylesheet_link('css/plugins/nprogress.css') }}
         {{ stylesheet_link('css/plugins/animate.css') }}
+        {{ stylesheet_link('css/plugins/sweetalert2.min.css') }}
+
         
         {# CSS CUSTOM #}
         {{ stylesheet_link('css/main/app.css') }}

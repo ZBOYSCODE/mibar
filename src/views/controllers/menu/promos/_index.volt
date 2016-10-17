@@ -208,7 +208,7 @@
 			        </div>
 			    </div>
 			    <div class="modal-footer card">
-			      <button type="button" class="btn btn-main" data-dismiss="modal">ENVIAR PEDIDO</button>
+			      <button id="Send-Products" type="button" class="btn btn-main">ENVIAR PEDIDO</button>
 			    </div>
 		    </div>
 	    </div>
