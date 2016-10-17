@@ -18,6 +18,7 @@
     use App\Models\Pedidos;
     use App\Models\ProducPromoPedidos;
     use App\Models\Promociones;
+    use App\Models\TipoPromo;
     
     /**
      * Modelo de negocio
@@ -43,7 +44,6 @@
          * @param $param['promocion_id'] = ID de promocion
          * @return objeto Promocion
          */
-
         public function getPromocion($param){
 
             if(!isset($param['promocion_id'])){
@@ -61,5 +61,60 @@
             return $result;
 
         }
+
+        /**
+         * getTipoPromo
+         *
+         *  retorna los tipos de promociones
+         *
+         * @author Sebastián Silva
+         * @return object
+         */
+        public function getListTipoPromo() {
+
+            $tipopromo = TipoPromo::find();
+
+            if($tipopromo->count() == 0) {
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $tipopromo;
+
+        }
+
+        /**
+         * getPromociones
+         *
+         * retorna la lista de todas las promociones
+         *
+         * @author Sebastián Silva
+         *
+         * @param array $param
+         * @return object 
+         */
+        public function getPromociones($param = null) {
+
+            if(!empty($param['tipo_promo_id'])) {
+
+                $promociones = Promociones::findByTipoPromoId($param['tipo_promo_id']);
+
+            } else { 
+
+                $promociones = Promociones::find();
+
+            }
+
+            
+
+            if($promociones->count() == 0) {
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $promociones;
+
+        }
+
 
     }
