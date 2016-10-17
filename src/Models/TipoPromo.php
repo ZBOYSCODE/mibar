@@ -25,7 +25,7 @@ class TipoPromo extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Promociones', 'tipo_promo_id', ['alias' => 'Promociones']);
+        $this->hasMany('id', __NAMESPACE__.'\Promociones', 'tipo_promo_id', ['alias' => 'Promociones']);
     }
 
     /**

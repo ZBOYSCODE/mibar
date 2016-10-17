@@ -1,11 +1,11 @@
 <?php
 return new \Phalcon\Config([
     'database' => [
-        'adapter'   => 'Mysql',
-        'host'      => '104.236.73.187',
-        'username'  => 'zentasql',
-        'password'  => 'zCFAvFwvPLbZpUFU',
-        'dbname'    => 'mibar'
+        'adapter'  => 'Mysql',
+       'host'      => '64.79.70.108',
+       'username'  => 'testing',
+       'password'  => 'Z3nt1#.',
+       'dbname'    => 'mibar'
     ],
     'application' => [
         'controllersDir'    => APP_DIR.'/controllers/',
@@ -25,9 +25,10 @@ return new \Phalcon\Config([
         'AWSSecretKey'      => ''
     ], 
     'noAuth'        => [         
-        'session'   => array('*'    =>  true),
         'welcome'   => array('*'    =>  true),
-        'menu'   => array('*'    =>  true),
+        'menu'      => array('*'    =>  true),
+        'login'     => array('*'    =>  true),
+        'acceso'    => array('*'    =>  true),
         'prueba'    => array('*'    =>  true),
         'test'      => array('*'    =>  true)
     ],

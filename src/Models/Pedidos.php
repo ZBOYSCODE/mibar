@@ -81,6 +81,17 @@ class Pedidos extends \Phalcon\Mvc\Model
         $this->belongsTo('promocion_id', 'Promociones', 'id', ['alias' => 'Promociones']);
     }
 
+    public function beforeValidationOnCreate()
+    {
+        $this->created_at = date('Y-m-d H:i:s');
+        $this->updated_at = date('Y-m-d H:i:s');
+    }
+
+    public function beforeUpdate()
+    {
+        $this->updated_at = date('Y-m-d H:i:s');
+    }    
+
     /**
      * Returns table name mapped in the model.
      *

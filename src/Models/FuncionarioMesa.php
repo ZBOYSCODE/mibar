@@ -1,47 +1,51 @@
 <?php
+
 namespace App\Models;
 
-class Mesas extends \Phalcon\Mvc\Model
+class FuncionarioMesa extends \Phalcon\Mvc\Model
 {
 
     /**
      *
      * @var integer
-     * @Primary
-     * @Identity
-     * @Column(type="integer", length=11, nullable=false)
      */
     public $id;
 
     /**
      *
      * @var integer
-     * @Column(type="integer", length=11, nullable=false)
      */
-    public $numero;
+    public $funcionario_id;
 
-    /**
-     *
-     * @var string
-     * @Column(type="string", length=20, nullable=false)
-     */
-    public $seccion;
-
-    
     /**
      *
      * @var integer
-     * @Column(type="integer", length=1, nullable=false)
      */
-    public $estado;
+    public $mesa_id;
+
+    /**
+     *
+     * @var integer
+     */
+    public $turno_id;
+
+    /**
+     *
+     * @var datetime
+     */
+    public $fecha;
+
 
     /**
      * Initialize method for model.
      */
+
     public function initialize()
     {
-        $this->hasMany('id', __NAMESPACE__.'Cuentas', 'mesa_id', ['alias' => 'Cuentas']);
-        $this->hasMany('id', __NAMESPACE__.'Reservas', 'mesa_id', ['alias' => 'Reservas']);
+        $this->belongsTo('funcionario_id', __NAMESPACE__.'\Funcionarios', 'id', array('alias' => 'Funcionarios'));
+        $this->belongsTo('mesa_id', __NAMESPACE__.'\Mesas', 'id', array('alias' => 'Mesas'));
+        $this->belongsTo('turno_id', __NAMESPACE__.'\Turnos', 'id', array('alias' => 'Turnos'));
+
     }
 
     /**
@@ -51,14 +55,14 @@ class Mesas extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'mesas';
+        return 'funcionario_mesa';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas[]
+     * @return Roles[]
      */
     public static function find($parameters = null)
     {
@@ -69,7 +73,7 @@ class Mesas extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas
+     * @return Roles
      */
     public static function findFirst($parameters = null)
     {

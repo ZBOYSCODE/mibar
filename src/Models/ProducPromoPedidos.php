@@ -46,9 +46,9 @@ class ProducPromoPedidos extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->belongsTo('funcionario_id', 'Funcionarios', 'id', ['alias' => 'Funcionarios']);
-        $this->belongsTo('pedido_id', 'Pedidos', 'id', ['alias' => 'Pedidos']);
-        $this->belongsTo('producto_id', 'Productos', 'id', ['alias' => 'Productos']);
+        $this->belongsTo('funcionario_id', __NAMESPACE__.'\Funcionarios', 'id', ['alias' => 'Funcionarios']);
+        $this->belongsTo('pedido_id', __NAMESPACE__.'\Pedidos', 'id', ['alias' => 'Pedidos']);
+        $this->belongsTo('producto_id', __NAMESPACE__.'\Productos', 'id', ['alias' => 'Productos']);
     }
 
     /**

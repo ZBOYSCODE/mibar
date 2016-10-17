@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-class Mesas extends \Phalcon\Mvc\Model
+class SubcategoriaProductos extends \Phalcon\Mvc\Model
 {
 
     /**
@@ -18,30 +18,22 @@ class Mesas extends \Phalcon\Mvc\Model
      * @var integer
      * @Column(type="integer", length=11, nullable=false)
      */
-    public $numero;
+    public $categoria_producto_id;
 
     /**
      *
      * @var string
-     * @Column(type="string", length=20, nullable=false)
+     * @Column(type="string", length=255, nullable=false)
      */
-    public $seccion;
-
-    
-    /**
-     *
-     * @var integer
-     * @Column(type="integer", length=1, nullable=false)
-     */
-    public $estado;
+    public $nombre;
 
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->hasMany('id', __NAMESPACE__.'Cuentas', 'mesa_id', ['alias' => 'Cuentas']);
-        $this->hasMany('id', __NAMESPACE__.'Reservas', 'mesa_id', ['alias' => 'Reservas']);
+        $this->hasMany('id', __NAMESPACE__.'\Productos', 'subcategoria_id', ['alias' => 'Productos']);
+        $this->belongsTo('categoria_producto_id', __NAMESPACE__.'\CategoriaProductos', 'id', ['alias' => 'CategoriaProductos']);
     }
 
     /**
@@ -51,14 +43,14 @@ class Mesas extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'mesas';
+        return 'subcategoria_productos';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas[]
+     * @return SubcategoriaProductos[]
      */
     public static function find($parameters = null)
     {
@@ -69,7 +61,7 @@ class Mesas extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas
+     * @return SubcategoriaProductos
      */
     public static function findFirst($parameters = null)
     {

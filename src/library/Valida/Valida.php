@@ -8,44 +8,49 @@
 
 		public 	$post;
 		private $failed = false;
-		public 	$errors;
+		private $list_errors;
 
 		private $rules = array(	'required',
 								'int',
 								'string',
 								'max',
 								'min',
-								'email'
+								'email',
+								'date',
+								'rut'
 								);
-	
-		public function __construct($post, $arg) {
+
+
+		public function validate($post, $reglas) {
+
+			// reset variables
+			$this->failed 		= false;
+			$this->list_errors 	= null;
+
 
 			# verificamos que la variable $arg sea un array
-			if(is_array($post)){
+			if( is_array($post) ) {
+
 				$this->setPost($post);
-			}
 
-			foreach ($arg as $campo => $reglas) {
 				# recorremos el array
+				foreach ($reglas as $campo => $regla) {
+					
+					$this->isValid($campo, $regla);
+				}
 
-				$this->isValid($campo, $reglas);
+			} else {
+				# en caso de no ser un array retornamos un false
+				$this->list_errors[] = "El primer argumento debe ser un array";
+				return false;
 			}
-			
 		}
 
 		private function setPost($post){
 			$this->post = $post;
 		}
 
-		/**
-		 * Es valido ?
-		 *
-		 * Esta función se encarga de validar los campos enviados
-		 * y los errores correspondientes los guarda en la variable $errors
-		 *
-		 * @param string $campo nombre del campo
-		 * @param array $reglas conjunto de reglas que deve validar
-		 */
+
 		private function isValid($campo, $reglas)
 		{
 			$reglas = explode('|', $reglas);
@@ -72,7 +77,7 @@
 						}
 
 					} else {
-						$this->errors[] = "El tipo de regla no existe.";
+						$this->list_errors[] = "El tipo de regla no existe.";
 					}
 				
 				} else {
@@ -88,7 +93,7 @@
 						}
 
 					} else {
-						$this->errors[] = "El tipo de regla no existe.";
+						$this->list_errors[] = "El tipo de regla no existe.";
 					}
 				}
 			}
@@ -100,12 +105,12 @@
 			if(isset($this->post[$campo])){
 
 				if(empty($this->post[$campo])){
-					$this->errors[] = "{$campo} es requerido.";
+					$this->list_errors[$campo] = "Campo requerido.";
 					return false;
 				}
 
 			} else {
-				$this->errors[] = "{$campo} es requerido.";
+				$this->list_errors[$campo] = "Campo requerido.";
 				return false;
 			}
 
@@ -114,8 +119,14 @@
 
 		private function is_string($campo) {
 
-			if(!is_string($this->post[$campo])){
-				$this->errors[] = "{$campo} debe ser un texto.";
+			if(!is_string($this->post[$campo])) {
+
+				if( !isset($this->list_errors[$campo]) ) {
+
+					$this->list_errors[$campo] = "Este campo debe ser un texto.";
+				}
+				
+
 				return false;
 			}
 
@@ -126,8 +137,13 @@
 
 			if(isset($this->post[$campo])){
 
-				if(!is_int( (int)$this->post[$campo] )){
-					$this->errors[] = "{$campo} debe ser un entero.";
+				if(!is_int( (int)$this->post[$campo] )) {
+
+					if( !isset($this->list_errors[$campo]) ) {
+
+						$this->list_errors[$campo] = "Este campo debe ser un entero.";
+					}
+
 					return false;
 				}
 
@@ -140,11 +156,15 @@
 			
 			if(isset($this->post[$campo])){
 				if (!filter_var($this->post[$campo], FILTER_VALIDATE_EMAIL)) {
-				    $this->errors[] = "{$campo} debe ser un email valido.";
+
+					if( !isset($this->list_errors[$campo]) ) {
+				    	
+				    	$this->list_errors[$campo] = "Debe ingresar un email válido.";
+				    }
+
 					return false;
 				}
 			}
-
 			return true;
 		}
 
@@ -156,14 +176,22 @@
 
 					if($this->post[$campo] > $num) {
 
-						$this->errors[] = "{$campo} debe ser menor o igual a {$num}.";
+						if( !isset($this->list_errors[$campo]) ) {
+
+							$this->list_errors[$campo] = "Este valor debe ser menor o igual a {$num}.";
+						}
+
 						return false;
 					}
 
 				} else {
 					if(mb_strlen($this->post[$campo]) > $num) {
 
-						$this->errors[] = "El número de caracteres de {$campo} debe ser menor o igual a {$num}.";
+						if( !isset($this->list_errors[$campo]) ) {
+							
+							$this->list_errors[$campo] = "El número de caracteres de este campo debe ser menor o igual a {$num}.";
+						}
+
 						return false;
 					}
 				}
@@ -180,7 +208,11 @@
 
 					if($this->post[$campo] < $num) {
 
-						$this->errors[] = "{$campo} debe ser mayor o igual a {$num}.";
+						if( !isset($this->list_errors[$campo]) ) {
+							
+							$this->list_errors[$campo] = "Este valor debe ser mayor o igual a {$num}.";
+						}
+
 						return false;
 					}
 					
@@ -188,7 +220,11 @@
 
 					if(mb_strlen($this->post[$campo]) < $num) {
 
-						$this->errors[] = "El número de caracteres de {$campo} debe ser mayor o igual a {$num}.";
+						if( !isset($this->list_errors[$campo]) ) {
+							
+							$this->list_errors[$campo] = "El número de caracteres de este campo debe ser mayor o igual a {$num}.";
+						}
+
 						return false;
 					}
 				}
@@ -197,8 +233,87 @@
 			return true;
 		}
 
+		private function is_date($campo) {
+
+			if(isset($this->post[$campo]) && !empty($this->post[$campo])){
+
+				if(!$this->validateDate($this->post[$campo])) {
+
+					if( !isset($this->list_errors[$campo]) ) {
+							
+						$this->list_errors[$campo] = "Debe ingresar una fecha válida.";
+					}
+
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		private function validateDate($date, $format = 'd-m-Y') {
+
+		    $d = \DateTime::createFromFormat($format, $date);
+		    return $d && $d->format($format) == $date;
+		}
+
+		private function is_rut($campo) {
+
+			if(isset($this->post[$campo]) && !empty($this->post[$campo])){
+
+				if(!$this->valida_rut($this->post[$campo])) {
+
+					if( !isset($this->list_errors[$campo]) ) {
+							
+						$this->list_errors[$campo] = "Debe ingresar un rut valido.";
+					}
+
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		private function valida_rut($rut)
+		{
+		    if (!preg_match("/^[0-9.]+[-]?+[0-9kK]{1}/", $rut)) {
+		        return false;
+		    }
+
+		    $rut 	= preg_replace('/[\.\-]/i', '', $rut);
+		    $dv 	= substr($rut, -1);
+		    $numero = substr($rut, 0, strlen($rut) - 1);
+		    $i 		= 2;
+		    $suma 	= 0;
+		    
+		    foreach (array_reverse(str_split($numero)) as $v) {
+		        if ($i == 8)
+		            $i = 2;
+		        $suma += $v * $i;
+		        ++$i;
+		    }
+		    
+		    $dvr = 11 - ($suma % 11);
+		    
+		    if ($dvr == 11)
+		        $dvr = 0;
+		    if ($dvr == 10)
+		        $dvr = 'K';
+		    if ($dvr == strtoupper($dv))
+		        return true;
+		    else
+		        return false;
+		}
+	
+
 		public function failed(){
 			return $this->failed;
 		}
+
+		public function getErrors(){
+			return $this->list_errors;
+		}
+
 
 	}

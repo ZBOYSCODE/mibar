@@ -1,47 +1,43 @@
 <?php
+
 namespace App\Models;
 
-class Mesas extends \Phalcon\Mvc\Model
+class Turnos extends \Phalcon\Mvc\Model
 {
 
     /**
      *
      * @var integer
-     * @Primary
-     * @Identity
-     * @Column(type="integer", length=11, nullable=false)
      */
     public $id;
 
     /**
      *
-     * @var integer
-     * @Column(type="integer", length=11, nullable=false)
+     * @var time
      */
-    public $numero;
+    public $hora_inicio;
+
+    /**
+     *
+     * @var time
+     */
+    public $hora_termino;
 
     /**
      *
      * @var string
-     * @Column(type="string", length=20, nullable=false)
      */
-    public $seccion;
+    public $descripcion;
 
-    
-    /**
-     *
-     * @var integer
-     * @Column(type="integer", length=1, nullable=false)
-     */
-    public $estado;
 
     /**
      * Initialize method for model.
      */
+
     public function initialize()
     {
-        $this->hasMany('id', __NAMESPACE__.'Cuentas', 'mesa_id', ['alias' => 'Cuentas']);
-        $this->hasMany('id', __NAMESPACE__.'Reservas', 'mesa_id', ['alias' => 'Reservas']);
+        $this->hasMany('id', __NAMESPACE__.'\FuncionarioMesa', 'turno_id', array('alias' => 'FuncionarioMesa'));
+        
     }
 
     /**
@@ -51,14 +47,14 @@ class Mesas extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'mesas';
+        return 'turnos';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas[]
+     * @return Roles[]
      */
     public static function find($parameters = null)
     {
@@ -69,7 +65,7 @@ class Mesas extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas
+     * @return Roles
      */
     public static function findFirst($parameters = null)
     {

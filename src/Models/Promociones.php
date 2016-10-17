@@ -39,9 +39,9 @@ class Promociones extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Pedidos', 'promocion_id', ['alias' => 'Pedidos']);
-        $this->hasMany('id', 'ProdPromo', 'promocion_id', ['alias' => 'ProdPromo']);
-        $this->belongsTo('tipo_promo_id', 'TipoPromo', 'id', ['alias' => 'TipoPromo']);
+        $this->hasMany('id', __NAMESPACE__.'\Pedidos', 'promocion_id', ['alias' => 'Pedidos']);
+        $this->hasMany('id', __NAMESPACE__.'\ProdPromo', 'promocion_id', ['alias' => 'ProdPromo']);
+        $this->belongsTo('tipo_promo_id', __NAMESPACE__.'\TipoPromo', 'id', ['alias' => 'TipoPromo']);
     }
 
     /**

@@ -191,7 +191,7 @@
         return new AccesoAcl();
     });
 
-    $di->set('Valida', function () {
+    $di->set('valida', function () {
         return new Valida();
     });
 

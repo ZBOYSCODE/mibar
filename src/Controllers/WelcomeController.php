@@ -12,8 +12,17 @@ class WelcomeController extends ControllerBase
     	#js custom
         $this->assets->addJs('js/pages/welcome.js');
 
-        #vista
-        $this->view->pick("controllers/welcome/_index");
+    	if ( is_array( $this->session->get("auth-identity") )){
+
+    		$this->view->pick("controllers/menu/_index");
+
+    	} else {
+
+    		$this->view->pick("controllers/welcome/_index");
+    	}
+
+        
+
     }
 
 }
