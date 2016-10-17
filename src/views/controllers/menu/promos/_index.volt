@@ -2,11 +2,11 @@
 	<div class="row">
 		<div class="col-xs-6 col-sm-6">
 			<div class="nav-filter-item">
-				<select name="promo-categories" id="promo-categories" class="form-control">
+				 <select name="promo-categories" id="promo-categories" class="form-control">
 				    <option value="Filtrar">Filtrar Categoría</option>
-					<option value="Bebida">Bebida</option>
-					<option value="Comida">Comida</option>
-					<option value="Mixto">Mixto</option>
+                    {% for subcategoria in subcategorias %}
+					   <option value="{{ subcategoria.id }}"> {{ subcategoria.nombre}} </option>
+                    {% endfor %}
 				</select>
 			</div>	
 		</div>
@@ -23,113 +23,48 @@
 </div>
 <form action="">
     <div class="menu-products">
-    	<div class="product-item card">
-    		<div class="row">
-    			<div class="col-xs-4 col-sm-4">
-    				<div class="product-item-img">
-    					{{ image("img/products/drinks/drink.jpg", "alt":"", "class":"img-responsive") }}
-    				</div>	
-    			</div>
-    			<div class="col-xs-8 col-sm-8">
-    				<div class="product-item-details">
-    				    <p class="title">Ron Abuelo 3 años</p>
-    				    <p class="description">Es terrible de weno oe ti!</p>
-    				    <div class="row">
-    				    	<div class="col-xs-4 col-sm-4">
-    				    		<div class="price">$ 3.500</div>
-    				    	</div>
-    				    	<div class="col-xs-8 col-sm-8">
-    				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus"><i class="fa fa-minus"></i></button>
-    				    			<button class="plus"><i class="fa fa-plus"></i></button>
-    				    			<input type="text" class="form-control pull-right">
-    				    		</div>
-    				    	</div>
-    				    </div>
-    				</div>	
-    			</div>
-    		</div>
-    		<div class="row product-add-item-comment">
-    			<button type="button" data-toggle="collapse" data-target="#comment-1">
-    				<i class="fa fa-plus"></i> Añadir Comentario
-    			</button>
-    			<div id="comment-1" class="product-item-comment collapse">
-    				<textarea name="comment" class="form-control" rows="3"></textarea>
-    			</div>
-    		</div>
-    	</div>
 
-    	<div class="product-item card">
-    		<div class="row">
-    			<div class="col-xs-4 col-sm-4">
-    				<div class="product-item-img">
-    					{{ image("img/products/foods/food.jpg", "alt":"", "class":"img-responsive") }}
-    				</div>	
-    			</div>
-    			<div class="col-xs-8 col-sm-8">
-    				<div class="product-item-details">
-    				    <p class="title">Mini Mac</p>
-    				    <p class="description">Es terrible de weno oe ti!</p>
-    				    <div class="row">
-    				    	<div class="col-xs-4 col-sm-4">
-    				    		<div class="price">$ 4.500</div>
-    				    	</div>
-    				    	<div class="col-xs-8 col-sm-8">
-    				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus"><i class="fa fa-minus"></i></button>
-    				    			<button class="plus"><i class="fa fa-plus"></i></button>
-    				    			<input type="text" class="form-control pull-right">
-    				    		</div>
-    				    	</div>
-    				    </div>
-    				</div>	
-    			</div>
-    		</div>
-    		<div class="row product-add-item-comment">
-    			<button type="button" data-toggle="collapse" data-target="#comment-2">
-    				<i class="fa fa-plus"></i> Añadir Comentario
-    			</button>
-    			<div id="comment-2" class="product-item-comment collapse">
-    				<textarea name="comment" class="form-control" rows="3"></textarea>
-    			</div>
-    		</div>
-    	</div>
+        {% for producto in productos %}
 
-    	<div class="product-item card">
-    		<div class="row">
-    			<div class="col-xs-4 col-sm-4">
-    				<div class="product-item-img">
-    					{{ image("img/products/drinks/drink.jpg", "alt":"", "class":"img-responsive") }}
-    				</div>	
-    			</div>
-    			<div class="col-xs-8 col-sm-8">
-    				<div class="product-item-details">
-    				    <p class="title">Ron Abuelo 3 años</p>
-    				    <p class="description">Es terrible de weno oe ti!</p>
-    				    <div class="row">
-    				    	<div class="col-xs-4 col-sm-4">
-    				    		<div class="price">$ 3.500</div>
-    				    	</div>
-    				    	<div class="col-xs-8 col-sm-8">
-    				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus"><i class="fa fa-minus"></i></button>
-    				    			<button class="plus"><i class="fa fa-plus"></i></button>
-    				    			<input type="text" class="form-control pull-right">
-    				    		</div>
-    				    	</div>
-    				    </div>
-    				</div>	
-    			</div>
-    		</div>
-    		<div class="row product-add-item-comment">
-    			<button type="button" data-toggle="collapse" data-target="#comment-3">
-    				<i class="fa fa-plus"></i> Añadir Comentario
-    			</button>
-    			<div id="comment-3" class="product-item-comment collapse">
-    				<textarea name="comment" class="form-control" rows="3"></textarea>
-    			</div>
-    		</div>
-    	</div>
+
+        	<div class="product-item card">
+        		<div class="row">
+        			<div class="col-xs-4 col-sm-4">
+        				<div class="product-item-img">
+        					{{ image(producto.avatar, "alt":"", "class":"img-responsive") }}
+        				</div>	
+        			</div>
+        			<div class="col-xs-8 col-sm-8">
+        				<div class="product-item-details">
+        				    <p class="title">{{producto.nombre}}</p>
+        				    <p class="description">{{ producto.descripcion }}</p>
+        				    <div class="row">
+        				    	<div class="col-xs-4 col-sm-4">
+        				    		<div class="price">$ {{ producto.precio }}</div>
+        				    	</div>
+        				    	<div class="col-xs-8 col-sm-8">
+        				    		<div class="product-item-buttons pull-right">
+        				    			<button class="minus"><i class="fa fa-minus"></i></button>
+        				    			<button class="plus"><i class="fa fa-plus"></i></button>
+        				    			<input type="text" class="form-control pull-right">
+        				    		</div>
+        				    	</div>
+        				    </div>
+        				</div>	
+        			</div>
+        		</div>
+        		<div class="row product-add-item-comment">
+        			<button type="button" data-toggle="collapse" data-target="#comment-1">
+        				<i class="fa fa-plus"></i> Añadir Comentario
+        			</button>
+        			<div id="comment-1" class="product-item-comment collapse">
+        				<textarea name="comment" class="form-control" rows="3"></textarea>
+        			</div>
+        		</div>
+        	</div>
+
+        {% endfor %}
+
     </div>
 
 	<div class="menu-footer">
