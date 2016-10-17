@@ -32,8 +32,8 @@ class SubcategoriaProductos extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Productos', 'subcategoria_id', ['alias' => 'Productos']);
-        $this->belongsTo('categoria_producto_id', 'CategoriaProductos', 'id', ['alias' => 'CategoriaProductos']);
+        $this->hasMany('id', __NAMESPACE__.'\Productos', 'subcategoria_id', ['alias' => 'Productos']);
+        $this->belongsTo('categoria_producto_id', __NAMESPACE__.'\CategoriaProductos', 'id', ['alias' => 'CategoriaProductos']);
     }
 
     /**

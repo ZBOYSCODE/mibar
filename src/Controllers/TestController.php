@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use App\Business\PedidoBSN;
 use App\Business\ProductoBSN;
+use App\Business\MeseroBSN;
 
 
 class TestController extends ControllerBase
@@ -80,9 +81,39 @@ class TestController extends ControllerBase
     public function getProductDetailsAction() {
         $productBSN = new ProductoBSN();
 
-        $result = $productBSN->getProductDetails(5);
+        $result = $productBSN->getProductDetails(array('id' => 5));
         //var_dump($result);
 
         echo $result->id;
+    }
+
+    public function getMesasAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $fecha = new \DateTime('2016-10-17');
+
+        $param = array( "funcionario_id" => "1",
+                        "turno_id"       => "1",
+                        "fecha"          => $fecha
+                         );
+
+
+
+        $mesasporFuncionario = $meseroBSN->getMesas($param);
+
+        if($mesasporFuncionario==false){
+            print_r($meseroBSN->error);
+            die();
+        }
+
+        //relación automatica
+        foreach ($mesasporFuncionario as $funcionarioMesa) {
+            echo $funcionarioMesa->Mesas->numero;
+            echo " ";
+        }
+
+
+
     }
 }
