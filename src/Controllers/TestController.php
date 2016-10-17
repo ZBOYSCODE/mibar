@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use App\Business\PedidoBSN;
 use App\Business\ProductoBSN;
+use App\Business\MeseroBSN;
 
 
 class TestController extends ControllerBase
@@ -17,7 +18,7 @@ class TestController extends ControllerBase
 
     public function createOrderAction(){
 
-        $param = [ 
+        $paramProd = [ 
                    0 => 
                        ['cuenta_id' => 1, 
                        'producto_id' => 1,
@@ -29,12 +30,12 @@ class TestController extends ControllerBase
                        ['cuenta_id' => 1, 
                        'producto_id' => 2,
                        'precio' => 6000,
-                       'cantidad' => 1,
+                       'cantidad' => 2,
                        'comentario' => '',
                        'es_promocion' => false]                  
                ];
 
-        $param = [ 
+        $paramPromo = [ 
                    0 => 
                        ['cuenta_id' => 1, 
                        'producto_id' => 1,
@@ -52,7 +53,7 @@ class TestController extends ControllerBase
                ];               
 
         $pedidoBsn = new PedidoBSN();
-        $result = $pedidoBsn->createOrder($param);
+        $result = $pedidoBsn->createOrder($paramPromo);
         if(!is_object($result))
             var_dump($result);
         print_r($pedidoBsn->error);
@@ -66,5 +67,35 @@ class TestController extends ControllerBase
         //var_dump($result);
 
         echo $result->id;
+    }
+
+    public function getMesasAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $fecha = new \DateTime('2016-10-17');
+
+        $param = array( "funcionario_id" => "1",
+                        "turno_id"       => "1",
+                        "fecha"          => $fecha
+                         );
+
+
+
+        $mesasporFuncionario = $meseroBSN->getMesas($param);
+
+        if($mesasporFuncionario==false){
+            print_r($meseroBSN->error);
+            die();
+        }
+
+        //relación automatica
+        foreach ($mesasporFuncionario as $funcionarioMesa) {
+            echo $funcionarioMesa->Mesas->numero;
+            echo " ";
+        }
+
+
+
     }
 }

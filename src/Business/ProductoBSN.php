@@ -1,6 +1,4 @@
 <?php
-
-
     /**
      * Modelo de negocio Productos
      *
@@ -28,13 +26,14 @@
      *
      * @author zenta group
      */
-class ProductoBSN extends Plugin
-{
-    /**
-     *
-     * @var array
-     */
-    public 	$error;
+    class ProductoBSN extends Plugin
+    {
+        /**
+         *
+         * @var array
+         */
+        public 	$error;
+
 
     /**
      * @author jcocina
@@ -56,7 +55,7 @@ class ProductoBSN extends Plugin
             }
             return $result;
         }
-        if (is_array($param)) {
+        if (is_array($param) and sizeof($param) > 1) {
             $where = "id in (" .$param[0] . ")";
             for ($i = 1; $i < sizeof($param) - 1; $i++) {
                 $where = str_replace(')', ', ' . $param[$i] . ')', $where);
@@ -180,4 +179,6 @@ class ProductoBSN extends Plugin
             return $productos;
         }
 
+
 }
+

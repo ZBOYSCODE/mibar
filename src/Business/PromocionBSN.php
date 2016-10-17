@@ -34,7 +34,32 @@
          * @var array
          */
     	public 	$error;
+
+
+        /**
+         * getPromocion
+         *
+         * @author osanmartin
+         * @param $param['promocion_id'] = ID de promocion
+         * @return objeto Promocion
+         */
+
+        public function getPromocion($param){
+
+            if(!isset($param['promocion_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+            }
+
+            if(isset($param['promocion_id']))
+                $result = Promociones::findFirstById($param['promocion_id']);
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
+        }
+
     }
-
-}
-

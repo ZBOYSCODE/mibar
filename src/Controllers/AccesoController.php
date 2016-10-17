@@ -103,16 +103,4 @@
             return $this->response->redirect('login');
         }
 
-
-        /**
-         * METODO PRUEBA
-         */
-        public function printdataAction(){
-
-            echo "Data Session";
-            
-            echo "<pre>";
-            print_r( $this->session->get("auth-identity") );
-            echo "</pre>";
-        }
 	}
