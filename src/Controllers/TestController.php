@@ -17,7 +17,7 @@ class TestController extends ControllerBase
 
     public function createOrderAction(){
 
-        $param = [ 
+        $paramProd = [ 
                    0 => 
                        ['cuenta_id' => 1, 
                        'producto_id' => 1,
@@ -29,12 +29,12 @@ class TestController extends ControllerBase
                        ['cuenta_id' => 1, 
                        'producto_id' => 2,
                        'precio' => 6000,
-                       'cantidad' => 1,
+                       'cantidad' => 2,
                        'comentario' => '',
                        'es_promocion' => false]                  
                ];
 
-        $param = [ 
+        $paramPromo = [ 
                    0 => 
                        ['cuenta_id' => 1, 
                        'producto_id' => 1,
@@ -52,7 +52,7 @@ class TestController extends ControllerBase
                ];               
 
         $pedidoBsn = new PedidoBSN();
-        $result = $pedidoBsn->createOrder($param);
+        $result = $pedidoBsn->createOrder($paramPromo);
         if(!is_object($result))
             var_dump($result);
         print_r($pedidoBsn->error);

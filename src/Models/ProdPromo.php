@@ -32,8 +32,8 @@ class ProdPromo extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->belongsTo('producto_id', 'Productos', 'id', ['alias' => 'Productos']);
-        $this->belongsTo('promocion_id', 'Promociones', 'id', ['alias' => 'Promociones']);
+        $this->belongsTo('producto_id', __NAMESPACE__.'\Productos', 'id', ['alias' => 'Productos']);
+        $this->belongsTo('promocion_id', __NAMESPACE__.'\Promociones', 'id', ['alias' => 'Promociones']);
     }
 
     /**
