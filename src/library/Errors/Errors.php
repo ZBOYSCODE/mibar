@@ -25,4 +25,6 @@
 
         public $EMAIL_EXISTS = "El email ya existe";
 
+        public $UNKNOW = "Error interno del servidor";
+
     }
