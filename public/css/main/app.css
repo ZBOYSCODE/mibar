@@ -9,6 +9,10 @@ body, html {
 
 /* Navs */
 
+.navbar-background{
+  background: #521852;
+}
+
 .menu-bars {
   font-size: 30px;
   padding: 4px;
@@ -30,10 +34,42 @@ body, html {
 }
 
 .nav-logo{
-    height: 40px;
-    position: absolute;
-    right: 30px;
-    padding-top: 5px;
+  height: 40px;
+  position: absolute;
+  right: 30px;
+  padding-top: 5px;
+}
+
+.nav-menu-cart{
+  position: absolute;
+  right: 150px;
+  top: 20px;
+  color: #fff;
+  font-size: 2.5em;
+  text-decoration: none;
+}
+
+.nav-menu-cart:hover{
+  color: #d65cc0;
+}
+
+.nav-menu-cart:focus{
+  color: #fff;
+  border: none !important;
+  outline: none;
+}
+
+.nav-menu-cart .nav-menu-cart-cont{
+  background-color: #d65cc0;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.4em;
+  padding-left: 8px;
+  padding-top: 3px;
+  width: 30px;
+  position: absolute;
+  bottom: 25px;
+  left: 24px;
 }
 
 .navbar-toggle{
@@ -164,6 +200,7 @@ body, html {
   margin: 30px 5px 0px 5px !important;
 }
 
+
 div.menu-types > div:first-child{
   margin-left: 0px;
 }
@@ -180,7 +217,7 @@ div.menu-types > div:last-child{
 }
 
 .menu-type-item button{
-  padding-top: 10px;
+  padding-top: 15px;
   margin: 0;
   height: 130px;
   width: 100%;
@@ -189,8 +226,8 @@ div.menu-types > div:last-child{
 }
 
 .menu-type-item img{
-  height: 80px;
-  margin: 3px auto;
+  height: 70px;
+  margin: 5px auto;
 }
 
 .menu-type-item p{
@@ -199,6 +236,7 @@ div.menu-types > div:last-child{
 }
 
 /* Categories Content */
+
 
 .nav-filter-item{
   padding: 8px 15px;
@@ -212,9 +250,23 @@ div.menu-types > div:last-child{
   margin: 0 auto;
 }
 
+.nav-filter-item select:focus{
+  outline: none;
+  border: none !important;
+  -webkit-box-shadow: 0px 2px 15px 0px rgba(214, 92, 192, 1);
+  -moz-box-shadow:    0px 2px 15px 0px rgba(214, 92, 192, 1);
+  box-shadow:         0px 2px 15px 0px rgba(214, 92, 192, 1);
+}
+
 /* Products Item */
+
+.menu-products{
+  margin-bottom: 80px;
+}
+
 .product-item{
   padding: 20px;
+  padding-bottom: 0px;
 }
 .product-item-img img{
   width: 150px;
@@ -239,6 +291,7 @@ div.menu-types > div:last-child{
   width: 30px;
   height: 30px;
   margin-right: 5px;
+  padding-top: 4px;
 }
 
 .product-item-buttons .minus{
@@ -250,11 +303,125 @@ div.menu-types > div:last-child{
   width: 30px;
   height: 30px;
   margin-right: 5px;
+  padding-top: 4px;
 }
 
 .product-item-buttons input{
   width: 60px;
   margin-left: 15px;
+}
+
+.product-item-buttons input:focus{
+  outline: none;
+  border: none !important;
+  -webkit-box-shadow: 0px 2px 15px 0px rgba(214, 92, 192, 1);
+  -moz-box-shadow:    0px 2px 15px 0px rgba(214, 92, 192, 1);
+  box-shadow:         0px 2px 15px 0px rgba(214, 92, 192, 1);
+}
+
+.product-add-item-comment{
+  padding: 10px;
+}
+
+.product-add-item-comment button{
+  background-color: transparent;
+  border: none;
+  margin: 5px 10px;
+}
+
+.product-add-item-comment button:active,
+.product-add-item-comment button:focus{
+  color: #d65cc0 !important;
+  outline: none;
+  border: none !important;
+}
+
+.menu-products-list-modal .modal-header{
+  padding-top: 18px;
+  font-size: 2em;
+}
+
+.menu-products-list-modal .modal-header i{
+  margin-right: 20px;
+}
+
+.menu-products-list-modal .modal-footer{
+  text-align: center;
+  padding-top: 13px;
+}
+
+.menu-products-list-modal .modal-header,
+.menu-products-list-modal .modal-footer{
+  border: none;
+  border-radius: 4px;
+  height: 60px;
+}
+
+.menu-products-list-modal .modal-body{
+  padding: 0;
+}
+
+.menu-products-list-modal .modal-content{
+  background-color: #521852; 
+  border-radius: 4px;
+}
+
+.menu-products-list-modal .modal-close{
+  color: #fff !important;
+  padding-top: 3px;
+}
+
+.product-item-modal{
+  padding: 10px 10px;
+}
+
+.product-item-modal .title{
+  font-size: 1.5em !important;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.product-item-modal b{
+  text-transform: uppercase;
+  font-size: 1.3em;
+}
+
+.product-item-modal i{
+  font-size: 1.5em;
+  margin-right: 10px;
+}
+
+.product-item-modal .comment{
+  margin-top: 20px;
+}
+
+.product-item-modal .comment p{
+  margin-top: 20px;
+}
+
+.product-item-modal .btn{
+  padding: 3px 7px;
+  border-radius: 30px;
+  font-size: 12px;
+}
+
+.modal-close:hover{
+  color: #d65cc0;
+}
+
+.menu-footer-buttons{
+ text-align: center;
+ padding: 10px;
+ height: 60px;
+ margin: 10px; 
+}
+
+.menu-footer{
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  background-color: #521852;
 }
 
 

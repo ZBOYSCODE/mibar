@@ -1,5 +1,5 @@
 <header>
-     <nav class="navbar navbar-fixed-top">
+     <nav class="navbar navbar-fixed-top navbar-background">
         <div class="card">
             <div class="navbar-header">
                 <button class="navbar-toggle pull-left" data-toggle="collapse" data-target="#menu">
@@ -7,6 +7,10 @@
                 </button>
                 <a href="" class="pull-right" title="Ir a Inicio">
                     {{ image("img/mibar.png", "alt":"Logo", "class":"nav-logo img-responsive") }}
+                </a>
+                <a href="" class="nav-menu-cart pull-right" data-toggle="modal" data-target="#products-modal">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="nav-menu-cart-cont">01</span>
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="menu">
