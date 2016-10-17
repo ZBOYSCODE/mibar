@@ -21,7 +21,7 @@
 		</div>
 	</div>
 </div>
-<form action="">
+
     <div class="menu-products">
     	<div class="product-item card">
     		<div class="row">
@@ -40,9 +40,9 @@
     				    	</div>
     				    	<div class="col-xs-8 col-sm-8">
     				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus"><i class="fa fa-minus"></i></button>
-    				    			<button class="plus"><i class="fa fa-plus"></i></button>
-    				    			<input type="text" class="form-control pull-right">
+    				    			<button class="minus" data-producto='1'><i class="fa fa-minus"></i></button>
+    				    			<button class="plus" data-producto='1'><i class="fa fa-plus"></i></button>
+    				    			<input type="number" min='0' value='0' class="form-control pull-right input_pedidos" id='input-1' data-producto='1'>
     				    		</div>
     				    	</div>
     				    </div>
@@ -76,9 +76,9 @@
     				    	</div>
     				    	<div class="col-xs-8 col-sm-8">
     				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus"><i class="fa fa-minus"></i></button>
-    				    			<button class="plus"><i class="fa fa-plus"></i></button>
-    				    			<input type="text" class="form-control pull-right">
+    				    			<button class="minus"  data-producto='2'><i class="fa fa-minus"></i></button>
+    				    			<button class="plus"  data-producto='2'><i class="fa fa-plus"></i></button>
+    				    			<input type="number" min='0' value='0' class="form-control pull-right input_pedidos" id='input-2' data-producto='2'>
     				    		</div>
     				    	</div>
     				    </div>
@@ -112,9 +112,9 @@
     				    	</div>
     				    	<div class="col-xs-8 col-sm-8">
     				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus"><i class="fa fa-minus"></i></button>
-    				    			<button class="plus"><i class="fa fa-plus"></i></button>
-    				    			<input type="text" class="form-control pull-right">
+    				    			<button class="minus" data-producto='3'><i class="fa fa-minus"></i></button>
+    				    			<button class="plus" data-producto='3'><i class="fa fa-plus"></i></button>
+    				    			<input type="number" min='0' value='0' class="form-control pull-right input_pedidos" id='input-3' data-producto='3'>
     				    		</div>
     				    	</div>
     				    </div>
@@ -134,10 +134,13 @@
 
 	<div class="menu-footer">
 		<div class="row menu-footer-buttons card">
-			<button id="add-menu-product" class="btn btn-main" type="submit">AÑADIR PEDIDOS</button>
+			<button id="add-menu-product" class="btn btn-main" type="button">AÑADIR PEDIDOS</button>
 		</div>
 	</div>	
-</form>
+
+
+
+
 <form action="">
 	<!-- Modal -->
 	<div id="products-modal" class="menu-products-list-modal modal fade" role="dialog">
