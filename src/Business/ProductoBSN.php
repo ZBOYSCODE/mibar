@@ -131,7 +131,7 @@
          *
          * @return object
          */
-        public function GetProductsbyCategory($param) {
+        public function getProductsbyCategory($param) {
 
             if(!isset($param['categoria_id'])){
                 $this->error[] = $this->errors->MISSING_PARAMETERS;
