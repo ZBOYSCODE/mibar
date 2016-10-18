@@ -10,9 +10,9 @@
 			    </div>
 			    <div class="modal-body">
 			      <!-- Products -->
-			        <div class="card" id='pedido-1'>
+			        <div class="card">
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='1'>Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -29,9 +29,9 @@
 				      	</div>
 			        </div>
 
-			        <div class="card" id='pedido-2'>
+			        <div class="card">
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='2'>Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -48,9 +48,9 @@
 				      	</div>
 			        </div>
 
-			        <div class="card" id='pedido-3'>
+			        <div class="card">
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='3'>Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -74,3 +74,4 @@
 	    </div>
 	</div>
 </form>
+	

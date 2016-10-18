@@ -21,7 +21,7 @@
 		</div>
 	</div>
 </div>
-
+<form action="">
     <div class="menu-products">
 
         {% for producto in productos %}
@@ -44,16 +44,9 @@
         				    	</div>
         				    	<div class="col-xs-8 col-sm-8">
         				    		<div class="product-item-buttons pull-right">
-        				    			<button class="minus" data-producto='{{producto.id}}'><i class="fa fa-minus"></i></button>
-        				    			<button class="plus" data-producto='{{producto.id}}'><i class="fa fa-plus"></i></button>
-
-        				    			<input  type            = "number" 
-                                                min             = '0'
-                                                value           = '0' 
-                                                class           = "form-control pull-right input_pedidos" 
-                                                id              = 'input-{{producto.id}}' 
-                                                data-producto   = '{{producto.id}}'
-                                                data-promocion  = 'false' >
+        				    			<button class="minus"><i class="fa fa-minus"></i></button>
+        				    			<button class="plus"><i class="fa fa-plus"></i></button>
+        				    			<input type="text" class="form-control pull-right">
         				    		</div>
         				    	</div>
         				    </div>
@@ -61,10 +54,10 @@
         			</div>
         		</div>
         		<div class="row product-add-item-comment">
-        			<button type="button" data-toggle="collapse" data-target="#comment-{{producto.id}}">
+        			<button type="button" data-toggle="collapse" data-target="#comment-1">
         				<i class="fa fa-plus"></i> Añadir Comentario
         			</button>
-        			<div id="comment-{{producto.id}}" class="product-item-comment collapse">
+        			<div id="comment-1" class="product-item-comment collapse">
         				<textarea name="comment" class="form-control" rows="3"></textarea>
         			</div>
         		</div>
@@ -76,12 +69,7 @@
 
 	<div class="menu-footer">
 		<div class="row menu-footer-buttons card">
-			<button id="add-menu-product" class="btn btn-main" type="button">AÑADIR PEDIDOS</button>
+			<button id="add-menu-product" class="btn btn-main" type="submit">AÑADIR PEDIDOS</button>
 		</div>
 	</div>	
-
-
-    <div id="myOrder-modal"></div>
-
-
-	
+</form>
