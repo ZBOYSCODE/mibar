@@ -8,7 +8,7 @@
                 <a href="" class="pull-right" title="Ir a Inicio">
                     {{ image("img/mibar.png", "alt":"Logo", "class":"nav-logo img-responsive") }}
                 </a>
-                <a href="" class="nav-menu-cart pull-right" data-toggle="modal" data-target="#products-modal">
+                <a href="" class="nav-menu-cart pull-right" data-callName="ordersButton" data-url="menu/myOrders">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="nav-menu-cart-cont">01</span>
                 </a>
