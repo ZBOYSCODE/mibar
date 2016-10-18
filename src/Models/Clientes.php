@@ -86,9 +86,9 @@ class Clientes extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Cuentas', 'cliente_id', ['alias' => 'Cuentas']);
-        $this->hasMany('id', 'Reservas', 'cliente_id', ['alias' => 'Reservas']);
-        $this->belongsTo('tipo_cliente_id', 'TipoClientes', 'id', ['alias' => 'TipoClientes']);
+        $this->hasMany('id', __NAMESPACE__.'\Cuentas', 'cliente_id', ['alias' => 'Cuentas']);
+        $this->hasMany('id', __NAMESPACE__.'\Reservas', 'cliente_id', ['alias' => 'Reservas']);
+        $this->belongsTo('tipo_cliente_id', __NAMESPACE__.'\TipoClientes', 'id', ['alias' => 'TipoClientes']);
     }
 
     /**

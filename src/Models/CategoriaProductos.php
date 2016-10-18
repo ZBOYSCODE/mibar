@@ -25,7 +25,7 @@ class CategoriaProductos extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Productos', 'categoria_id', ['alias' => 'Productos']);
+        $this->hasMany('id', __NAMESPACE__.'\Productos', 'categoria_id', ['alias' => 'Productos']);
     }
 
     /**

@@ -25,7 +25,7 @@ class Bares extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Cuentas', 'bar_id', ['alias' => 'Cuentas']);
+        $this->hasMany('id', __NAMESPACE__.'\Cuentas', 'bar_id', ['alias' => 'Cuentas']);
     }
 
     /**
