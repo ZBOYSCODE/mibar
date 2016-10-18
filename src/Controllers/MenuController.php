@@ -44,6 +44,7 @@ class MenuController extends ControllerBase
         $this->view->setVar("productos", $productos);
         $this->view->setVar("subcategorias", $subcategorias);
 
+
         #vista
         $this->view->pick("controllers/menu/_index");
     }
@@ -74,18 +75,16 @@ class MenuController extends ControllerBase
 
 		        $paramCategoria = ["categoria_id" => $categoria_id];
 
-
 		        $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
 		        $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
 
 		        $dataView["productos"] = $productos;
 		        $dataView["subcategorias"] = $subcategorias;
 
-
-
 		        $toRend = $this->view->getPartial($view, $dataView);
 
 		        $this->mifaces->addToRend('menu-products',$toRend);
+		        $this->mifaces->addToDataView("menuNav", "opcion1");
 
         	} else{
 

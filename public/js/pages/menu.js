@@ -1,7 +1,10 @@
+ var menuNav = "opcion1";
+
  $(document).on('ready', function() {
 
- 	var url = $("#frm").val();
+  $('#'+menuNav).addClass('active');
 
+ 	var url = $("#frm").val();
  	$(document).on('click', '#add-menu-product', function() {
 
  		var producto = $(this).attr('data-producto');
@@ -134,23 +137,52 @@
 
     $('.menu-type-item').on('click',function(){
                        
-    var action = $(this).data("url");
-    var categoria = $(this).data("categoria");
+        var action = $(this).data("url");
+        var categoria = $(this).data("categoria");
 
-    var dataIn = new FormData();
+        var dataIn = new FormData();
 
-    dataIn.append("categoria",categoria);
+        dataIn.append("categoria",categoria);
 
-    //mifaces
-    $.callAjax(dataIn, action, $(this));
-    
+        //mifaces
+        $.callAjax(dataIn, action, $(this));
+
   });
 
 
- 	
+ 	/* Procedimientos Post Ajax Call */
+$(document).ajaxComplete(function(event,xhr,options){
+
+  console.log(event, xhr, options);
+
+
+    if(options.callName != null )
+    {
+        if(options.callName == "changeMenu") {
+            active_Menu();
+        }
+    }
+
+});
 
  	
 
- 	
+ 	function active_Menu(){
 
- });
+      $('.button-active').removeClass('active');
+
+      if (menuNav == "opcion0"){
+        $('#opcion0').addClass('active');
+      }
+
+      if (menuNav == "opcion1"){
+        $('#opcion1').addClass('active');
+      }
+
+      if (menuNav == "opcion2"){
+        $('#opcion2').addClass('active');
+      }
+ }
+
+});
+
