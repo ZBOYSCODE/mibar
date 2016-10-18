@@ -25,7 +25,7 @@ class Bodegas extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Stock', 'bodega_id', ['alias' => 'Stock']);
+        $this->hasMany('id', __NAMESPACE__.'\Stock', 'bodega_id', ['alias' => 'Stock']);
     }
 
     /**

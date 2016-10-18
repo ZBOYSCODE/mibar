@@ -2,8 +2,8 @@
 	<div class="row">
 		<div class="col-xs-6 col-sm-6">
 			<div class="nav-filter-item">
-				 <select name="promo-categories" id="promo-categories" class="form-control">
-				    <option value="Filtrar">Filtrar Categoría</option>
+				 <select name="promo-categories" id="promo-categories" class="form-control promo-categories">
+				    <option value="0">Todas las promos</option>
                     {% for subcategoria in subcategorias %}
 					   <option value="{{ subcategoria.id }}"> {{ subcategoria.nombre}} </option>
                     {% endfor %}
@@ -25,7 +25,7 @@
     <div class="menu-products">
         {% for producto in promociones %}
 
-        	<div class="product-item card">
+        	<div class="product-item card" data-categoria="{{ producto.tipo_promo_id }}">
         		<div class="row">
         			<div class="col-xs-4 col-sm-4">
         				<div class="product-item-img">

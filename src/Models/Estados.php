@@ -25,8 +25,8 @@ class Estados extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Pedidos', 'estado_id', ['alias' => 'Pedidos']);
-        $this->hasMany('id', 'Reservas', 'estado_id', ['alias' => 'Reservas']);
+        $this->hasMany('id', __NAMESPACE__.'\Pedidos', 'estado_id', ['alias' => 'Pedidos']);
+        $this->hasMany('id', __NAMESPACE__.'\Reservas', 'estado_id', ['alias' => 'Reservas']);
     }
 
     /**

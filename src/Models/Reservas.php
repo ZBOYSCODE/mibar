@@ -60,9 +60,9 @@ class Reservas extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->belongsTo('cliente_id', 'Clientes', 'id', ['alias' => 'Clientes']);
-        $this->belongsTo('estado_id', 'Estados', 'id', ['alias' => 'Estados']);
-        $this->belongsTo('mesa_id', 'Mesas', 'id', ['alias' => 'Mesas']);
+        $this->belongsTo('cliente_id', __NAMESPACE__.'\Clientes', 'id', ['alias' => 'Clientes']);
+        $this->belongsTo('estado_id', __NAMESPACE__.'\Estados', 'id', ['alias' => 'Estados']);
+        $this->belongsTo('mesa_id', __NAMESPACE__.'\Mesas', 'id', ['alias' => 'Mesas']);
     }
 
     /**

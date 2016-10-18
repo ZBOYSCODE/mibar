@@ -64,13 +64,13 @@
  			}
  		}); 
 
-
  		enviar_pedido(pedido);
  	}
 
+
  	function enviar_pedido(pedido) {
 
- 		var json = JSON.stringify(pedido);
+        var json = JSON.stringify(pedido);
 
  		var datos = {
 
@@ -165,34 +165,31 @@
       
    });
 
-  $('.menu-prod').on('click',function(){
-
-    var action = $(this).data("url");
-
-    var dataIn = new FormData();
-
-    //mifaces
-    $.callAjax(dataIn, action, $(this));
+    $('.menu-prod').on('click',function(){
 
 
-  });
+        var action = $(this).data("url");
+
+        var dataIn = new FormData();
+
+        //mifaces
+        $.callAjax(dataIn, action, $(this));
+
+    });
 
 
 
-
-  $('.menu-promo').on('click',function(){
-
-    var action = $(this).data("url");
-
-    var dataIn = new FormData();
-
-    //mifaces
-    $.callAjax(dataIn, action, $(this));
+    $('.menu-promo').on('click',function(){
 
 
-  });  
+        var action = $(this).data("url");
 
+        var dataIn = new FormData();
 
+        //mifaces
+        $.callAjax(dataIn, action, $(this));
+
+    });
 
 
    $('.nav-menu-cart').on('click',function(e){
@@ -206,11 +203,57 @@
     
     e.preventDefault();
     
-
   }); 
+ 
+
+    $(document).on('change', "#promo-categories",function(){
+
+        var tipoPromo = $(this).val();
+
+        if(tipoPromo == 0){
+
+            $(".product-item").show();      
+
+
+        } else{
+
+            $(".product-item").hide();
+
+            products = $(".product-item").filter("[data-categoria='"+tipoPromo+"']");
+
+            products.show();
+
+        }
+
+    });    
+
+
+    $(document).on('change', "#prod-categories",function(){
+
+        var subcategoria = $(this).val();
+
+
+        if(subcategoria == 0){
+
+            $(".product-item").show();      
+
+        } else{
+
+            $(".product-item").hide();
+
+            products = $(".product-item").filter("[data-categoria='"+subcategoria+"']");
+
+            products.show();
+
+        }
+
+  });    
 
 
 
+
+});
+  
     /* Procedimientos Post Ajax Call */
   $(document).ajaxComplete(function(event,xhr,options){
 
@@ -224,12 +267,8 @@
            }
       }
 
-  });
+  }); 
 
-
-});
-
- 	
 
  	function active_Menu(){
 

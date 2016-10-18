@@ -53,8 +53,8 @@ class Stock extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->belongsTo('bodega_id', 'Bodegas', 'id', ['alias' => 'Bodegas']);
-        $this->belongsTo('producto_id', 'Productos', 'id', ['alias' => 'Productos']);
+        $this->belongsTo('bodega_id', __NAMESPACE__.'\Bodegas', 'id', ['alias' => 'Bodegas']);
+        $this->belongsTo('producto_id', __NAMESPACE__.'\Productos', 'id', ['alias' => 'Productos']);
     }
 
     /**

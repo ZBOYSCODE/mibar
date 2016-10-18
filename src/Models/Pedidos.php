@@ -74,11 +74,11 @@ class Pedidos extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'ProducPromoPedidos', 'pedido_id', ['alias' => 'ProducPromoPedidos']);
-        $this->belongsTo('cuenta_id', 'Cuentas', 'id', ['alias' => 'Cuentas']);
-        $this->belongsTo('estado_id', 'Estados', 'id', ['alias' => 'Estados']);
-        $this->belongsTo('producto_id', 'Productos', 'id', ['alias' => 'Productos']);
-        $this->belongsTo('promocion_id', 'Promociones', 'id', ['alias' => 'Promociones']);
+        $this->hasMany('id', __NAMESPACE__.'\ProducPromoPedidos', 'pedido_id', ['alias' => 'ProducPromoPedidos']);
+        $this->belongsTo('cuenta_id', __NAMESPACE__.'\Cuentas', 'id', ['alias' => 'Cuentas']);
+        $this->belongsTo('estado_id', __NAMESPACE__.'\Estados', 'id', ['alias' => 'Estados']);
+        $this->belongsTo('producto_id', __NAMESPACE__.'\Productos', 'id', ['alias' => 'Productos']);
+        $this->belongsTo('promocion_id', __NAMESPACE__.'\Promociones', 'id', ['alias' => 'Promociones']);
     }
 
     public function beforeValidationOnCreate()

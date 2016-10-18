@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-class Mesas extends \Phalcon\Mvc\Model
+class CuentasPagos extends \Phalcon\Mvc\Model
 {
 
     /**
@@ -18,38 +18,25 @@ class Mesas extends \Phalcon\Mvc\Model
      * @var integer
      * @Column(type="integer", length=11, nullable=false)
      */
-    public $numero;
+    public $pago_id;
 
     /**
      *
-     * @var string
-     * @Column(type="string", length=20, nullable=false)
+     * @var integer
+     * @Column(type="integer", length=11, nullable=false)
      */
-    public $seccion;
+    public $cuenta_id;
 
     
-    /**
-     *
-     * @var integer
-     * @Column(type="integer", length=1, nullable=false)
-     */
-    public $estado;
-
-    /**
-     *
-     * @var integer
-     */
-    public $bar_id;
 
     /**
      * Initialize method for model.
      */
     public function initialize()
-    {
-        $this->hasMany('id', __NAMESPACE__.'\Cuentas', 'mesa_id', ['alias' => 'Cuentas']);
-        $this->hasMany('id', __NAMESPACE__.'\Reservas', 'mesa_id', ['alias' => 'Reservas']);
-        $this->hasMany('id', __NAMESPACE__.'\FuncionarioMesa', 'mesa_id', ['alias' => 'FuncionarioMesa']);
-        $this->belongsTo('bar_id', __NAMESPACE__.'\Bares', 'id', ['alias' => 'Bares']);
+    {   
+        $this->hasMany('id', __NAMESPACE__.'\CuentasPagos', 'pago_id', ['alias' => 'CuentasPagos']);
+        $this->belongsTo('pago_id', __NAMESPACE__.'\Pagos', 'id', ['alias' => 'Pagos']);
+        $this->belongsTo('cuenta_id', __NAMESPACE__.'\Cuentas', 'id', ['alias' => 'Cuentas']);
     }
 
     /**
@@ -59,14 +46,14 @@ class Mesas extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'mesas';
+        return 'cuentas_pagos';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas[]
+     * @return Cuentas[]
      */
     public static function find($parameters = null)
     {
@@ -77,7 +64,7 @@ class Mesas extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Mesas
+     * @return Cuentas
      */
     public static function findFirst($parameters = null)
     {
