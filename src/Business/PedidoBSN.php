@@ -274,6 +274,79 @@
         }
 
 
+        /**
+         * Guarda el pedido en sesion
+         *
+         * guarda la lista de productos en sesion, antes de crear una orden !!
+         * 
+         * @author Sebastián Silva
+         *
+         * @param array $param
+         * @return boolean
+         */
+        public function savePedidoSesion($param) {
+
+            if(!isset($param['pedidos']) AND !isset($param['pedidos'])) {
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }  
+
+            $list_pedidos = array();
+
+            try {
+
+                // Check if the variable is defined
+                if ($this->session->has("pedidos")) {
+                    // Retrieve its value
+                    $pedidos = $this->session->get("pedidos");
+
+                    foreach ($pedidos as $pedido) {
+                            
+                        array_push($list_pedidos, $pedido);
+                    }
+                }
+
+                foreach ($param['pedidos'] as $pedido) {
+                    
+                    $ped = array(
+                        'producto'  => $pedido->producto,
+                        'cantidad'  => $pedido->cantidad,
+                        'promocion' => $pedido->promocion,
+                        'comment'   => $pedido->comment
+                    );
+
+                    array_push($list_pedidos, $ped);
+                }
+
+                $this->session->set('pedidos', $list_pedidos);
+
+                return true;
+                
+            } catch (Exception $e) {
+
+                return false;
+            }
+        }
+
+
+        /**
+         * retorna la lista de pedidos
+         *
+         * retorna la lista de productos en sesion
+         * 
+         * @author Sebastián Silva
+         *
+         * @param array $param
+         * @return boolean
+         */
+        public function getPedidoSesion() {
+
+            return $this->session->get("pedidos");
+        }
+
+
+
 
     }
 
