@@ -20,14 +20,14 @@ class TestController extends ControllerBase
 
         $paramProd = [ 
                    0 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 1,
                        'precio' => 3500,
                        'cantidad' => 2,
                        'comentario' => 'Sin hielo',
                        'es_promocion' => false], 
                    1 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 2,
                        'precio' => 6000,
                        'cantidad' => 2,
@@ -37,14 +37,14 @@ class TestController extends ControllerBase
 
         $paramPromo = [ 
                    0 => 
-                       ['cuenta_id' => 1, 
+                       [ 
                        'producto_id' => 1,
                        'precio' => 6000,
                        'cantidad' => 1,
                        'comentario' => '',
                        'es_promocion' => true], 
                    1 => 
-                       ['cuenta_id' => 1, 
+                       [ 
                        'producto_id' => 2,
                        'precio' => 10000,
                        'cantidad' => 2,
@@ -55,23 +55,26 @@ class TestController extends ControllerBase
         $paramProdPedido = [
 
                    0 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 1,
-                       'precio' => 6000,
                        'cantidad' => 1,
                        'comentario' => '',
                        'es_promocion' => true], 
                    1 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 2,
-                       'precio' => 6000,
                        'cantidad' => 2,
                        'comentario' => '',
                        'es_promocion' => false]                            
                     ];
 
+        $cuenta_id = 1;
+
+        $param["pedidos"] = $paramProdPedido;
+        $param["cuenta_id"] = $cuenta_id;
+
         $pedidoBsn = new PedidoBSN();
-        $result = $pedidoBsn->createOrder($paramProdPedido);
+        $result = $pedidoBsn->createOrder($param);
         if(!is_object($result))
             var_dump($result);
         print_r($pedidoBsn->error);
