@@ -41,12 +41,6 @@ class Cuentas extends \Phalcon\Mvc\Model
      */
     public $funcionario_id;
 
-    /**
-     *
-     * @var integer
-     * @Column(type="integer", length=11, nullable=false)
-     */
-    public $pago_id;
 
     /**
      *
@@ -54,25 +48,18 @@ class Cuentas extends \Phalcon\Mvc\Model
      * @Column(type="integer", length=1, nullable=false)
      */
     public $estado;
-
-    /**
-     *
-     * @var integer
-     * @Column(type="integer", length=11, nullable=false)
-     */
-    public $bar_id;
+    
 
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Pedidos', 'cuenta_id', ['alias' => 'Pedidos']);
-        $this->belongsTo('bar_id', 'Bares', 'id', ['alias' => 'Bares']);
-        $this->belongsTo('cliente_id', 'Clientes', 'id', ['alias' => 'Clientes']);
-        $this->belongsTo('funcionario_id', 'Funcionarios', 'id', ['alias' => 'Funcionarios']);
-        $this->belongsTo('mesa_id', 'Mesas', 'id', ['alias' => 'Mesas']);
-        $this->belongsTo('pago_id', 'Pagos', 'id', ['alias' => 'Pagos']);
+        $this->hasMany('id', __NAMESPACE__.'\Pedidos', 'cuenta_id', ['alias' => 'Pedidos']);
+        $this->hasMany('id', __NAMESPACE__.'\CuentasPagos', 'cuenta_id', ['alias' => 'CuentasPagos']);
+        $this->belongsTo('cliente_id', __NAMESPACE__.'\Clientes', 'id', ['alias' => 'Clientes']);
+        $this->belongsTo('funcionario_id', __NAMESPACE__.'\Funcionarios', 'id', ['alias' => 'Funcionarios']);
+        $this->belongsTo('mesa_id', __NAMESPACE__.'\Mesas', 'id', ['alias' => 'Mesas']);
     }
 
     /**

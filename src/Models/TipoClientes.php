@@ -26,7 +26,7 @@ class TipoClientes extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Clientes', 'tipo_cliente_id', ['alias' => 'Clientes']);
+        $this->hasMany('id', __NAMESPACE__.'\Clientes', 'tipo_cliente_id', ['alias' => 'Clientes']);
     }
 
     /**

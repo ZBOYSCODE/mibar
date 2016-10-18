@@ -223,5 +223,39 @@ class MenuController extends ControllerBase
 
 	}	
 
+	/**
+	* MyOrders
+	*
+	* @author Hernán Feliú
+	*
+	* Renderiza modal "Mis Pedidos" 
+	*
+	*
+	*/    
+
+	public function myOrdersAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/menu/orders/modal";
+            $this->mifaces->newFaces();
+
+
+	        $dataView = "Holiwi";
+	       
+	        $toRend = $this->view->getPartial($view, $dataView);
+
+	        $this->mifaces->addToRend('orders-modal',$toRend);
+        	$this->mifaces->run();
+
+        } else{
+
+        	$this->view->disable();
+
+        }
+
+	}	
+
 }
 

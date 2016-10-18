@@ -46,7 +46,7 @@ class Descuentos extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Pagos', 'descuento_id', ['alias' => 'Pagos']);
+        $this->hasMany('id', __NAMESPACE__.'\Pagos', 'descuento_id', ['alias' => 'Pagos']);
     }
 
     /**

@@ -78,11 +78,11 @@ class Funcionarios extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Cuentas', 'funcionario_id', ['alias' => 'Cuentas']);
-        $this->hasMany('id', 'Mesas', 'funcionario_id', ['alias' => 'Mesas']);
-        $this->hasMany('id', 'Pagos', 'funcionario_id', ['alias' => 'Pagos']);
-        $this->hasMany('id', 'ProducPromoPedidos', 'funcionario_id', ['alias' => 'ProducPromoPedidos']);
-        $this->belongsTo('rol_id', 'Roles', 'id', ['alias' => 'Roles']);
+        $this->hasMany('id', __NAMESPACE__.'\Cuentas', 'funcionario_id', ['alias' => 'Cuentas']);
+        $this->hasMany('id', __NAMESPACE__.'\Mesas', 'funcionario_id', ['alias' => 'Mesas']);
+        $this->hasMany('id', __NAMESPACE__.'\Pagos', 'funcionario_id', ['alias' => 'Pagos']);
+        $this->hasMany('id', __NAMESPACE__.'\ProducPromoPedidos', 'funcionario_id', ['alias' => 'ProducPromoPedidos']);
+        $this->belongsTo('rol_id', __NAMESPACE__.'\Roles', 'id', ['alias' => 'Roles']);
     }
 
     /**

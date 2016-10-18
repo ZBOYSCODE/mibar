@@ -64,9 +64,9 @@
  			}
  		}); 
 
-
  		enviar_pedido(pedido);
  	}
+
 
  	function enviar_pedido(pedido) {
 
@@ -175,8 +175,9 @@
         //mifaces
         $.callAjax(dataIn, action, $(this));
 
-
     });
+
+
 
     $('.menu-promo').on('click',function(){
 
@@ -188,10 +189,22 @@
         //mifaces
         $.callAjax(dataIn, action, $(this));
 
+    });
 
-    });  
 
+   $('.nav-menu-cart').on('click',function(e){
 
+    var action = $(this).data("url");
+
+    var dataIn = new FormData();
+
+    //mifaces
+    $.callAjax(dataIn, action, $(this));
+    
+    e.preventDefault();
+    
+  }); 
+ 
 
     $(document).on('change', "#promo-categories",function(){
 
@@ -240,7 +253,6 @@
 
 
 });
-
   
     /* Procedimientos Post Ajax Call */
   $(document).ajaxComplete(function(event,xhr,options){
@@ -250,11 +262,13 @@
           if(options.callName == "changeMenu") {
               active_Menu();
           }
+           if(options.callName == "ordersButton"){
+              openMyOrdersModal();
+           }
       }
 
   }); 
 
- 	
 
  	function active_Menu(){
 
@@ -271,6 +285,11 @@
       if (menuNav == "opcion2"){
         $('#opcion2').addClass('active');
       }
+ }
+
+ function openMyOrdersModal(){
+
+    $('#products-modal').modal('show');
  }
 
 

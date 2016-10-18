@@ -21,7 +21,7 @@
 		</div>
 	</div>
 </div>
-<form action="">
+
     <div class="menu-products">
 
         {% for producto in productos %}
@@ -72,4 +72,6 @@
 			<button id="add-menu-product" class="btn btn-main" type="submit">AÑADIR PEDIDOS</button>
 		</div>
 	</div>	
-</form>
+
+
+<div id="orders-modal"></div>

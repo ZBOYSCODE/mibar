@@ -60,9 +60,9 @@ class Pagos extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Cuentas', 'pago_id', ['alias' => 'Cuentas']);
-        $this->belongsTo('descuento_id', 'Descuentos', 'id', ['alias' => 'Descuentos']);
-        $this->belongsTo('funcionario_id', 'Funcionarios', 'id', ['alias' => 'Funcionarios']);
+        
+        $this->belongsTo('descuento_id', __NAMESPACE__.'\Descuentos', 'id', ['alias' => 'Descuentos']);
+        $this->belongsTo('funcionario_id', __NAMESPACE__.'\Funcionarios', 'id', ['alias' => 'Funcionarios']);
     }
 
     /**
