@@ -25,121 +25,7 @@
     <div class="menu-products">
 
 
-
-
-
-
-    	<div class="product-item card">
-    		<div class="row">
-    			<div class="col-xs-4 col-sm-4">
-    				<div class="product-item-img">
-    					{{ image("img/products/drinks/drink.jpg", "alt":"", "class":"img-responsive") }}
-    				</div>	
-    			</div>
-    			<div class="col-xs-8 col-sm-8">
-    				<div class="product-item-details">
-    				    <p class="title">Ron Abuelo 3 años</p>
-    				    <p class="description">Es terrible de weno oe ti!</p>
-    				    <div class="row">
-    				    	<div class="col-xs-4 col-sm-4">
-    				    		<div class="price">$ 3.500</div>
-    				    	</div>
-    				    	<div class="col-xs-8 col-sm-8">
-    				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus" data-producto='1'><i class="fa fa-minus"></i></button>
-    				    			<button class="plus" data-producto='1'><i class="fa fa-plus"></i></button>
-    				    			<input type="number" min='0' value='0' class="form-control pull-right input_pedidos" id='input-1' data-producto='1'>
-    				    		</div>
-    				    	</div>
-    				    </div>
-    				</div>	
-    			</div>
-    		</div>
-    		<div class="row product-add-item-comment">
-    			<button type="button" data-toggle="collapse" data-target="#comment-1">
-    				<i class="fa fa-plus"></i> Añadir Comentario
-    			</button>
-    			<div id="comment-1" class="product-item-comment collapse">
-    				<textarea name="comment" class="form-control" rows="3"></textarea>
-    			</div>
-    		</div>
-    	</div>
-
-    	<div class="product-item card">
-    		<div class="row">
-    			<div class="col-xs-4 col-sm-4">
-    				<div class="product-item-img">
-    					{{ image("img/products/foods/food.jpg", "alt":"", "class":"img-responsive") }}
-    				</div>	
-    			</div>
-    			<div class="col-xs-8 col-sm-8">
-    				<div class="product-item-details">
-    				    <p class="title">Mini Mac</p>
-    				    <p class="description">Es terrible de weno oe ti!</p>
-    				    <div class="row">
-    				    	<div class="col-xs-4 col-sm-4">
-    				    		<div class="price">$ 4.500</div>
-    				    	</div>
-    				    	<div class="col-xs-8 col-sm-8">
-    				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus"  data-producto='2'><i class="fa fa-minus"></i></button>
-    				    			<button class="plus"  data-producto='2'><i class="fa fa-plus"></i></button>
-    				    			<input type="number" min='0' value='0' class="form-control pull-right input_pedidos" id='input-2' data-producto='2'>
-    				    		</div>
-    				    	</div>
-    				    </div>
-    				</div>	
-    			</div>
-    		</div>
-    		<div class="row product-add-item-comment">
-    			<button type="button" data-toggle="collapse" data-target="#comment-2">
-    				<i class="fa fa-plus"></i> Añadir Comentario
-    			</button>
-    			<div id="comment-2" class="product-item-comment collapse">
-    				<textarea name="comment" class="form-control" rows="3"></textarea>
-    			</div>
-    		</div>
-    	</div>
-
-    	<div class="product-item card">
-    		<div class="row">
-    			<div class="col-xs-4 col-sm-4">
-    				<div class="product-item-img">
-    					{{ image("img/products/drinks/drink.jpg", "alt":"", "class":"img-responsive") }}
-    				</div>	
-    			</div>
-    			<div class="col-xs-8 col-sm-8">
-    				<div class="product-item-details">
-    				    <p class="title">Ron Abuelo 3 años</p>
-    				    <p class="description">Es terrible de weno oe ti!</p>
-    				    <div class="row">
-    				    	<div class="col-xs-4 col-sm-4">
-    				    		<div class="price">$ 3.500</div>
-    				    	</div>
-    				    	<div class="col-xs-8 col-sm-8">
-    				    		<div class="product-item-buttons pull-right">
-    				    			<button class="minus" data-producto='3'><i class="fa fa-minus"></i></button>
-    				    			<button class="plus" data-producto='3'><i class="fa fa-plus"></i></button>
-    				    			<input type="number" min='0' value='0' class="form-control pull-right input_pedidos" id='input-3' data-producto='3'>
-    				    		</div>
-    				    	</div>
-    				    </div>
-    				</div>	
-    			</div>
-    		</div>
-    		<div class="row product-add-item-comment">
-    			<button type="button" data-toggle="collapse" data-target="#comment-3">
-    				<i class="fa fa-plus"></i> Añadir Comentario
-    			</button>
-    			<div id="comment-3" class="product-item-comment collapse">
-    				<textarea name="comment" class="form-control" rows="3"></textarea>
-    			</div>
-    		</div>
-    	</div>
-
-
         {% for producto in productos %}
-
 
         	<div class="product-item card">
         		<div class="row">
@@ -158,9 +44,17 @@
         				    	</div>
         				    	<div class="col-xs-8 col-sm-8">
         				    		<div class="product-item-buttons pull-right">
-        				    			<button class="minus"><i class="fa fa-minus"></i></button>
-        				    			<button class="plus"><i class="fa fa-plus"></i></button>
-        				    			<input type="text" class="form-control pull-right">
+        				    			<button class="minus" data-producto='{{producto.id}}'><i class="fa fa-minus"></i></button>
+        				    			<button class="plus" data-producto='{{producto.id}}'><i class="fa fa-plus"></i></button>
+
+        				    			<input  type            = "number" 
+                                                min             = '0'
+                                                value           = '0' 
+                                                class           = "form-control pull-right input_pedidos" 
+                                                id              = 'input-{{producto.id}}' 
+                                                data-producto   = '{{producto.id}}'
+                                                data-promocion  = 'false' >
+
         				    		</div>
         				    	</div>
         				    </div>
@@ -168,10 +62,10 @@
         			</div>
         		</div>
         		<div class="row product-add-item-comment">
-        			<button type="button" data-toggle="collapse" data-target="#comment-1">
+        			<button type="button" data-toggle="collapse" data-target="#comment-{{producto.id}}">
         				<i class="fa fa-plus"></i> Añadir Comentario
         			</button>
-        			<div id="comment-1" class="product-item-comment collapse">
+        			<div id="comment-{{producto.id}}" class="product-item-comment collapse">
         				<textarea name="comment" class="form-control" rows="3"></textarea>
         			</div>
         		</div>
@@ -209,10 +103,23 @@
 			    	</div>
 			    </div>
 			    <div class="modal-body">
+
+
+
+
+
+
 			      <!-- Products -->
-			        <div class="card">
+
+
+
+
+
+
+
+			        <div class="card" id='pedido-1'>
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='1'>Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -229,9 +136,9 @@
 				      	</div>
 			        </div>
 
-			        <div class="card">
+			        <div class="card" id='pedido-2'>
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='2'>Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -248,9 +155,9 @@
 				      	</div>
 			        </div>
 
-			        <div class="card">
+			        <div class="card" id='pedido-3'>
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='3'>Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -266,6 +173,14 @@
 				      		</div>
 				      	</div>
 			        </div>
+
+
+
+
+
+
+
+
 			    </div>
 			    <div class="total card">
 			    	<div class="row">

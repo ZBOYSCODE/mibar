@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+
 use App\Business\ProductoBSN;
+use App\Business\PedidoBSN;
 
 
 
@@ -57,8 +59,7 @@ class MenuController extends ControllerBase
 	* Renderiza la vista de productos según el parámetro seleccionado
 	*
 	*
-	*/    
-
+	*/
 	public function changeMenuAction(){
 
         if($this->request->isAjax()){
@@ -100,9 +101,41 @@ class MenuController extends ControllerBase
         	$this->view->disable();
 
         }
+	}
 
+	/**
+	 * addPedido
+	 *
+	 * ingresa una nueva lista de pedidos
+	 *
+	 * @author Sebastián Silva
+	 */
+	public function  addPedidoAction() {
+
+		$listado =  json_decode($_POST['pedidos']);
+
+		$pedido = new PedidoBSN();
+
+		$data = array();
+
+		$param = array(
+			'pedidos' => $listado
+		);
+
+		if( $pedido->savePedidoSesion($param) ) {
+
+			$data['success'] = true;
+
+		} else {
+
+			$data['success'] = false;
+			$data['msg'] = $pedido->error;
+		}
+
+		echo json_encode($data);
 	}
 
 
 
 }
+

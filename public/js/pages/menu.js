@@ -10,6 +10,12 @@
 
  	});
 
+ 	$(document).on('click', '.delete-pedido', function(){
+
+ 		
+
+ 	});
+
 
  	function agregar_productos_carro() {
 
@@ -17,8 +23,9 @@
 
  		$(".input_pedidos").each(function() {
 
- 			var producto = $(this).attr('data-producto');
- 			var cantidad = $(this).val();
+ 			var producto 	= $(this).attr('data-producto'); 	// ID producto
+ 			var promo 		= $(this).attr('data-promocion');	// Indicamos cuando es una promoción
+ 			var cantidad 	= $(this).val();
 			
 
  			if (cantidad > 0) {
@@ -27,9 +34,10 @@
 
 				var element = {};
 
-	 			element.producto = producto;
-	 			element.cantidad = cantidad;
-	 			element.comment = comment;
+	 			element.producto 	= producto;
+	 			element.cantidad 	= cantidad;
+	 			element.promocion 	= promo; 
+	 			element.comment 	= comment;
 
 	 			pedido.push(element);
  			}
@@ -41,8 +49,13 @@
  	function enviar_pedido(pedido) {
 
  		var json = JSON.stringify(pedido);
+
+ 		var datos = {
+
+ 			'pedidos' : json
+ 		}
 	
-		fun = $.xajax(json, url+'/addPedido');
+		fun = $.xajax(datos, url+'/addPedido');
 
 		fun.success(function (data)
 		{
