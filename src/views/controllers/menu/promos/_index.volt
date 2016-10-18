@@ -24,7 +24,7 @@
 <form action="">
     <div class="menu-products">
 
-        {% for producto in productos %}
+        {% for producto in promociones %}
 
 
         	<div class="product-item card">

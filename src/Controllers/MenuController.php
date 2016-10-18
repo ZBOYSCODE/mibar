@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Business\ProductoBSN;
+use App\Business\PromocionBSN;
 
 
 
@@ -11,15 +12,18 @@ class MenuController extends ControllerBase
 	// Constantes
 
 	private $ID_CATEGORY_BEBIDAS = 1;
+	private $ID_CATEGORY_COMIDAS = 2;
 
 	// Business
 
 	private $productoBsn;
+	private $promocionBsn;
 
 
 
 	public function initialize(){
 		$this->productoBsn = new ProductoBSN();
+		$this->promocionBsn = new PromocionBSN();
 	}
 
 	/**
@@ -35,7 +39,7 @@ class MenuController extends ControllerBase
     	#js custom
         $this->assets->addJs('js/pages/menu.js');
 
-
+        // Al cambiar este parámetro, se debe cambiar también la vista.
         $paramCategoria = ["categoria_id" => $this->ID_CATEGORY_BEBIDAS];
 
         $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
@@ -50,48 +54,37 @@ class MenuController extends ControllerBase
 
 
 	/**
-	* changeMenu
+	* changeMenuDrinks
 	*
 	* @author osanmartin
 	*
-	* Renderiza la vista de productos según el parámetro seleccionado
+	* Renderiza la vista de bebidas según el parámetro seleccionado
 	*
 	*
 	*/    
 
-	public function changeMenuAction(){
+	public function changeMenuDrinksAction(){
 
         if($this->request->isAjax()){
 
             $post = $this->request->getPost();
-            $view = "controllers/menu/promos/_index";
+            $view = "controllers/menu/drinks/_index";
             $this->mifaces->newFaces();
 
 
-            if(isset($post["categoria"])){
+	        $paramCategoria = ["categoria_id" => $this->ID_CATEGORY_BEBIDAS];
 
-            	$categoria_id = $post["categoria"];
+	        $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
+	        $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
 
-		        $paramCategoria = ["categoria_id" => $categoria_id];
-
-
-		        $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
-		        $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
-
-		        $dataView["productos"] = $productos;
-		        $dataView["subcategorias"] = $subcategorias;
+	        $dataView["productos"] = $productos;
+	        $dataView["subcategorias"] = $subcategorias;
 
 
 
-		        $toRend = $this->view->getPartial($view, $dataView);
+	        $toRend = $this->view->getPartial($view, $dataView);
 
-		        $this->mifaces->addToRend('menu-products',$toRend);
-
-        	} else{
-
-				$this->mifaces->addToMsg("danger", "Error Inesperado.");
-
-        	}
+	        $this->mifaces->addToRend('menu-products',$toRend);
 
         	$this->mifaces->run();
 
@@ -102,6 +95,92 @@ class MenuController extends ControllerBase
         }
 
 	}
+
+
+	/**
+	* changeMenuFoods
+	*
+	* @author osanmartin
+	*
+	* Renderiza la vista de comidas según el parámetro seleccionado
+	*
+	*
+	*/    
+
+	public function changeMenuFoodsAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/menu/foods/_index";
+            $this->mifaces->newFaces();
+
+
+	        $paramCategoria = ["categoria_id" => $this->ID_CATEGORY_COMIDAS];
+
+	        $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
+	        $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
+
+	        $dataView["productos"] = $productos;
+	        $dataView["subcategorias"] = $subcategorias;
+
+
+
+	        $toRend = $this->view->getPartial($view, $dataView);
+
+	        $this->mifaces->addToRend('menu-products',$toRend);
+
+        	$this->mifaces->run();
+
+        } else{
+
+        	$this->view->disable();
+
+        }
+
+	}	
+
+	/**
+	* changeMenuPromocion
+	*
+	* @author osanmartin
+	*
+	* Renderiza la vista de promociones 
+	*
+	*
+	*/    
+
+	public function changeMenuPromocionAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/menu/promos/_index";
+            $this->mifaces->newFaces();
+
+	        $promociones = $this->promocionBsn->getPromociones();
+
+	        $subcategorias = $this->promocionBsn->getListTipoPromo();
+
+	        $dataView["promociones"] = $promociones;
+	        $dataView["subcategorias"] = $subcategorias;
+
+
+
+	        $toRend = $this->view->getPartial($view, $dataView);
+
+	        $this->mifaces->addToRend('menu-products',$toRend);
+
+
+        	$this->mifaces->run();
+
+        } else{
+
+        	$this->view->disable();
+
+        }
+
+	}	
 
 
 
