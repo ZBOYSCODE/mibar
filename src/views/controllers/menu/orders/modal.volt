@@ -11,10 +11,10 @@
 			    	<div class="col-xs-2 col-md-2">
 			    		{{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
 			    	</div>
-			    	<div class="col-xs-8 col-md-8">
+			    	<div class="col-xs-7 col-md-7">
 			    		<p>Orlando San Martín</p>
 			    	</div>
-			    	<div class="col-xs-2 col-md-2">
+			    	<div class="col-xs-3 col-md-3">
 			    		<p>Mesa 2</p>
 			    	</div>
 			    </div>
