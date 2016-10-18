@@ -179,7 +179,7 @@ class TestController extends ControllerBase
                         echo " Producto: ".$producto->nombre;
                         echo "<br>";
                 }
-                
+
                 echo "========================================================";         
             }
 
@@ -191,6 +191,48 @@ class TestController extends ControllerBase
         echo "<pre>";
         echo "Total";
         echo " ".$total;
+    }
+
+    public function entregaPedidoAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $param['pedido_id'] = 28;
+        if (!$meseroBSN->entregaPedido($param)) {
+            echo "Fail";
+        }else{
+            echo "Exito";
+            print_r($meseroBSN->error);
+        }
+
+    }
+    public function entregaPedidoPromoAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $param['pedido_id'] = 27;
+        if ($meseroBSN->entregaPedidoPromo($param)) {
+            echo "Exito";
+        }else{
+            echo "Fail";
+            print_r($meseroBSN->error);
+        }
+
+    }
+
+    public function esPedidoAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $param['pedido_id'] = 28;
+
+         if ($meseroBSN->esPromo($param)) {
+            echo "Es promo";
+        }else{
+            echo "No es promo";
+            print_r($meseroBSN->error);
+        }
+
     }
 
 
