@@ -12,7 +12,26 @@
 
  	$(document).on('click', '.delete-pedido', function(){
 
- 		
+ 		var pedido = $(this).attr('data-pedido');
+
+ 		$("#pedido-"+pedido).remove();
+ 		console.log("Pedido Nº "+pedido+" removido");
+
+ 		actualizar_pedidos();
+ 	});
+
+
+ 	$(document).on('click', '.minus', function(){
+
+ 		var producto = $(this).attr('data-producto');
+ 		quitar_producto(producto);
+
+ 	});
+
+ 	$(document).on('click', '.plus', function(){
+
+ 		var producto = $(this).attr('data-producto');
+ 		agregar_producto(producto);
 
  	});
 
@@ -42,6 +61,7 @@
 	 			pedido.push(element);
  			}
  		}); 
+
 
  		enviar_pedido(pedido);
  	}
@@ -77,22 +97,20 @@
 
  		console.log("actualizar pedidos");
 
+
+ 		actualizar_precio_pedidos();
+
+ 	}
+
+ 	function actualizar_precio_pedidos() {
+
+ 		$(".precio_pedidos").text("666.999");
+
+ 		console.log("precios actualizados");
  	}
 
 
- 	$(document).on('click', '.minus', function(){
-
- 		var producto = $(this).attr('data-producto');
- 		quitar_producto(producto);
-
- 	});
-
- 	$(document).on('click', '.plus', function(){
-
- 		var producto = $(this).attr('data-producto');
- 		agregar_producto(producto);
-
- 	});
+ 	
 
  	function agregar_producto(producto) {
 

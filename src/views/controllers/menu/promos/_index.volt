@@ -187,7 +187,7 @@
 			    			<p><b> Total a Pagar: </b></p>
 			    		</div>
 			    		<div class="col-xs-6 col-md-6">
-			    			<p><b><i class="fa fa-usd"></i> 32.000</b></p>
+			    			<p><b><i class="fa fa-usd"></i> <span class='precio_pedidos'>32.000</span></b></p>
 			    		</div>
 			    	</div>
 			    </div>
