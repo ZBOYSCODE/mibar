@@ -1,6 +1,5 @@
  $(document).on('ready', function() {
 
-
  	var url = $("#frm").val();
 
  	$(document).on('click', '#add-menu-product', function() {
@@ -126,20 +125,15 @@
           type: 'success',
           confirmButtonColor: '#521852'
         }).then(function() {
-
-
-
-
           $('#products-modal').modal('hide');
         })       
       });
       
    });
 
-  $('.menu-type-item').on('click',function(){
 
-
-
+    $('.menu-type-item').on('click',function(){
+                       
     var action = $(this).data("url");
     var categoria = $(this).data("categoria");
 
@@ -149,8 +143,7 @@
 
     //mifaces
     $.callAjax(dataIn, action, $(this));
-
-
+    
   });
 
 

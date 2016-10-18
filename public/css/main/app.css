@@ -221,7 +221,7 @@ div.menu-types > div:last-child{
 
 .menu-type-item{
   padding: 0;
-  margin: 5px 5px 0 5px;
+  margin: 10px 5px 0 5px;
   height: 130px;
   text-align: center;
 }
@@ -233,6 +233,14 @@ div.menu-types > div:last-child{
   width: 100%;
   background-color: transparent;
   border:none;
+}
+
+.menu-type-item button.active,
+.menu-type-item button:focus{
+  outline: none;
+  background-color:  #772277;
+  border: 2px solid #fff;
+  border-radius: 4px;
 }
 
 .menu-type-item img{
