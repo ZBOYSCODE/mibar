@@ -2,6 +2,8 @@
 
 {% block content %}
 
+   <input type="hidden" id='frm' value="<?php echo $this->url->get('menu'); ?>" >
+
 	<section class="section-content-top">
    		<div class="row menu-types">
    			<div class="col-xs-4 col-sm-4 no-col-padding">

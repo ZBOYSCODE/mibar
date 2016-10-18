@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+
 use App\Business\ProductoBSN;
 use App\Business\PromocionBSN;
+use App\Business\PedidoBSN;
 
 
 
@@ -137,8 +139,39 @@ class MenuController extends ControllerBase
         	$this->view->disable();
 
         }
+	}
 
-	}	
+	/**
+	 * addPedido
+	 *
+	 * ingresa una nueva lista de pedidos
+	 *
+	 * @author Sebastián Silva
+	 */
+	public function  addPedidoAction() {
+
+		$listado =  json_decode($_POST['pedidos']);
+
+		$pedido = new PedidoBSN();
+
+		$data = array();
+
+		$param = array(
+			'pedidos' => $listado
+		);
+
+		if( $pedido->savePedidoSesion($param) ) {
+
+			$data['success'] = true;
+
+		} else {
+
+			$data['success'] = false;
+			$data['msg'] = $pedido->error;
+		}
+
+		echo json_encode($data);
+	}
 
 	/**
 	* changeMenuPromocion
@@ -182,6 +215,5 @@ class MenuController extends ControllerBase
 
 	}	
 
-
-
 }
+

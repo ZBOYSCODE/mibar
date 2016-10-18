@@ -21,11 +21,10 @@
 		</div>
 	</div>
 </div>
-<form action="">
+
     <div class="menu-products">
 
         {% for producto in promociones %}
-
 
         	<div class="product-item card">
         		<div class="row">
@@ -44,9 +43,17 @@
         				    	</div>
         				    	<div class="col-xs-8 col-sm-8">
         				    		<div class="product-item-buttons pull-right">
-        				    			<button class="minus"><i class="fa fa-minus"></i></button>
-        				    			<button class="plus"><i class="fa fa-plus"></i></button>
-        				    			<input type="text" class="form-control pull-right">
+        				    			<button class="minus" data-producto='{{producto.id}}'><i class="fa fa-minus"></i></button>
+        				    			<button class="plus" data-producto='{{producto.id}}'><i class="fa fa-plus"></i></button>
+
+        				    			<input  type            = "number" 
+                                                min             = '0'
+                                                value           = '0' 
+                                                class           = "form-control pull-right input_pedidos" 
+                                                id              = 'input-{{producto.id}}' 
+                                                data-producto   = '{{producto.id}}'
+                                                data-promocion  = 'true' >
+
         				    		</div>
         				    	</div>
         				    </div>
@@ -54,10 +61,10 @@
         			</div>
         		</div>
         		<div class="row product-add-item-comment">
-        			<button type="button" data-toggle="collapse" data-target="#comment-1">
+        			<button type="button" data-toggle="collapse" data-target="#comment-{{producto.id}}">
         				<i class="fa fa-plus"></i> Añadir Comentario
         			</button>
-        			<div id="comment-1" class="product-item-comment collapse">
+        			<div id="comment-{{producto.id}}" class="product-item-comment collapse">
         				<textarea name="comment" class="form-control" rows="3"></textarea>
         			</div>
         		</div>
@@ -69,10 +76,13 @@
 
 	<div class="menu-footer">
 		<div class="row menu-footer-buttons card">
-			<button id="add-menu-product" class="btn btn-main" type="submit">AÑADIR PEDIDOS</button>
+			<button id="add-menu-product" class="btn btn-main" type="button">AÑADIR PEDIDOS</button>
 		</div>
 	</div>	
-</form>
+
+
+
+
 <form action="">
 	<!-- Modal -->
 	<div id="products-modal" class="menu-products-list-modal modal fade" role="dialog">
@@ -83,11 +93,32 @@
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MIS PEDIDOS</h4>
 			    </div>
+			    <div class="row user-details card">
+			    	<div class="col-xs-2 col-md-2">
+			    		{{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
+			    	</div>
+			    	<div class="col-xs-10 col-md-10">
+			    		<p>Orlando San Martín</p>
+			    	</div>
+			    </div>
 			    <div class="modal-body">
+
+
+
+
+
+
 			      <!-- Products -->
-			        <div class="card">
+
+
+
+
+
+
+
+			        <div class="card" id='pedido-1'>
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='1'>Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -104,9 +135,9 @@
 				      	</div>
 			        </div>
 
-			        <div class="card">
+			        <div class="card" id='pedido-2'>
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='2'>Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -123,9 +154,9 @@
 				      	</div>
 			        </div>
 
-			        <div class="card">
+			        <div class="card" id='pedido-3'>
 				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
+				      		<button type="button" class="btn btn-small btn-main pull-right delete-pedido" data-pedido='3'>Eliminar</button>
 				      		<p class="title">Ron Abuelo 3 años</p>
 				      		<div class="row">
 				      			<div class="col-xs-6 col-md-6">
@@ -141,6 +172,24 @@
 				      		</div>
 				      	</div>
 			        </div>
+
+
+
+
+
+
+
+
+			    </div>
+			    <div class="total card">
+			    	<div class="row">
+			    		<div class="col-xs-6 col-md-6">
+			    			<p><b> Total a Pagar: </b></p>
+			    		</div>
+			    		<div class="col-xs-6 col-md-6">
+			    			<p><b><i class="fa fa-usd"></i> 32.000</b></p>
+			    		</div>
+			    	</div>
 			    </div>
 			    <div class="modal-footer card">
 			      <button id="Send-Products" type="button" class="btn btn-main">ENVIAR PEDIDO</button>
