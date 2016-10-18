@@ -12,9 +12,6 @@
 
    				<div class="menu-type-item card menu-promo" data-url="menu/changeMenuPromocion" data-categoria="0" data-callName="changeMenu">
 	   				<button type="button" id="opcion0" class="button-active">
-
-
-
 	   					{{ image("img/icons/promos.png", "alt":"Promos", "class":"img-responsive") }}
 	   					<p>PROMOS</p>
 	   				</button>  				    
