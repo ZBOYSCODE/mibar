@@ -1,10 +1,15 @@
- var menuNav = "opcion1";
+
 
  $(document).on('ready', function() {
 
-  $('#'+menuNav).addClass('active');
+ 	var menuNav = "opcion1";
+ 	var url 	= $("#frm").val();
+	$('#'+menuNav).addClass('active');
 
- 	var url = $("#frm").val();
+  	actualizar_info();
+
+
+
  	$(document).on('click', '#add-menu-product', function() {
 
  		var producto = $(this).attr('data-producto');
@@ -12,14 +17,10 @@
 
  	});
 
- 	$(document).on('click', '.delete-pedido', function(){
+ 	$(document).on('click', '.delete-pedido', function() {
 
  		var pedido = $(this).attr('data-pedido');
-
- 		$("#pedido-"+pedido).remove();
- 		console.log("Pedido Nº "+pedido+" removido");
-
- 		actualizar_pedidos();
+ 		delete_pedido(pedido);
  	});
 
 
@@ -34,7 +35,6 @@
 
  		var producto = $(this).attr('data-producto');
  		agregar_producto(producto);
-
  	});
 
 
@@ -81,9 +81,16 @@
 
 		fun.success(function (data)
 		{
-			if(data.estado)
+			if(data.success)
 			{
-				actualizar_pedidos(data.pedidos);
+
+				$.bootstrapGrowl("Carro actualizado.",{type:'success'});
+
+				// reset input
+				$(".input_pedidos").val(0);
+
+				actualizar_info();
+				actualizar_precio_pedidos();
 				
 			}else{
 				$.bootstrapGrowl(data.msg,{type:'danger'});
@@ -95,12 +102,23 @@
 
 
 
- 	function actualizar_pedidos(pedidos) {
+ 	function actualizar_info() {
 
- 		console.log("actualizar pedidos");
+ 		var datos = {}
+
+   		fun = $.xajax(datos, url+'/getNumPedidos');
+
+		fun.success(function (data)
+		{
+			if(data.success) {
+				
+				$(".carro-compra").text(data.num);
+				
+			}
+
+		});
 
 
- 		actualizar_precio_pedidos();
 
  	}
 
@@ -141,31 +159,39 @@
 
  	}
 
-   
-   $('#Send-Products').on('click', function(){
+   	
 
-      swal({
-        title: '¿Estás Seguro?',
-        text: "Se enviarán todos los productos",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#521852',
-        cancelButtonColor: '#d65cc0',
-        confirmButtonText: 'Enviar'
-      }).then(function() {
-        swal({
-          title:'¡Pedido Concretado!',
-          text: 'Atenderemos su solicitud a la brevedad.',
-          type: 'success',
-          confirmButtonColor: '#521852'
-        }).then(function() {
-          $('#products-modal').modal('hide');
-        })       
-      });
+   	$(document).on('click', '#Send-Products', function(){
+
+   		swal({
+	        title: '¿Estás Seguro?',
+	        text: "Se enviarán todos los productos",
+	        type: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#521852',
+	        cancelButtonColor: '#d65cc0',
+	        confirmButtonText: 'Enviar'
+      	}).then(function() {
+
+      		if(concretar_pedido()){
+
+      			swal({
+		        	title:'¡Pedido Concretado!',
+		        	text: 'Atenderemos su solicitud a la brevedad.',
+		        	type: 'success',
+		        	confirmButtonColor: '#521852'
+
+		        }).then(function() {
+
+		          	$('#products-modal').modal('hide');
+		        })  
+      		}
+
+      	});
       
    });
 
-    $('.menu-prod').on('click',function(){
+   	$(document).on('click', '.menu-prod', function(){
 
 
         var action = $(this).data("url");
@@ -178,9 +204,7 @@
     });
 
 
-
-    $('.menu-promo').on('click',function(){
-
+   	$(document).on('click', '.menu-promo', function(){
 
         var action = $(this).data("url");
 
@@ -191,19 +215,18 @@
 
     });
 
+   	$(document).on('click', '.nav-menu-cart', function(e){
 
-   $('.nav-menu-cart').on('click',function(e){
+    	var action = $(this).data("url");
 
-    var action = $(this).data("url");
+    	var dataIn = new FormData();
 
-    var dataIn = new FormData();
-
-    //mifaces
-    $.callAjax(dataIn, action, $(this));
+    	//mifaces
+    	$.callAjax(dataIn, action, $(this));
     
-    e.preventDefault();
+    	e.preventDefault();
     
-  }); 
+  	}); 
  
 
     $(document).on('change', "#promo-categories",function(){
@@ -250,46 +273,130 @@
   });    
 
 
+    function concretar_pedido() {
+
+ 		var datos = {}
+
+   		fun = $.xajax(datos, url+'/concretarPedido');
+
+		fun.success(function (data)
+		{
+			if(data.success)
+			{
+				swal({
+					title:'¡Pedido Concretado!',
+					text: 'Atenderemos su solicitud a la brevedad.',
+					type: 'success',
+					confirmButtonColor: '#521852'
+
+				}).then(function() {
+					$('#products-modal').modal('hide');
+					actualizar_info();
+				}) 
+				
+			}else{
+				
+				swal({
+					title:'¡Lo Sentimos!',
+					text: 'No se pudo concretar el pedido, ¡Intente nuevamente!',
+					type: 'error',
+					confirmButtonColor: '#521852'
+
+				}).then(function() {
+					//$('#products-modal').modal('hide');
+				}) 
+
+			}
+		});
+   	}
 
 
-});
+   	function delete_pedido(pedido) {
+
+
+   		var datos = {
+   			'pedido' : pedido
+   		}
+
+   		fun = $.xajax(datos, url+'/removePedido');
+
+		fun.success(function (data)
+		{
+			if(data.success)
+			{
+				$("#pedido-"+data.pedido).remove();
+
+ 				console.log("Pedido Nº "+data.pedido+"removido");
+
+ 				actualizar_info();
+				
+			}else{
+				
+				swal({
+					title:'¡Lo Sentimos!',
+					text: 'No se pudo eliminar el pedido, ¡Intente nuevamente!',
+					type: 'error',
+					confirmButtonColor: '#521852'
+
+				}).then(function() {
+					//$('#products-modal').modal('hide');
+				}) 
+
+			}
+		});
+   	}
+   	
+
   
     /* Procedimientos Post Ajax Call */
-  $(document).ajaxComplete(function(event,xhr,options){
+	$(document).ajaxComplete(function(event,xhr,options){
 
-      if(options.callName != null )
-      {
-          if(options.callName == "changeMenu") {
-              active_Menu();
-          }
-           if(options.callName == "ordersButton"){
-              openMyOrdersModal();
-           }
-      }
+		if(options.callName != null ) {
+			if(options.callName == "changeMenu") {
+				active_Menu();
+			}
 
-  }); 
+			if(options.callName == "ordersButton") {
+				openMyOrdersModal();
+			}
+		}
+
+	}); 
 
 
- 	function active_Menu(){
+ 	function active_Menu() {
 
-      $('.button-active').removeClass('active');
+		$('.button-active').removeClass('active');
 
-      if (menuNav == "opcion0"){
-        $('#opcion0').addClass('active');
-      }
+		if (menuNav == "opcion0"){
+			$('#opcion0').addClass('active');
+		}
 
-      if (menuNav == "opcion1"){
-        $('#opcion1').addClass('active');
-      }
+		if (menuNav == "opcion1"){
+			$('#opcion1').addClass('active');
+		}
 
-      if (menuNav == "opcion2"){
-        $('#opcion2').addClass('active');
-      }
- }
+		if (menuNav == "opcion2"){
+			$('#opcion2').addClass('active');
+		}
+	}
 
- function openMyOrdersModal(){
+	 function openMyOrdersModal(){
 
-    $('#products-modal').modal('show');
- }
+	    $('#products-modal').modal('show');
+	 }
+
+
+ 	
+});
+
+
+
+
+
+
+
+
+
 
 

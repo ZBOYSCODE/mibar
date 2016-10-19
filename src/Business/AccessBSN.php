@@ -145,7 +145,8 @@
                 'id'        => $cliente->id,
                 'rol'       => $this->ROL_CLIENTE,
                 'cuenta'    => $cuenta->id,
-                'nombre'    => ucwords( strtolower( $cliente->nombre." ".$cliente->apellido ) )
+                'nombre'    => ucwords( strtolower( $cliente->nombre." ".$cliente->apellido ) ),
+                'mesa'      => 1 // NUMERO PRUEBA
 
             ));
 

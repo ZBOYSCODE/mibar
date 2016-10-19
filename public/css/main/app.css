@@ -518,6 +518,11 @@ div.menu-types > div:last-child{
   margin-bottom: 10px;
 }
 
+.lista_pedidos{
+  max-height: 60vh;
+  overflow: auto;
+}
+
 
 /* ========== MEDIAQUERIES ===========*/
 

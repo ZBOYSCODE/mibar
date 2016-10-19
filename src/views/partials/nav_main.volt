@@ -10,7 +10,7 @@
                 </a>
                 <a href="" class="nav-menu-cart pull-right" data-callName="ordersButton" data-url="menu/myOrders">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="nav-menu-cart-cont">01</span>
+                    <span class="nav-menu-cart-cont carro-compra">0</span>
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="menu">

@@ -15,67 +15,41 @@
 			    		<p>Orlando San Martín</p>
 			    	</div>
 			    	<div class="col-xs-3 col-md-3">
-			    		<p>Mesa 2</p>
+			    		<p>Mesa {{ session.get('auth-identity')['mesa'] }}</p>
 			    	</div>
 			    </div>
 			    <div class="modal-body">
 			      <!-- Products -->
-			        <div class="card">
-				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
-				      		<p class="title">Ron Abuelo 3 años</p>
-				      		<div class="row">
-				      			<div class="col-xs-6 col-md-6">
-				      				<p><b><i class="fa fa-bar-chart"></i> Cantidad: </b>4</p>
-				      			</div>
-				      			<div class="col-xs-6 col-md-6">
-				      				<p><b><i class="fa fa-calculator"></i> Total Pedido: </b>$14.000</p>
-				      			</div>
-				      		</div>
-				      		<div class="comment">
-				      			<b><i class="fa fa-commenting"></i> Comentario:</b>
-				      			<p>Con poca azucar, dos gotas de vinagre, 3 granos de sal y 4 onzas de licor de anis marca 3 palos.</p>
-				      		</div>
-				      	</div>
-			        </div>
+					
+					<div class="lista_pedidos">
 
-			        <div class="card">
-				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
-				      		<p class="title">Ron Abuelo 3 años</p>
-				      		<div class="row">
-				      			<div class="col-xs-6 col-md-6">
-				      				<p><b><i class="fa fa-bar-chart"></i> Cantidad: </b>4</p>
-				      			</div>
-				      			<div class="col-xs-6 col-md-6">
-				      				<p><b><i class="fa fa-calculator"></i> Total Pedido: </b>$14.000</p>
-				      			</div>
-				      		</div>
-				      		<div class="comment">
-				      			<b><i class="fa fa-commenting"></i> Comentario:</b>
-				      			<p>Con poca azucar, dos gotas de vinagre, 3 granos de sal y 4 onzas de licor de anis marca 3 palos.</p>
-				      		</div>
-				      	</div>
-			        </div>
+						{% for pedido in pedidos %}
 
-			        <div class="card">
-				      	<div class="product-item-modal">
-				      		<button type="button" class="btn btn-small btn-main pull-right">Eliminar</button>
-				      		<p class="title">Ron Abuelo 3 años</p>
-				      		<div class="row">
-				      			<div class="col-xs-6 col-md-6">
-				      				<p><b><i class="fa fa-bar-chart"></i> Cantidad: </b>4</p>
-				      			</div>
-				      			<div class="col-xs-6 col-md-6">
-				      				<p><b><i class="fa fa-calculator"></i> Total Pedido: </b>$14.000</p>
-				      			</div>
-				      		</div>
-				      		<div class="comment">
-				      			<b><i class="fa fa-commenting"></i> Comentario:</b>
-				      			<p>Con poca azucar, dos gotas de vinagre, 3 granos de sal y 4 onzas de licor de anis marca 3 palos.</p>
-				      		</div>
-				      	</div>
-			        </div>
+							<div class="card" id='pedido-{{pedido.num_pedido}}'>
+						      	<div class="product-item-modal">
+						      		<button type="button" data-pedido="{{ pedido.num_pedido }}" class="btn btn-small btn-main pull-right delete-pedido">Eliminar</button>
+						      		<p class="title">{{ pedido.nombre }}</p>
+						      		<div class="row">
+						      			<div class="col-xs-6 col-md-6">
+						      				<p><b><i class="fa fa-bar-chart"></i> Cantidad: </b>{{ pedido.cantidad }}</p>
+						      			</div>
+						      			<div class="col-xs-6 col-md-6">
+						      				<p><b><i class="fa fa-calculator"></i> Total Pedido: </b>$<span>{{ pedido.precio }}</span></p>
+						      			</div>
+						      		</div>
+						      		<div class="comment">
+						      			<b><i class="fa fa-commenting"></i> Comentario:</b>
+						      			<p>{{ pedido.comentario }}</p>
+						      		</div>
+						      	</div>
+					        </div>
+
+						{% endfor %}
+
+					</div>
+						
+
+
 			    </div>
 			    <div class="modal-footer card">
 			      <button id="Send-Products" type="button" class="btn btn-main">ENVIAR PEDIDO</button>
