@@ -116,6 +116,10 @@ body, html {
   color: #fff;
 }
 
+.btn-width {
+  min-width: 120px;
+}
+
 /* Paddings & Margins */
 
 .section-content-top{
