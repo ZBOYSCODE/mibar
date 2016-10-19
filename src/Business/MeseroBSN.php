@@ -18,6 +18,7 @@
     use App\Models\Mesas;
     use App\Models\FuncionarioMesa;
     use App\Models\Cuentas;
+    use App\Models\Pedidos;
     /**
      * Modelo de negocio
      *
@@ -28,7 +29,6 @@
      */
     class MeseroBSN extends Plugin
     {
-
         /**
          *
          * @var array
@@ -44,6 +44,7 @@
          *                    "funcionario_id" => integer
          *                     "turno_id"       => integer
          *                    "fecha"          => Date
+
          *                 ]
          * @return boolean
          */
@@ -152,7 +153,146 @@
 
         }
 
-    
+
+        /**
+         * Entrega un pedido 
+         * Evalúa si es una promo, de serlo marca como entregados todos los productos
+         * De la promoción
+         *
+         * @author rsoto
+         * @param $param = [ 
+         *                    "pedido_id " => integer"             
+         *                 ]
+         *
+         * @return ResultSet
+         */
+
+        public function entregaPedido($param = null){
+
+            if (isset($param['pedido_id']) AND !empty($param['pedido_id'])) {
+
+                $pedidoId = $param['pedido_id'];
+                $pedido = Pedidos::findFirstById($pedidoId);
+
+                if($this->esPromo($param)){
+
+                    return $this->entregaPedidoPromo(array('pedido_id' => $pedidoId));    
+
+                }else{
+
+                    $pedido->estado_id = 5;
+                    if ($pedido->save() === false) {
+
+                        $this->error = $this->errors->$FILE_WRITE_FAIL;
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }
+            }else{
+                $this->error = $this->errors->$MISSING_PARAMETERS;
+                return false;
+
+            }
+        }
+        
+
+        /**
+         * Entrega un producto en promocion param incluye [produc_promo_pedido].
+         * Si param sólo trae [pedido_id], el método se encargará de marcar todos sus productos en promocion 
+         * Como entregados 
+         *
+         * @author rsoto
+         * @param $param = [ 
+         *                    "pedido_id " => integer" 
+         *                    "produc_promo_pedido_id " => integer"            
+         *                 ]
+         *
+         * @return boolean
+         */
+
+        public function entregaPedidoPromo($param = null){
+
+            if (isset($param['pedido_id']) AND !empty($param['pedido_id']) AND isset($param['produc_promo_pedido_id']) AND !empty($param['produc_promo_pedido_id'])) {
+
+                $pedidoId = $param['pedido_id'];
+                $productPromoId = $param['produc_promo_pedido_id'];
+                $pedido = Pedidos::findFirstById($pedidoId);
+                
+                foreach ($pedido->ProducPromoPedidos as $productoPromo ) {
+                   
+                   if($productoPromo->id==$productPromoId){
+
+                        $bandera = "a";
+                        $productoPromo->estado = 5;
+                        if ($productoPromo->save() === false) {
+                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           return false;
+                       }
+                   }
+                }
+                if(!isset($bandera)){
+                    $this->error = $this->errors->NO_RECORDS_FOUND;
+                    return false;
+                }
+
+                return true;    
+
+            }elseif(isset($param['pedido_id']) AND !empty($param['pedido_id'])){    
+
+                if($this->esPromo($param)){
+
+                    $pedidoId = $param['pedido_id'];
+                    $pedido = Pedidos::findFirstById($pedidoId);
+
+                    foreach ($pedido->ProducPromoPedidos as $productoPromo ) {
+
+                        $productoPromo->estado = 5;
+                        if ($productoPromo->save() === false) {
+                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           return false;
+                       }
+                    }
+
+                    return true;
+
+                }else {
+                    $this->error = $this->errors->WRONG_PARAMETERS;
+                }
+
+            }else{
+                $this->error = $this->errors->$MISSING_PARAMETERS;
+                return false;
+            }
+
+        }
+
+        /**
+         * Consulta si un pedido es promocion 
+         *
+         * @author rsoto
+         * @param $param = [ 
+         *                    "pedido_id " => integer" 
+         *                    
+         *                 ]
+         *
+         * @return boolean
+         */
+
+        private function esPromo($param){
+
+            if(isset($param['pedido_id']) OR !empty($param['pedido_id'])){
+
+                $pedidoId = $param['pedido_id'];
+                $pedido = Pedidos::findFirstById($pedidoId);
+
+                if(is_null($pedido->promocion_id)){
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        }
 
     }
 

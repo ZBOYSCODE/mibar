@@ -36,10 +36,12 @@
     	public 	$error;
 
         private $promocionBsn;
+        private $productoBsn;
 
         public function __construct()
         {
             $this->promocionBsn = new PromocionBSN();
+            $this->productoBsn = new ProductoBSN();
         }
 
 
@@ -52,7 +54,6 @@
          *                      [ 
          *                         "user_id" => integer
          *                         "producto_id" => integer
-         *                         "precio" => integer
          *                         "cantidad" => integer 
          *                         "comentario" => text
          *                         "es_promocion" => true/false
@@ -66,17 +67,34 @@
 
             $this->db->begin();
 
-            if(count($param) == 0){
+            if(!isset($param['cuenta_id']) OR
+               !isset($param['pedidos'])){
                 $this->error[] = $this->errors->MISSING_PARAMETERS;
                 return false;
             }
 
-            foreach ($param as $val) {
+            $cuenta_id  = $param['cuenta_id'];
+            $pedidos = $param['pedidos'];
 
-                if($val["es_promocion"])
+            $precioProductosList = $this->productoBsn->getPreciosProducto($pedidos);
+            $precioPromocionesList = $this->promocionBsn->getPreciosPromocion($pedidos);
+
+
+            foreach ($pedidos as $val) {
+
+                $val['cuenta_id'] = $cuenta_id;
+
+                if($val['es_promocion']){
+                    
+                    $val['precio'] = $precioPromocionesList[$val['producto_id']];
                     $result = $this->createOrderPromocion($val);
-                else
+
+                }else{
+
+                    $val['precio'] = $precioProductosList[$val['producto_id']];
                     $result = $this->createOrderProducto($val);
+
+                }
 
                 if(!$result){
                     $this->db->rollback();
@@ -108,7 +126,7 @@
 
                 $pedido->producto_id = $param["producto_id"];
                 $pedido->cuenta_id = $param["cuenta_id"];
-                $pedido->precio = $param["precio"]/$param["cantidad"];
+                $pedido->precio = $param["precio"];
                 $pedido->comentario = $param["comentario"];
                 $pedido->estado_id = 1;
 
@@ -157,7 +175,7 @@
 
                 $pedido->promocion_id = $param["producto_id"];
                 $pedido->cuenta_id = $param["cuenta_id"];
-                $pedido->precio = $param["precio"]/$param["cantidad"];
+                $pedido->precio = $param["precio"];
                 $pedido->comentario = $param["comentario"];
                 $pedido->estado_id = 1;
 
@@ -344,9 +362,6 @@
 
             return $this->session->get("pedidos");
         }
-
-
-
 
     }
 

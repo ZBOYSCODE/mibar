@@ -21,6 +21,8 @@
 
         public $MISSING_PARAMETERS = 'Faltan parametros para realizar la consulta';
 
+        public $WRONG_PARAMETERS = "El dato ingresado no corresponde al solicitado";
+
         public $DUPLICATE_ELEMENT = "El elemento ya se encuentra en la Base de datos";
 
         public $EMAIL_EXISTS = "El email ya existe";

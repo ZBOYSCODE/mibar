@@ -117,4 +117,51 @@
         }
 
 
+         /**
+         * getPreciosPromocion
+         *
+         * retorna la lista de los precios
+         *
+         * @author osanmartin
+         *
+         * @param array $param : array de promociones u objetos
+         *                        con el siguiente formato:
+         *                          ["es_promocion" => boolean,
+         *                           "producto_id" => integer];
+         * @return array [id => precio]
+         */
+
+        public function getPreciosPromocion($param){
+
+            $find = " id IN ( ";
+
+            $length = count($param);
+
+            foreach ($param as $key => $val) {
+            
+                if($val["es_promocion"]){
+
+                    $find .= $val["producto_id"] ;
+
+                    if($key == $length)
+                        $find .= ',';
+
+                }
+
+            }
+
+            $find .= ")";
+
+
+            $promociones = Promociones::find($find);
+
+            foreach ($promociones as $val) {
+                $arr[$val->id] = $val->precio;
+            }            
+
+            return $arr;
+
+        }           
+
+
     }

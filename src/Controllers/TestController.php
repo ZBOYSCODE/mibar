@@ -20,14 +20,14 @@ class TestController extends ControllerBase
 
         $paramProd = [ 
                    0 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 1,
                        'precio' => 3500,
                        'cantidad' => 2,
                        'comentario' => 'Sin hielo',
                        'es_promocion' => false], 
                    1 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 2,
                        'precio' => 6000,
                        'cantidad' => 2,
@@ -37,14 +37,14 @@ class TestController extends ControllerBase
 
         $paramPromo = [ 
                    0 => 
-                       ['cuenta_id' => 1, 
+                       [ 
                        'producto_id' => 1,
                        'precio' => 6000,
                        'cantidad' => 1,
                        'comentario' => '',
                        'es_promocion' => true], 
                    1 => 
-                       ['cuenta_id' => 1, 
+                       [ 
                        'producto_id' => 2,
                        'precio' => 10000,
                        'cantidad' => 2,
@@ -55,23 +55,26 @@ class TestController extends ControllerBase
         $paramProdPedido = [
 
                    0 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 1,
-                       'precio' => 6000,
                        'cantidad' => 1,
                        'comentario' => '',
                        'es_promocion' => true], 
                    1 => 
-                       ['cuenta_id' => 1, 
+                       [
                        'producto_id' => 2,
-                       'precio' => 6000,
                        'cantidad' => 2,
                        'comentario' => '',
                        'es_promocion' => false]                            
                     ];
 
+        $cuenta_id = 1;
+
+        $param["pedidos"] = $paramProdPedido;
+        $param["cuenta_id"] = $cuenta_id;
+
         $pedidoBsn = new PedidoBSN();
-        $result = $pedidoBsn->createOrder($paramProdPedido);
+        $result = $pedidoBsn->createOrder($param);
         if(!is_object($result))
             var_dump($result);
         print_r($pedidoBsn->error);
@@ -176,7 +179,7 @@ class TestController extends ControllerBase
                         echo " Producto: ".$producto->nombre;
                         echo "<br>";
                 }
-                
+
                 echo "========================================================";         
             }
 
@@ -188,6 +191,48 @@ class TestController extends ControllerBase
         echo "<pre>";
         echo "Total";
         echo " ".$total;
+    }
+
+    public function entregaPedidoAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $param['pedido_id'] = 28;
+        if (!$meseroBSN->entregaPedido($param)) {
+            echo "Fail";
+        }else{
+            echo "Exito";
+            print_r($meseroBSN->error);
+        }
+
+    }
+    public function entregaPedidoPromoAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $param['pedido_id'] = 27;
+        if ($meseroBSN->entregaPedidoPromo($param)) {
+            echo "Exito";
+        }else{
+            echo "Fail";
+            print_r($meseroBSN->error);
+        }
+
+    }
+
+    public function esPedidoAction(){
+
+        $meseroBSN = new MeseroBSN();
+
+        $param['pedido_id'] = 28;
+
+         if ($meseroBSN->esPromo($param)) {
+            echo "Es promo";
+        }else{
+            echo "No es promo";
+            print_r($meseroBSN->error);
+        }
+
     }
 
 
