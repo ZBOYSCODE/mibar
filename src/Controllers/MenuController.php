@@ -188,7 +188,6 @@ class MenuController extends ControllerBase
 	*
 	*
 	*/    
-
 	public function changeMenuPromocionAction(){
 
         if($this->request->isAjax()){
@@ -220,8 +219,59 @@ class MenuController extends ControllerBase
         	$this->view->disable();
 
         }
+	}
 
-	}	
+
+	/**
+     * concreta el pedido
+     *
+     * se crea una orden con la lista de pedidos
+     * 
+     * @author Sebastián Silva
+     *
+     * @return json
+     */
+    public function concretarPedidoAction() {
+
+        $data = array();
+
+
+        if ($this->session->has("pedidos")) {
+
+        	$pedidos = new PedidoBSN();
+
+	        $lista_pedidos = $this->session->get("pedidos");
+
+	        $param = array(
+	        	'cuenta_id' => $this->session->get("auth-identity")['cuenta'],
+	        	'pedidos'	=> $lista_pedidos
+	        );
+
+
+	        if( $pedidos->createOrder($param) ) {
+
+	        	$data['success'] = true;
+
+	        	$this->deleteAllPedidos();
+	        } else {
+
+	        	print_r($pedidos->error);
+
+	        	$data['success'] = false;
+	        	$data['msg'] = $pedidos->error;
+	        }
+
+        } else {
+
+        	$data['success'] = false;
+        	$data['msg'] = "No existen pedidos en el carro.";
+        }
+
+
+	        
+
+        echo json_encode($data);
+    }
 
 	/**
 	* MyOrders
@@ -230,9 +280,7 @@ class MenuController extends ControllerBase
 	*
 	* Renderiza modal "Mis Pedidos" 
 	*
-	*
-	*/    
-
+	*/
 	public function myOrdersAction(){
 
         if($this->request->isAjax()){
@@ -242,8 +290,13 @@ class MenuController extends ControllerBase
             $this->mifaces->newFaces();
 
 
-	        $dataView = "Holiwi";
-	       
+            $dataView["cuenta_id"] 	= $this->session->get("auth-identity")['cuenta'];
+            $dataView["mesa"] 		= $this->session->get("auth-identity")['mesa'];
+
+            $pedidos = new PedidoBSN();
+
+            $dataView["pedidos"] 	= $pedidos->getPedidos();
+
 	        $toRend = $this->view->getPartial($view, $dataView);
 
 	        $this->mifaces->addToRend('orders-modal',$toRend);
@@ -254,8 +307,97 @@ class MenuController extends ControllerBase
         	$this->view->disable();
 
         }
-
 	}	
 
+	/**
+	 * removePedido
+	 *
+	 * remueve un pedido del carro
+	 *
+	 * @author Sebastián Silva
+	 * @return json
+	 */
+	public function removePedidoAction() {
+
+		$data= array();
+
+		if(!isset($_POST['pedido'])){
+
+			$data['success'] = false;
+			echo json_encode($data);
+			return false;
+		}
+
+		$lista_pedidos = array();
+
+		if ($this->session->has("pedidos")) {
+
+            $pedidos = $this->session->get("pedidos");
+            unset( $pedidos[$_POST['pedido']] );
+
+            $this->session->set('pedidos', $pedidos);
+			
+			$data['success'] = true;
+			$data['pedido'] = $_POST['pedido'];
+        } else {
+
+        	$data['success'] = false;
+        }
+
+		echo json_encode($data);
+	}
+
+	/**
+	 * getNumPedidos
+	 *
+	 * obtiene el número de pedidos en el carro
+	 *
+	 * @author Sebastián Silva
+	 * @return json
+	 */
+	public function getNumPedidosAction() {
+
+		if ($this->session->has("pedidos")) {
+
+            $pedidos = $this->session->get("pedidos");
+            
+            $data['success'] 	= true;
+            $data['num'] 		= count($pedidos);
+        } else {
+
+        	$data['success'] 	= true;
+            $data['num'] 		= 0;
+        }
+
+        echo json_encode($data);
+	}
+
+	/**
+	 * deleteAllPedidos
+	 *
+	 * elimina todos los pedidos del carro de compra
+	 *
+	 * @author Sebastián Silva
+	 * @return boolean
+	 */
+	private function deleteAllPedidos() {
+
+		if ($this->session->has("pedidos")) {
+
+            $this->session->remove("pedidos");
+        }
+
+        return true;
+	}
+
 }
+
+
+
+
+
+
+
+
+
 

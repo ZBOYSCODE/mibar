@@ -133,33 +133,51 @@
 
         public function getPreciosPromocion($param){
 
-            $find = " id IN ( ";
+            $list = array();
 
-            $length = count($param);
-
-            foreach ($param as $key => $val) {
-            
-                if($val["es_promocion"]){
-
-                    $find .= $val["producto_id"] ;
-
-                    if($key == $length)
-                        $find .= ',';
-
-                }
-
+            if( count($param) == 0 ){
+                return array();
             }
 
-            $find .= ")";
+            foreach ($param as $val) {
+            
+                if( $val["es_promocion"] ){
+
+                    array_push($list, $val["producto_id"] );
+                }
+            }
 
 
-            $promociones = Promociones::find($find);
+            if( count($list) > 0 ) {
 
-            foreach ($promociones as $val) {
-                $arr[$val->id] = $val->precio;
-            }            
+                $list = implode(',', $list);
 
-            return $arr;
+                $find = "id IN (".$list.")";
+
+
+                $promociones = Promociones::find($find);
+
+                if(!$promociones->count()) {
+
+                    return array();
+
+                } else {
+                    
+                    $arr = array();
+                    
+                    foreach ($promociones as $promocion) {
+
+                        $arr[$promocion->id] = $promocion;
+                    }
+                }
+
+                return $arr;
+            
+            } else {
+
+                return array();
+            }
+                
 
         }           
 

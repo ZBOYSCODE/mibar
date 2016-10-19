@@ -51,7 +51,7 @@
                                                 class           = "form-control pull-right input_pedidos" 
                                                 id              = 'input-{{producto.id}}' 
                                                 data-producto   = '{{producto.id}}'
-                                                data-promocion  = 'true' >
+                                                data-promocion  = 1 >
 
         				    		</div>
         				    	</div>

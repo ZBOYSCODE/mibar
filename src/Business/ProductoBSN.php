@@ -192,39 +192,45 @@
          *                          ["es_promocion" => boolean,
          *                           "producto_id" => integer];
          * @return array [id => precio]
-         */        
-
-
+         */
         public function getPreciosProducto($param){
 
-            $find = " id IN ( ";
+            $list = array();
 
-            $length = count($param);
-
-            foreach ($param as $key => $val) {
-            
-                if(!$val["es_promocion"]){
-
-                    $find .= $val["producto_id"] ;
-
-                    if($key == $length)
-                        $find .= ',';
-
-                }
-
+            if( count($param) == 0 ){
+                return array();
             }
 
-            $find .= ")";
+            foreach ($param as $val) {
 
+                if( ! $val["es_promocion"] ){
+
+                    array_push($list, $val["producto_id"] );
+                }
+            }
+
+            $list = implode(',', $list);
+
+            $find = "id IN (".$list.")";
 
             $productos = Productos::find($find);
 
-            foreach ($productos as $val) {
-                $arr[$val->id] = $val->precio;
+            
+            if(!$productos->count()) {
+
+                return array();
+
+            } else {
+                
+                $arr = array();
+                
+                foreach ($productos as $producto) {
+
+                    $arr[$producto->id] = $producto;
+                }
             }
 
             return $arr;
-
         }        
 
 
