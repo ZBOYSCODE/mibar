@@ -29,8 +29,13 @@ class WaiterController extends ControllerBase
     public function indexAction()
     {
 
+
+        $param['mesa_id'] = 1;
+
+        $this->meseroBsn->getDataPedidosByCuenta($param);
+
         //DATO EN BRUTO
-        $id_mesero = 5;
+        $id_mesero = 1;
 
     	#js custom
         $this->assets->addJs('js/pages/waiter.js');
