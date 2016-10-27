@@ -27,7 +27,7 @@
 
 							<div class="card" id='pedido-{{pedido.num_pedido}}'>
 						      	<div class="product-item-modal">
-						      		<button type="button" data-pedido="{{ pedido.num_pedido }}" class="btn btn-small btn-main pull-right delete-pedido">Eliminar</button>
+						      		<button type="button" data-pedido="{{ pedido.num_pedido }}" class="btn btn-small btn-main btn-delete pull-right delete-pedido">Eliminar</button>
 						      		<p class="title">{{ pedido.nombre }}</p>
 						      		<div class="row">
 						      			<div class="col-xs-6 col-md-6">

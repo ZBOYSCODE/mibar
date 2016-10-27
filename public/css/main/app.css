@@ -100,6 +100,14 @@ body, html {
   color: #fff;
 }
 
+.btn-main:focus,
+.btn-main.active{
+  outline: none;
+  background-color: #521852;
+  border: 2px solid #fff;
+  color: #fff !important;
+}
+
 .btn-main:hover{
   color: #fff;
   background-color: #d65cc0;
@@ -118,6 +126,13 @@ body, html {
 
 .btn-width {
   min-width: 120px;
+}
+
+.btn-delete{
+  padding: 3px 7px;
+  border-radius: 30px;
+  font-size: 12px;
+  background-color: #c12020;
 }
 
 
@@ -525,6 +540,10 @@ div.menu-types > div:last-child{
   text-align: center;
   padding-top: 10px;
   margin-bottom: 10px;
+}
+
+.table-item-footer button{
+  margin: 0 10px;
 }
 
 .lista_pedidos{

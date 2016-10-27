@@ -18,6 +18,7 @@
 			    	        </div>
 			    	        <div class="col-xs-8 col-sm-8">
 			    	            <div class="table-item-details">
+			    	                <button type="button" class="btn btn-main btn-delete btn-sm table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
 			    	                <p class="description"><b>Cliente: </b>Juanito</p>
 			    	                <p class="description"><b>N° Pedidos: </b>6</p>
 			    	                <p class="description"><b>Subtotal: </b>$15000</p>
@@ -25,8 +26,7 @@
 			    	        </div>
 			    	    </div>
 			    	    <div class="table-item-footer">
-							<button type="button" class="btn btn-main btn-width table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
-							<button type="button" class="btn btn-main btn-width" data-callName="table-details-button" data-url="">Ver Productos</button>
+							<button type="button" class="btn btn-main btn-width" data-callName="table-details-button" data-url="" data-toggle="modal" data-target="#table-products-modal">Detalles</button>
 			    	    </div>
 			    	</div>
 
@@ -35,4 +35,5 @@
 	    </div>
 	</div>
 
+    {{ partial("controllers/waiter/tables/modal_orders") }}
 	
