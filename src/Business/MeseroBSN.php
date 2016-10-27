@@ -35,6 +35,10 @@
          */
         public  $error;
 
+        private $ESTADO_CUENTA_PENDIENTE = 1;
+        private $ESTADO_MESA_ACTIVA = 1;
+        private $ESTADO_PEDIDO_PENDIENTE = 1;
+
         /**
          * Obtiene mesas según parametro (Todas las mesas de un bar o todas las mesas asignadas a un mesero)
          * En TestController es posible getCuentaAction, es posible encontrar la forma de acceder a sus valores 
@@ -49,29 +53,29 @@
          * @return boolean
          */
 
+        /*
         public function getMesas($param = null){
 
             if(isset($param)&&!empty($param)){
                 
                 if( isset($param['funcionario_id']) AND 
-                    isset($param['turno_id']) AND 
+                    isset($param['turno']) AND 
                     isset($param['fecha'])) {
                 
 
                     $funcionario_id = $param['funcionario_id'];
-                    $turno_id       = $param['turno_id'];
+                    $turno       = $param['turno'];
                     $fecha          = $param['fecha'];
 
-                    $fechaY         = $fecha->format('Y');
-                    $fechaM         = $fecha->format('m');
-                    $fechaD         = $fecha->format('d');
 
                     $mesas = FuncionarioMesa::query()
-                        ->where("funcionario_id         = {$funcionario_id}")
-                        ->andWhere("turno_id            = {$turno_id}")
-                        ->andWhere("YEAR(fecha) = {$fechaY}")
-                        ->andWhere("MONTH(fecha) = {$fechaM}")
-                        ->andWhere("DAY(fecha)   = {$fechaD}")
+                        ->leftJoin("App\Models\Turnos","App\Models\FuncionarioMesa.turno_id = t.id","t")
+                        ->leftJoin("App\Models\Mesas","App\Models\FuncionarioMesa.mesa_id = m.id","m")
+                        ->leftJoin("App\Models\Cuentas","m.id = c.id","c")
+                        ->where("App\Models\FuncionarioMesa.funcionario_id         = {$funcionario_id}")
+                        ->andWhere("'{$turno}' BETWEEN t.hora_inicio AND t.hora_termino")
+                        ->andWhere("App\Models\FuncionarioMesa.fecha  = '{$fecha}'")
+                        ->andWhere("c.estado = {$this->ESTADO_CUENTA_PENDIENTE}")
                         ->execute();
 
                     if(!$mesas->count()){
@@ -108,7 +112,153 @@
                 return false;
 
             }
+        }*/
+
+
+        /**
+        *
+        * Obtiene mesas para un funcionario
+        *
+        * @author osanmartin
+        *
+        * @param $param['funcionario_id'] : ID de funcionario
+        * @return lista de objetos Mesa asociados
+        *
+        *
+        */
+
+        public function getMesas($param){
+
+            if(!isset($param['funcionario_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Mesas::query()
+                    ->leftJoin("App\Models\FuncionarioMesa","App\Models\Mesas.id = fm.mesa_id","fm")
+                    ->where("fm.funcionario_id = {$param['funcionario_id']}")
+                    ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
         }
+
+
+        /**
+        *
+        * Obtiene pedidos pendientes de mesas de un funcionario
+        *
+        * @author osanmartin
+        *
+        * @param $param['funcionario_id'] : ID de funcionario
+        * @return array con formato [$id_mesa] = $cantidad_pedidos
+        *
+        *
+        */        
+
+        public function getPedidosPendientesMesasFuncionario($param){
+
+            if(!isset($param['funcionario_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Pedidos::query()
+                    ->columns(['mesa_id' => 'm.id','cantidad_pedidos'=>'count(App\Models\Pedidos.id)'])
+                    ->leftJoin("App\Models\Cuentas","c.id = App\Models\Pedidos.cuenta_id","c")
+                    ->leftJoin("App\Models\Mesas","m.id = c.mesa_id","m")
+                    ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
+                    ->where("fm.funcionario_id = {$param['funcionario_id']}")
+                    ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->andWhere("App\Models\Pedidos.estado_id = {$this->ESTADO_PEDIDO_PENDIENTE}")
+                    ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            $mesas = $this->getMesas($param);
+            $pedidosPendientes = $result;
+
+            foreach ($mesas as $val) {
+
+                $arr[$val->id] = 0;
+
+            }
+
+            foreach ($pedidosPendientes as $key => $val) {
+
+                if(isset($arr[$val->mesa_id]))
+                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+
+            }
+
+            return $arr;
+
+        }
+
+        /**
+        *
+        * Obtiene pedidos totales de mesas de un funcionario
+        *
+        * @author osanmartin
+        *
+        * @param $param['funcionario_id'] : ID de funcionario
+        * @return array con formato [$id_mesa] = $cantidad_pedidos
+        *
+        *
+        */        
+
+        public function getPedidosTotalesMesasFuncionario($param){
+
+            if(!isset($param['funcionario_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Pedidos::query()
+                    ->columns(['mesa_id' => 'm.id','cantidad_pedidos'=>'count(App\Models\Pedidos.id)'])
+                    ->leftJoin("App\Models\Cuentas","c.id = App\Models\Pedidos.cuenta_id","c")
+                    ->leftJoin("App\Models\Mesas","m.id = c.mesa_id","m")
+                    ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
+                    ->where("fm.funcionario_id = {$param['funcionario_id']}")
+                    ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            $mesas = $this->getMesas($param);
+            $pedidosTotales = $result;
+
+            foreach ($mesas as $val) {
+
+                $arr[$val->id] = 0;
+
+            }
+
+            foreach ($pedidosTotales as $key => $val) {
+
+                if(isset($arr[$val->mesa_id]))
+                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+
+            }
+
+            return $arr;
+
+        }        
         
         /**
          * Obtiene las cuentas según el identificador de la mesa
@@ -293,6 +443,8 @@
                 }
             }
         }
+
+
 
     }
 
