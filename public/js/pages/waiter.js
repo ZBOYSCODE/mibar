@@ -1,5 +1,8 @@
 $(document).on('ready', function() {
 
+
+
+
 	$('.table-details-button').on('click',function(e){
 
 	    var action = $(this).data("url");
@@ -53,6 +56,17 @@ $(document).on('ready', function() {
         } 
     
     });     
+
+    
+    $('.table-order-button').on('click',function(e){
+
+        var route = "/mibar/qr/"+$(this).data("href");
+        location.href= route;
+    
+    }); 
+
+
+    
 
 	
 });
