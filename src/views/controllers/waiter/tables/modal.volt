@@ -21,14 +21,12 @@
 			    	                <p class="description"><b>Cliente: </b>Juanito</p>
 			    	                <p class="description"><b>N° Pedidos: </b>6</p>
 			    	                <p class="description"><b>Subtotal: </b>$15000</p>
-			    	                <div class="row">
-			    	                   <button type="button" class="btn btn-small btn-main pull-right table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
-			    	                </div>
 			    	            </div>  
 			    	        </div>
 			    	    </div>
-			    	    <div class="row table-item-footer">
-			    	    	 <button type="button" class="btn btn-main" data-callName="table-details-button" data-url="">Ver Productos</button>
+			    	    <div class="table-item-footer">
+							<button type="button" class="btn btn-main btn-width table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
+							<button type="button" class="btn btn-main btn-width" data-callName="table-details-button" data-url="">Ver Productos</button>
 			    	    </div>
 			    	</div>
 

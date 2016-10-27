@@ -24,5 +24,11 @@
         'action'        =>  'logout'
     ));
 
+    $router->add('/qr/:params', array(
+        'controller'    =>  "welcome",
+        'action'        =>  'preprocessing',
+        'params'        =>  1
+    ));
+
     
 	return $router;

@@ -1,8 +1,6 @@
 $(document).on('ready', function() {
 
- 	var menuNav = "opcion1";
  	var url 	= $("#frm").val();
-	$('#'+menuNav).addClass('active');
 
   	actualizar_info();
 
@@ -122,7 +120,6 @@ $(document).on('ready', function() {
 
  		$(".precio_pedidos").text("666.999");
 
- 		console.log("precios actualizados");
  	}
 
 
@@ -190,6 +187,8 @@ $(document).on('ready', function() {
    	$(document).on('click', '.menu-prod', function(){
 
 
+		$('.button-active').removeClass('active');
+
         var action = $(this).data("url");
 
         var dataIn = new FormData();
@@ -201,6 +200,8 @@ $(document).on('ready', function() {
 
 
    	$(document).on('click', '.menu-promo', function(){
+
+   		$('.button-active').removeClass('active');
 
         var action = $(this).data("url");
 
@@ -227,6 +228,9 @@ $(document).on('ready', function() {
 
     $(document).on('change', "#promo-categories",function(){
 
+
+		$('.button-active').removeClass('active');
+
         var tipoPromo = $(this).val();
 
         if(tipoPromo == 0){
@@ -248,6 +252,8 @@ $(document).on('ready', function() {
 
 
     $(document).on('change', "#prod-categories",function(){
+
+		$('.button-active').removeClass('active');
 
         var subcategoria = $(this).val();
 
