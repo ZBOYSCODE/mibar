@@ -14,7 +14,8 @@ class WelcomeController extends ControllerBase
 
     	if ( is_array( $this->session->get("auth-identity") )){
 
-    		$this->view->pick("controllers/menu/_index");
+    		//$this->view->pick("controllers/menu/_index");
+            return $this->response->redirect("menu");
 
     	} else {
 
