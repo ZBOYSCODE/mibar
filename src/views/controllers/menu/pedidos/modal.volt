@@ -5,7 +5,7 @@
 		    <div class="modal-content">
 			    <div class="modal-header card">
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
-			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MI CARRO</h4>
+			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MI PEDIDOS</h4>
 			    </div>
 			     <div class="row user-details card">
 			    	<div class="col-xs-2 col-md-2">

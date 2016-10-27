@@ -224,6 +224,19 @@ $(document).on('ready', function() {
     	e.preventDefault();
     
   	}); 
+
+  	$(document).on('click', '.mi-cuenta', function(e) {
+
+    	var action = $(this).data("url");
+
+    	var dataIn = new FormData();
+
+    	//mifaces
+    	$.callAjax(dataIn, action, $(this));
+    
+    	e.preventDefault();
+    
+  	}); 
  
 
     $(document).on('change', "#promo-categories",function(){
@@ -361,6 +374,10 @@ $(document).on('ready', function() {
 			if(options.callName == "ordersButton") {
 				openMyOrdersModal();
 			}
+
+			if(options.callName == "openmodalcuenta") {
+				openMiCuentaModal();
+			}
 		}
 
 	}); 
@@ -376,6 +393,10 @@ $(document).on('ready', function() {
 	 function openMyOrdersModal(){
 
 	    $('#products-modal').modal('show');
+	 }
+
+	 function openMiCuentaModal() {
+	 	$('#products-modal').modal('show');
 	 }
 
 

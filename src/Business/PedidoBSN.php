@@ -476,6 +476,40 @@
 
             return $pedidos;
         }
+
+        /**
+         * getAllOrders
+         *
+         * retorna todas las ordenes de una cuenta
+         *
+         * @author Sebastián Silva
+         *
+         * @param array $param
+         * @return objects
+         */
+        public function getAllOrders($param) {
+
+            if( !isset($param['cuenta_id'])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $pedidos = Pedidos::find(
+                array(
+                    " cuenta_id = {$param['cuenta_id']} ",
+                    "order" => "id DESC"
+                )
+            );
+
+
+            if( $pedidos->count() == 0) {
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+
+            return $pedidos;
+        }
     }
 
 
