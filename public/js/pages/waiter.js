@@ -12,6 +12,48 @@ $(document).on('ready', function() {
 	    e.preventDefault();
     
     }); 
+
+
+    $(document).on('change','#filtro-mesa',function(){
+
+        var filtroMesa = $(this).val();
+
+        if(filtroMesa == 0){
+
+            $(".table-item").show();      
+
+        } else{
+
+            $(".table-item").hide();
+
+            tables = $(".table-item").filter("[data-mesa='"+filtroMesa+"']");
+
+            tables.show();
+
+        }        
+    
+    }); 
+
+    $(document).on('change','#filtro-estado-mesa',function(){
+
+        var filtroEstadoMesa = $(this).val();
+
+        if(filtroEstadoMesa == 0){
+
+            $(".table-item").show();      
+
+        } else{
+
+            $(".table-item").hide();
+
+            tables = $(".table-item").filter("[data-estado-mesa='"+filtroEstadoMesa+"']");
+
+            tables.show();
+
+        } 
+    
+    });     
+
 	
 });
 

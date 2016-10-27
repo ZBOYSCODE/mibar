@@ -30,7 +30,7 @@ class WaiterController extends ControllerBase
     {
 
         //DATO EN BRUTO
-        $id_mesero = 1;
+        $id_mesero = 5;
 
     	#js custom
         $this->assets->addJs('js/pages/waiter.js');
