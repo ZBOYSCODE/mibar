@@ -2,6 +2,8 @@
     
     error_reporting(E_ALL);
 
+    date_default_timezone_set('America/Santiago');
+
     require __DIR__ . '/../vendor/autoload.php';
 
     use Phalcon\Mvc\Application;
