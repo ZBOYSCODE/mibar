@@ -35,6 +35,8 @@
          */
         public  $error;
 
+        public $estado_cancelado = 6;
+
         /**
          * Obtiene mesas según parametro (Todas las mesas de un bar o todas las mesas asignadas a un mesero)
          * En TestController es posible getCuentaAction, es posible encontrar la forma de acceder a sus valores 
@@ -278,7 +280,6 @@
          *
          * @return boolean
          */
-
         private function esPromo($param){
 
             if(isset($param['pedido_id']) OR !empty($param['pedido_id'])){
@@ -292,6 +293,62 @@
                     return true;
                 }
             }
+        }
+
+        /**
+         * liberarMesas
+         *
+         * la cuenta pasará a estado cancelado
+         * y se cancelaran los pedidos asociados
+         */
+        public function liberarMesas($param) {
+
+            // verificamos que viene el id de la cuenta
+            if( !isset($param['cuenta_id'])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $this->db->begin();
+
+            $cuenta = Cuentas::findFirstById($param['cuenta_id']);
+
+            // verificamos que haya encontrado la cuenta
+            if(!$cuenta) {
+                $this->error = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            // cambiamos el estado de la cuanta a cancelado
+            $cuenta->estado = $this->estado_cancelado;
+
+            // verificamos que se actualice correctamente
+            if($cuenta->save() == false ) {
+                $this->error = $this->errors->$FILE_WRITE_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+
+            $pedidos = Pedidos::findByCuentaId($param['cuenta_id']);
+
+            if( $pedidos->count() > 0) {
+
+                foreach ($pedidos as $pedido) {
+
+                    $pedido->estado_id = $this->estado_cancelado;
+
+                    if( !$pedido->save()) {
+
+                        $this->db->rollback();
+                        return false;
+                    }
+                }
+            }
+
+
+            $this->db->commit();
+            return true;
         }
 
     }
