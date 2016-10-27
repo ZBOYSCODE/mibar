@@ -120,6 +120,7 @@ body, html {
   min-width: 120px;
 }
 
+
 /* Paddings & Margins */
 
 .section-content-top{
@@ -260,6 +261,14 @@ div.menu-types > div:last-child{
   font-weight: bold;
   margin-top: 10px;
 }
+
+.button-active:focus {
+  outline: none;
+  background-color:  #772277;
+  border: 2px solid #fff;
+  border-radius: 4px;
+}
+
 
 /* Categories Content */
 
