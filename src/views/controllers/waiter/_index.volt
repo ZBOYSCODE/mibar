@@ -20,10 +20,11 @@
 		<div class="col-xs-6 col-sm-6">
 			<div class="nav-filter-item">
 				<select name="promo-prices" id="promo-prices" class="form-control">
-				    <option value="Filtrar" class="filter">Filtrar Estado</option>
-					<option value="reservada">Reservadas</option>
-					<option value="disponibles">Disponibles</option>
-					<option value="En proceso">En proceso</option>
+				    <option value="0" class="filter">Todos los estados</option>
+				 	{% for estadoMesa in estadosMesa %}
+				    	<option value="{{ estadoMesa.id }}">{{estadoMesa.name}}</option>
+					{% endfor %}
+
 				</select>
 			</div>	
 		</div>

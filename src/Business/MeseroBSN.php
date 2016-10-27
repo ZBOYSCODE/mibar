@@ -19,6 +19,7 @@
     use App\Models\FuncionarioMesa;
     use App\Models\Cuentas;
     use App\Models\Pedidos;
+    use App\Models\EstadosMesa;
     /**
      * Modelo de negocio
      *
@@ -424,6 +425,31 @@
 
             $this->db->commit();
             return true;
+        }
+
+
+        /**
+        *
+        * Obtiene mesas para un funcionario
+        *
+        * @author osanmartin
+        *
+        * @return lista de objetos estados mesa asociados
+        *
+        */
+
+        public function getEstadosMesa(){
+
+
+            $result = EstadosMesa::find();
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
         }
 
     }

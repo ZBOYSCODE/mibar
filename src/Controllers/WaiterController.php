@@ -42,6 +42,7 @@ class WaiterController extends ControllerBase
                        'turno' => $datetime->format('H:i:s')];
 
         $mesas = $this->meseroBsn->getMesas($paramMesas);
+        $estadosMesa = $this->meseroBsn->getEstadosMesa($paramMesas);
         $pedidosPendientes = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
         $pedidosTotales = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
 
@@ -52,6 +53,7 @@ class WaiterController extends ControllerBase
         $this->view->setVar("mesas",$mesas) ;
         $this->view->setVar("pedidosPendientes",$pedidosPendientes) ;
         $this->view->setVar("pedidosTotales",$pedidosTotales) ;
+        $this->view->setVar("estadosMesa",$estadosMesa) ;
         $this->view->pick("controllers/waiter/_index");
     }
 
