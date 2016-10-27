@@ -39,80 +39,7 @@
         private $ESTADO_MESA_ACTIVA = 1;
         private $ESTADO_PEDIDO_PENDIENTE = 1;
 
-        /**
-         * Obtiene mesas según parametro (Todas las mesas de un bar o todas las mesas asignadas a un mesero)
-         * En TestController es posible getCuentaAction, es posible encontrar la forma de acceder a sus valores 
-         *
-         * @author rsoto
-         * @param $param = [ 
-         *                    "funcionario_id" => integer
-         *                     "turno_id"       => integer
-         *                    "fecha"          => Date
-
-         *                 ]
-         * @return boolean
-         */
-
-        /*
-        public function getMesas($param = null){
-
-            if(isset($param)&&!empty($param)){
-                
-                if( isset($param['funcionario_id']) AND 
-                    isset($param['turno']) AND 
-                    isset($param['fecha'])) {
-                
-
-                    $funcionario_id = $param['funcionario_id'];
-                    $turno       = $param['turno'];
-                    $fecha          = $param['fecha'];
-
-
-                    $mesas = FuncionarioMesa::query()
-                        ->leftJoin("App\Models\Turnos","App\Models\FuncionarioMesa.turno_id = t.id","t")
-                        ->leftJoin("App\Models\Mesas","App\Models\FuncionarioMesa.mesa_id = m.id","m")
-                        ->leftJoin("App\Models\Cuentas","m.id = c.id","c")
-                        ->where("App\Models\FuncionarioMesa.funcionario_id         = {$funcionario_id}")
-                        ->andWhere("'{$turno}' BETWEEN t.hora_inicio AND t.hora_termino")
-                        ->andWhere("App\Models\FuncionarioMesa.fecha  = '{$fecha}'")
-                        ->andWhere("c.estado = {$this->ESTADO_CUENTA_PENDIENTE}")
-                        ->execute();
-
-                    if(!$mesas->count()){
-                        $this->error = $this->errors->NO_RECORDS_FOUND;
-                        return false;
-                    }
-                    return $mesas;
-
-                }
-            
-
-                if(isset($param['bar_id'])){
-
-                    $barId  = $param['bar_id'];
-
-                    $mesas = Mesas::query()
-                        ->where(" bar_id = {$barId}")
-                        ->execute();
-
-                    if(!$mesas->count()){
-                        $this->error = $this->errors->NO_RECORDS_FOUND;
-                        return false;
-                    }
-                    return $mesas;
-                }else{
-
-                    $this->error[] = $this->errors->MISSING_PARAMETERS;
-                    return false;
-
-                }
-
-            }else{
-                $this->error[] = $this->errors->MISSING_PARAMETERS;
-                return false;
-
-            }
-        }*/
+        public $estado_cancelado = 6;
 
 
         /**
@@ -428,7 +355,6 @@
          *
          * @return boolean
          */
-
         private function esPromo($param){
 
             if(isset($param['pedido_id']) OR !empty($param['pedido_id'])){
@@ -444,7 +370,61 @@
             }
         }
 
+        /**
+         * liberarMesas
+         *
+         * la cuenta pasará a estado cancelado
+         * y se cancelaran los pedidos asociados
+         */
+        public function liberarMesas($param) {
 
+            // verificamos que viene el id de la cuenta
+            if( !isset($param['cuenta_id'])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $this->db->begin();
+
+            $cuenta = Cuentas::findFirstById($param['cuenta_id']);
+
+            // verificamos que haya encontrado la cuenta
+            if(!$cuenta) {
+                $this->error = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            // cambiamos el estado de la cuanta a cancelado
+            $cuenta->estado = $this->estado_cancelado;
+
+            // verificamos que se actualice correctamente
+            if($cuenta->save() == false ) {
+                $this->error = $this->errors->$FILE_WRITE_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+
+            $pedidos = Pedidos::findByCuentaId($param['cuenta_id']);
+
+            if( $pedidos->count() > 0) {
+
+                foreach ($pedidos as $pedido) {
+
+                    $pedido->estado_id = $this->estado_cancelado;
+
+                    if( !$pedido->save()) {
+
+                        $this->db->rollback();
+                        return false;
+                    }
+                }
+            }
+
+
+            $this->db->commit();
+            return true;
+        }
 
     }
 

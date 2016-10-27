@@ -12,7 +12,7 @@
 			    		{{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
 			    	</div>
 			    	<div class="col-xs-7 col-md-7">
-			    		<p>Orlando San Martín</p>
+			    		<p>{{ session.get('auth-identity')['nombre'] }}</p>
 			    	</div>
 			    	<div class="col-xs-3 col-md-3">
 			    		<p>Mesa {{ session.get('auth-identity')['mesa'] }}</p>
@@ -47,12 +47,23 @@
 						{% endfor %}
 
 					</div>
+
+					
 						
 
 
 			    </div>
 			    <div class="modal-footer card">
-			      <button id="Send-Products" type="button" class="btn btn-main">ENVIAR PEDIDO</button>
+			    	<div class="row">
+			    		<div class='col-xs-5'>
+							<span class="precio-total">$ {{ total_pedido }}</span>
+						</div>
+						<div class='col-xs-7'>
+							<button id="Send-Products" type="button" class="btn btn-main pull-right">ENVIAR PEDIDO</button>
+						</div>
+			    	</div>
+				    	
+			      
 			    </div>
 		    </div>
 	    </div>

@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 	<div class="card full-card">
 		<div class="wel-card-content">
 		    <div class="row">
@@ -17,6 +18,17 @@
 		    </div>
 			<div class="row text-center">
 				<h1 class="wel-title">¡Bienvenido!</h1>
+
+
+
+				{% if session.get('table_id_tmp') !== null %}
+					{% set mesa = session.get('table_id_tmp') %}
+				{% else %}
+					{% set mesa = 1 %}
+				{% endif %}
+
+
+				<p>Estas ubicado en la mesa #{{ mesa }}</p>
 				<h3>Por Favor, ingresa tu nombre</h3>
 				<p><?php $this->flashSession->output() ?></p>
 				<form action="acceso/login" method='POST'>

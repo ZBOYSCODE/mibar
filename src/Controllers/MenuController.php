@@ -44,6 +44,8 @@ class MenuController extends ControllerBase
         // Al cambiar este parámetro, se debe cambiar también la vista.
         $paramCategoria = ["categoria_id" => $this->ID_CATEGORY_BEBIDAS];
 
+        
+
         $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
         $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
 
@@ -289,9 +291,9 @@ class MenuController extends ControllerBase
             $view = "controllers/menu/orders/modal";
             $this->mifaces->newFaces();
 
-
-            $dataView["cuenta_id"] 	= $this->session->get("auth-identity")['cuenta'];
-            $dataView["mesa"] 		= $this->session->get("auth-identity")['mesa'];
+            $dataView['total_pedido'] 	= $this->getTotalPedido();
+            $dataView["cuenta_id"] 		= $this->session->get("auth-identity")['cuenta'];
+            $dataView["mesa"] 			= $this->session->get("auth-identity")['mesa'];
 
             $pedidos = new PedidoBSN();
 
@@ -355,22 +357,67 @@ class MenuController extends ControllerBase
 	 * @author Sebastián Silva
 	 * @return json
 	 */
-	public function getNumPedidosAction() {
+	public function getResumenDatosAction() { //getNumPedidos
 
-		if ($this->session->has("pedidos")) {
+		$data = array();
 
-            $pedidos = $this->session->get("pedidos");
-            
-            $data['success'] 	= true;
-            $data['num'] 		= count($pedidos);
-        } else {
 
-        	$data['success'] 	= true;
-            $data['num'] 		= 0;
-        }
+		$data['total_pedidos'] 	= $this->getNumPedidos();
+		$data['precio_total']	= $this->getTotalPedido();
+
 
         echo json_encode($data);
 	}
+
+	private function getTotalPedido() {
+
+		$precio_total = 0;
+
+		if ( $this->session->has("pedidos") ) {
+
+			$pedidos = $this->session->get("pedidos");
+
+			$prod = new ProductoBSN();
+			$prom = new PromocionBSN();
+
+		
+			foreach ($pedidos as $pedido) {
+
+				if($pedido['es_promocion']) {
+
+					$precio = $prom->getPrecioById($pedido['producto_id']);
+					$precio_total += $precio * $pedido['cantidad'];
+				} else {
+
+
+					$precio = $prod->getPrecioById($pedido['producto_id']);
+					$precio_total += $precio * $pedido['cantidad'];
+				}
+				
+			}
+
+
+            $pedidos = $this->session->get("pedidos");
+            
+
+        }
+
+        return $precio_total;
+
+	}
+
+	private function getNumPedidos() {
+
+		if ($this->session->has("pedidos")) {	
+
+            $pedidos = $this->session->get("pedidos");
+            return count($pedidos);
+        } else {
+
+            return 0;
+        }
+	}
+
 
 	/**
 	 * deleteAllPedidos
