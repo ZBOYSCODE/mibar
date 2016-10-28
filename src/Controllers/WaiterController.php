@@ -12,7 +12,10 @@ class WaiterController extends ControllerBase
     private $meseroBsn;
 
     public function initialize(){
+
+        parent::initialize();
         $this->meseroBsn = new MeseroBSN();
+
     }    
 
 
@@ -74,8 +77,7 @@ class WaiterController extends ControllerBase
             $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
-            $view = "controllers/waiter/tables/modal";
-
+            $view = "controllers/waiter/tables/details";
 
             $table_id = $post['table_id'];
             $param['mesa_id'] = $table_id;
@@ -87,7 +89,7 @@ class WaiterController extends ControllerBase
 	       
 	        $toRend = $this->view->getPartial($view, $dataView);
 
-	        $this->mifaces->addToRend('table-modal',$toRend);
+	        $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
         	$this->mifaces->run();
 
         } else{

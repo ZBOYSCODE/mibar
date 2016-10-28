@@ -22,7 +22,7 @@
 				    	                <button type="button" class="btn btn-main btn-delete btn-sm table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
 				    	                <p class="description"><b>Cliente: </b>{{ detalle['cuenta'].Clientes.nombre ~ " " ~ detalle['cuenta'].Clientes.apellido }}</p>
 				    	                <p class="description"><b>N° Pedidos: </b>{{ detalle['cantidad'] }}</p>
-				    	                <p class="description"><b>Subtotal: </b>${{ utility._number_format(detalle['subtotal']) }}</p>
+				    	                <p class="description"><b>Subtotal: </b>$ {{ utility._number_format(detalle['subtotal']) }}</p>
 				    	            </div>  
 				    	        </div>
 				    	    </div>
@@ -36,5 +36,5 @@
 	    </div>
 	</div>
 
-    {{ partial("controllers/waiter/tables/modal_orders") }}
+   
 	
