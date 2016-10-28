@@ -29,11 +29,6 @@ class WaiterController extends ControllerBase
     public function indexAction()
     {
 
-
-        $param['mesa_id'] = 1;
-
-        $this->meseroBsn->getDataPedidosByCuenta($param);
-
         //DATO EN BRUTO
         $id_mesero = 1;
 
@@ -62,16 +57,33 @@ class WaiterController extends ControllerBase
         $this->view->pick("controllers/waiter/_index");
     }
 
+     /**
+    * TableDetails
+    *
+    *
+    * @author Hernán Feliú
+    *
+    * Renderiza modal Detalles Mesa via mifaces
+    *
+    */
+
     public function tableDetailsAction(){
 
         if($this->request->isAjax()){
 
             $post = $this->request->getPost();
-            $view = "controllers/waiter/tables/modal";
             $this->mifaces->newFaces();
 
+            $view = "controllers/waiter/tables/modal";
 
-	        $dataView = "Holiwi";
+
+            $table_id = $post['table_id'];
+            $param['mesa_id'] = $table_id;
+
+            $tabObj = new MeseroBSN();
+            $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+            //print_r($tablesDetails);exit();
+	        $dataView['detalles'] =  $tablesDetails;
 	       
 	        $toRend = $this->view->getPartial($view, $dataView);
 
@@ -85,6 +97,54 @@ class WaiterController extends ControllerBase
         }
 
 	}	
+
+
+    /**
+    * BillDetails
+    *
+    *
+    * @author osanmartin
+    *
+    * Renderiza modal detalles cuenta via mifaces
+    *
+    */    
+
+    public function billDetailsAction(){
+
+
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            $view = "controllers/waiter/tables/modal_orders";
+
+
+            $cuenta_id = $post['cuenta'];
+            $param['cuenta_id'] = $table_id;
+
+            $tabObj = new MeseroBSN();
+            $tablesDetails = $tabObj->getDetalleMesa($param);
+            
+            $dataView['detalles'] =  $tablesDetails;
+           
+            $toRend = $this->view->getPartial($view, $dataView);
+
+            $this->mifaces->addToRend('table-modal',$toRend);
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
+
+    }
+
+
+
 
 
 }

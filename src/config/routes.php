@@ -24,11 +24,16 @@
         'action'        =>  'logout'
     ));
 
+    $router->add('/cashbox/table/:params', array(
+        'controller'    => 'cashbox',
+        'action'        => 'table',
+        'params'        => 1
+    ));
+
     $router->add('/qr/:params', array(
         'controller'    =>  "welcome",
         'action'        =>  'preprocessing',
         'params'        =>  1
     ));
 
-    
 	return $router;

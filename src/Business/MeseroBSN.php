@@ -466,7 +466,7 @@
         *
         */
 
-        public function getDataPedidosByCuenta($param){
+        public function getDataCuentasByMesa($param){
 
             if(!isset($param['mesa_id'])){
                 $this->error[] = $this->errors->MISSING_PARAMETERS;
@@ -487,21 +487,25 @@
                 return false;
             }
 
-            $cuentas = $this->getDetalleMesa($param);
 
+            $cuentas = $this->getDetalleMesa($param);
 
             foreach ($cuentas as $val) {
                 
-                $arr[$val->id] = ['subtotal'=>0,'cantidad'=>0];
+                $arr[$val->id] = ['subtotal'=>0,
+                                  'cantidad'=>0,
+                                  'cuenta'=>$val];
 
             }
 
-
             foreach ($result as $key => $val) {
 
-                if(isset($arr[$val->cuenta_id]))
-                    $arr[$val->cuenta_id] = ['subtotal' => $val->subtotal,
-                                  'cantidad' => $val->cantidad];
+                if(isset($arr[$val->cuenta_id]) AND 
+                   $val->cantidad){
+
+                    $arr[$val->cuenta_id]['subtotal'] = $val->subtotal;
+                    $arr[$val->cuenta_id]['cantidad'] = $val->cantidad;
+                }
 
             }
 

@@ -10,11 +10,11 @@
 
                 <div class="table-item-details">
                     <p class="title">MESA {{mesa.numero}} </p>
-                    <p class="description">Total Pedidos: {{pedidosTotales[mesa.id]}}</p>
-                    <p class="description">Pedidos Pendientes: {{pedidosPendientes[mesa.id]}}</p>
-                    <p id="estado" class="description">Estado: {{mesa.EstadosMesa.name}}</p>
+                    <p class="description">Total Pedidos: {{ pedidosTotales[mesa.id] }}</p>
+                    <p class="description">Pedidos Pendientes: {{ pedidosPendientes[mesa.id] }}</p>
+                    <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
                     <div class="row">
-                       <button type="button" class="btn btn-small btn-main pull-right table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Detalles</button>
+                       <button type="button" class="btn btn-small btn-main pull-right table-details-button" data-callName="table-details-button" data-table="{{ mesa.id }}" data-url="waiter/tableDetails">Detalles</button>
                     </div>
                 </div>  
                 
@@ -27,4 +27,4 @@
     <div id="table-modal">
         
     </div
-    >
+    
