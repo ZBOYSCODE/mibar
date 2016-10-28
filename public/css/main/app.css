@@ -559,6 +559,10 @@ div.menu-types > div:last-child{
     font-size: 20px;
 }
 
+#bill-details .modal-body{
+  padding-bottom: 80px;
+}
+
 
 /* ========== MEDIAQUERIES ===========*/
 

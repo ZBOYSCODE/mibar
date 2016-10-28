@@ -151,6 +151,62 @@ class WaiterController extends ControllerBase
     }
 
 
+    /**
+    * validateOrders
+    *
+    *
+    * @author osanmartin
+    *
+    * cambia estado a una serie de pedidos 
+    *
+    */
+
+    public function validateOrdersAction(){   
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            
+            if(!empty($pedidosValidados)){
+                $pedidosValidados = explode(',', $post['pedidosValidados']);
+                $resultValidacion = $this->pedidoBsn->validateOrders($pedidosValidados); 
+            } else{
+                $resultValidacion = true;
+            }
+
+            if(!empty($pedidosNoValidados)){
+                $pedidosNoValidados = explode(',', $post['pedidosNoValidados']);
+                $resultCancelacion = $this->pedidoBsn->cancelOrders($pedidosNoValidados); 
+            } else{
+                $resultCancelacion = true;
+            }
+
+            if($resultValidacion AND 
+               $resultCancelacion){
+
+                $this->mifaces->addToMsg('success','Los pedidos han sido validados correctamente!');    
+
+            } else{
+
+                $this->mifaces->addToMsg('danger','No se ha podido validar los pedidos, vuelta a intentarlo.');    
+            }
+
+            
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }      
+
+    }
+
+
+
+
 
 
 

@@ -35,6 +35,9 @@
          */
     	public 	$error;
 
+        private $ESTADO_PEDIDO_VALIDADO = 2;
+        private $ESTADO_PEDIDO_CANCELADO = 6;
+
         private $promocionBsn;
         private $productoBsn;
 
@@ -510,7 +513,143 @@
 
             return $pedidos;
         }
+
+
+        /**
+         * validarPedidos
+         *
+         * cambia estado a validado a todos los pedidos enviados
+         *
+         * @author osanmartin
+         *
+         * @param array $param listado de pedidos
+         * @return boolean
+         */
+
+        public function validateOrders($param){
+
+            $this->db->begin();
+
+
+            if(!count($param)){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            foreach ($param as $val) {
+
+                $paramPedido['pedido_id'] = $val;
+                $paramPedido['estado_id'] = $this->ESTADO_PEDIDO_VALIDADO;
+
+                $result = $this->updatePedido($paramPedido);
+
+                if(!$result){
+                    $this->db->rollback();
+                    return false;
+                }
+
+            }
+
+            $this->db->commit();
+
+            return true;
+
+        }
+
+
+        /**
+         * anularPedidos
+         *
+         * cambia estado a cancelado todos los pedidos enviados
+         *
+         * @author osanmartin
+         *
+         * @param array $param listado de pedidos
+         * @return boolean
+         */
+
+        public function cancelOrders($param){
+
+            $this->db->begin();
+
+
+            if(!count($param)){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            foreach ($param as $val) {
+
+                $paramPedido['pedido_id'] = $val;
+                $paramPedido['estado_id'] = $this->ESTADO_PEDIDO_CANCELADO;
+
+                $result = $this->updatePedido($paramPedido);
+
+                if(!$result){
+                    $this->db->rollback();
+                    return false;
+                }
+
+            }
+
+            $this->db->commit();
+
+            return true;
+
+        }        
+
+        /**
+        *
+        * updatePedido
+        *
+        * Actualiza el estado de un pedido
+        *
+        * @author osanmartin
+        *
+        * @param $param array de datos de pedido a actualizar
+        *
+        * @return boolean
+        *
+        */
+        public function updatePedido($param){
+
+            if(!isset($param['pedido_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $pedido = Pedidos::findFirstById($param['pedido_id']);
+
+            if(!$pedido){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND_ID;
+                return false;
+            }
+
+            foreach ($param as $key => $val) {
+                $pedido->$key = $val;
+            }
+
+            if ($pedido->update() == false)
+            {
+                foreach ($pedido->getMessages() as $message) {
+                    $this->error[] = $message->getMessage();
+                }
+
+                return false;
+            } else{
+                return true;
+            }            
+
+        }
+
+
+
     }
+
 
 
 
