@@ -13,14 +13,14 @@ class WaiterController extends ControllerBase
 
     private $meseroBsn;
     private $pedidoBsn;
+    private $cajaBsn;
 
     public function initialize(){
 
+        parent::initialize();
         $this->meseroBsn = new MeseroBSN();
         $this->pedidoBsn = new PedidoBSN();
         $this->cajaBsn   = new CajaBSN();
-
-        parent::initialize();
 
     }    
 
@@ -83,8 +83,7 @@ class WaiterController extends ControllerBase
             $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
-            $view = "controllers/waiter/tables/modal";
-
+            $view = "controllers/waiter/tables/details";
 
             $table_id = $post['table_id'];
             $param['mesa_id'] = $table_id;
@@ -96,7 +95,7 @@ class WaiterController extends ControllerBase
 
 	        $toRend = $this->view->getPartial($view, $dataView);
 
-	        $this->mifaces->addToRend('table-modal',$toRend);
+	        $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
         	$this->mifaces->run();
 
         } else{
@@ -125,7 +124,7 @@ class WaiterController extends ControllerBase
             $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
-            $view = "controllers/waiter/tables/modal_orders";
+            $view = "controllers/waiter/tables/orders";
 
 
             $cuenta_id = $post['cuenta'];
@@ -139,7 +138,7 @@ class WaiterController extends ControllerBase
 
             $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('table-modal-orders',$toRend);
+            $this->mifaces->addToRend('table-modal-orders_render',$toRend);
             $this->mifaces->run();
 
         } else{
