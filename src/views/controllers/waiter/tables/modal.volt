@@ -20,9 +20,9 @@
 				    	        <div class="col-xs-8 col-sm-8">
 				    	            <div class="table-item-details">
 				    	                <button type="button" class="btn btn-main btn-delete btn-sm table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
-				    	                <p class="description"><b>Cliente: </b>Juanito</p>
-				    	                <p class="description"><b>N° Pedidos: </b>6</p>
-				    	                <p class="description"><b>Subtotal: </b>$15000</p>
+				    	                <p class="description"><b>Cliente: </b>{{ detalle['cuenta'].Clientes.nombre ~ " " ~ detalle['cuenta'].Clientes.apellido }}</p>
+				    	                <p class="description"><b>N° Pedidos: </b>{{ detalle['cantidad'] }}</p>
+				    	                <p class="description"><b>Subtotal: </b>${{ utility._number_format(detalle['subtotal']) }}</p>
 				    	            </div>  
 				    	        </div>
 				    	    </div>
