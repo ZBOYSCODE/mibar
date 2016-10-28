@@ -58,16 +58,33 @@ class WaiterController extends ControllerBase
         $this->view->pick("controllers/waiter/_index");
     }
 
+     /**
+    * TableDetails
+    *
+    *
+    * @author Hernán Feliú
+    *
+    * Renderiza modal Detalles Mesa via mifaces
+    *
+    */
+
     public function tableDetailsAction(){
 
         if($this->request->isAjax()){
 
             $post = $this->request->getPost();
-            $view = "controllers/waiter/tables/modal";
             $this->mifaces->newFaces();
 
+            $view = "controllers/waiter/tables/modal";
 
-	        $dataView = "Holiwi";
+
+            $table_id = $post['table_id'];
+            $param['mesa_id'] = $table_id;
+
+            $tabObj = new MeseroBSN();
+            $tablesDetails = $tabObj->getDetalleMesa($param);
+            
+	        $dataView['detalles'] =  $tablesDetails;
 	       
 	        $toRend = $this->view->getPartial($view, $dataView);
 

@@ -6,8 +6,10 @@ $(document).on('ready', function() {
 	$('.table-details-button').on('click',function(e){
 
 	    var action = $(this).data("url");
+        var table_id = $(this).data('table');
 
 	    var dataIn = new FormData();
+        dataIn.append('table_id',table_id);
 
 	    //mifaces
 	    $.callAjax(dataIn, action, $(this));
