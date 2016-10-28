@@ -463,9 +463,17 @@
                 return false;
             }
 
+            if( isset($param['estado_id']) ) {
+                
+                $where_estado = " AND estado_id = ".$param['estado_id'];
+            } else {
+
+                $where_estado = '';
+            }
+
             $pedidos = Pedidos::find(
                 array(
-                    " cuenta_id = {$param['cuenta_id']} AND pago_id is null ",
+                    " cuenta_id = {$param['cuenta_id']} AND pago_id is null {$where_estado} ",
                     "order" => "id DESC"
                 )
             );
@@ -475,7 +483,6 @@
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
                 return false;
             }
-
 
             return $pedidos;
         }
