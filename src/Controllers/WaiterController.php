@@ -81,8 +81,8 @@ class WaiterController extends ControllerBase
             $param['mesa_id'] = $table_id;
 
             $tabObj = new MeseroBSN();
-            $tablesDetails = $tabObj->getDataPedidosByCuenta($param);
-            print_r($tablesDetails);exit();
+            $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+            //print_r($tablesDetails);exit();
 	        $dataView['detalles'] =  $tablesDetails;
 	       
 	        $toRend = $this->view->getPartial($view, $dataView);
