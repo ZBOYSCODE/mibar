@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Business\MeseroBSN;
+use App\Business\PedidoBSN;
+use App\Business\CajaBSN;
 
 class WaiterController extends ControllerBase
 {
@@ -10,9 +12,16 @@ class WaiterController extends ControllerBase
     // Business
 
     private $meseroBsn;
+    private $pedidoBsn;
 
     public function initialize(){
+
         $this->meseroBsn = new MeseroBSN();
+        $this->pedidoBsn = new PedidoBSN();
+        $this->cajaBsn   = new CajaBSN();
+
+        parent::initialize();
+
     }    
 
 
@@ -84,7 +93,7 @@ class WaiterController extends ControllerBase
             $tablesDetails = $tabObj->getDetalleMesa($param);
             
 	        $dataView['detalles'] =  $tablesDetails;
-	       
+
 	        $toRend = $this->view->getPartial($view, $dataView);
 
 	        $this->mifaces->addToRend('table-modal',$toRend);
@@ -111,8 +120,6 @@ class WaiterController extends ControllerBase
 
     public function billDetailsAction(){
 
-
-
         if($this->request->isAjax()){
 
             $post = $this->request->getPost();
@@ -122,16 +129,17 @@ class WaiterController extends ControllerBase
 
 
             $cuenta_id = $post['cuenta'];
-            $param['cuenta_id'] = $table_id;
+            $param['cuenta_id'] = $cuenta_id;
 
-            $tabObj = new MeseroBSN();
-            $tablesDetails = $tabObj->getDetalleMesa($param);
-            
-            $dataView['detalles'] =  $tablesDetails;
-           
+            $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
+            $cuenta         = $this->cajaBsn->getCuentaById($param);
+
+            $dataView['pedidosCuenta']  =  $pedidosCuenta;
+            $dataView['cuenta']         =  $cuenta;
+
             $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('table-modal',$toRend);
+            $this->mifaces->addToRend('table-modal-orders',$toRend);
             $this->mifaces->run();
 
         } else{

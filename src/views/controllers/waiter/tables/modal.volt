@@ -27,7 +27,7 @@
 				    	        </div>
 				    	    </div>
 				    	    <div class="table-item-footer">
-								<button type="button" class="btn btn-main btn-width" data-callName="table-details-button" data-url="" data-toggle="modal" data-target="#table-products-modal">Detalles</button>
+								<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="1" >Detalles</button>
 				    	    </div>
 				    	</div>
                     {% endfor %}
@@ -36,5 +36,4 @@
 	    </div>
 	</div>
 
-    {{ partial("controllers/waiter/tables/modal_orders") }}
 	

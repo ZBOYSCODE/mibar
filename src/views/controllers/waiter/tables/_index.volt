@@ -26,5 +26,9 @@
     
     <div id="table-modal">
         
-    </div
+    </div>
+
+    <div id="table-modal-orders">
+        
+    </div>    
     

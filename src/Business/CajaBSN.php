@@ -84,4 +84,38 @@ class CajaBSN extends Plugin
     }
 
 
+    /**
+     *
+     * Obtiene una cuenta por su id.
+     *
+     *
+     * @author osanmartin
+     * @param array $param['cuenta_id'] 
+     * @return objeto Cuenta
+     *
+     *
+     */
+
+    public function getCuentaById($param){
+
+        if(!isset($param['cuenta_id'])){
+
+            $this->error[] = $this->errors->MISSING_PARAMETERS;
+            return false;
+
+        }
+
+        $result = Cuentas::findFirstById($param['cuenta_id']);
+
+        if(!$result->count()){
+
+            $this->error[] = $this->errors->NO_RECORDS_FOUND;
+
+        }
+
+        return $result;
+    }
+
+
+
 }
