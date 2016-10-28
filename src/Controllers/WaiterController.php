@@ -29,7 +29,6 @@ class WaiterController extends ControllerBase
     public function indexAction()
     {
 
-
         //DATO EN BRUTO
         $id_mesero = 1;
 
@@ -98,6 +97,20 @@ class WaiterController extends ControllerBase
         }
 
 	}	
+
+
+    /**
+    * CuentaDetails
+    *
+    *
+    * @author osanmartin
+    *
+    * Renderiza modal Detalles Mesa via mifaces
+    *
+    */    
+
+
+
 
 
 }
