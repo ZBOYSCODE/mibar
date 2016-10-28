@@ -140,13 +140,18 @@
          */
         private function initSession(\App\Models\Clientes $cliente, \App\Models\Cuentas $cuenta) {
 
+            if($this->session->get('table_id_tmp') !== null)
+                $mesa = $this->session->get('table_id_tmp');
+            else
+                $mesa = 1; // NUMERO PRUEBA
+
             $this->session->set('auth-identity', array(
 
                 'id'        => $cliente->id,
                 'rol'       => $this->ROL_CLIENTE,
                 'cuenta'    => $cuenta->id,
                 'nombre'    => ucwords( strtolower( $cliente->nombre." ".$cliente->apellido ) ),
-                'mesa'      => 1 // NUMERO PRUEBA
+                'mesa'      =>  $mesa
 
             ));
 

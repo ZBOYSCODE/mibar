@@ -29,4 +29,11 @@
         'action'        => 'table',
         'params'        => 1
     ));
+
+    $router->add('/qr/:params', array(
+        'controller'    =>  "welcome",
+        'action'        =>  'preprocessing',
+        'params'        =>  1
+    ));
+
 	return $router;

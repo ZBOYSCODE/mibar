@@ -415,7 +415,7 @@
                 foreach ($pedidos as $key => &$pedido) { 
 
                     #separamos las promociones de los productos
-                    if($pedido->es_promocion) {
+                    if( $pedido->es_promocion ) {
 
                         $pedido->num_pedido         = $key;
                         $pedido->precio             = $promos[$pedido->producto_id]['precio'] * $pedido->cantidad;
@@ -425,6 +425,7 @@
                         $pedido->avatar             = $promos[$pedido->producto_id]['avatar'];
 
                     } else {
+
                         $pedido->num_pedido         = $key;
                         $pedido->precio             = $prod[$pedido->producto_id]['precio'] * $pedido->cantidad;
                         $pedido->precio_unitario    = $prod[$pedido->producto_id]['precio'];
@@ -442,8 +443,73 @@
             }
         }
 
-        
+        /**
+         * getOrders
+         *
+         * retorna la lista de ordenes de una cuenta
+         *
+         * @author Sebastián Silva
+         *
+         * @param array $param
+         * @return objects
+         */
+        public function getOrdersWithoutPayment($param) {
 
+            if( !isset($param['cuenta_id'])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $pedidos = Pedidos::find(
+                array(
+                    " cuenta_id = {$param['cuenta_id']} AND pago_id is null ",
+                    "order" => "id DESC"
+                )
+            );
+
+
+            if( $pedidos->count() == 0) {
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+
+            return $pedidos;
+        }
+
+        /**
+         * getAllOrders
+         *
+         * retorna todas las ordenes de una cuenta
+         *
+         * @author Sebastián Silva
+         *
+         * @param array $param
+         * @return objects
+         */
+        public function getAllOrders($param) {
+
+            if( !isset($param['cuenta_id'])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $pedidos = Pedidos::find(
+                array(
+                    " cuenta_id = {$param['cuenta_id']} ",
+                    "order" => "id DESC"
+                )
+            );
+
+
+            if( $pedidos->count() == 0) {
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+
+            return $pedidos;
+        }
     }
 
 

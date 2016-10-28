@@ -44,6 +44,8 @@ class MenuController extends ControllerBase
         // Al cambiar este parámetro, se debe cambiar también la vista.
         $paramCategoria = ["categoria_id" => $this->ID_CATEGORY_BEBIDAS];
 
+        
+
         $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
         $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
 
@@ -289,9 +291,10 @@ class MenuController extends ControllerBase
             $view = "controllers/menu/orders/modal";
             $this->mifaces->newFaces();
 
+            $dataView['total_pedido'] 	= $this->getTotalPedido();
 
-            $dataView["cuenta_id"] 	= $this->session->get("auth-identity")['cuenta'];
-            $dataView["mesa"] 		= $this->session->get("auth-identity")['mesa'];
+            $dataView["cuenta_id"] 		= $this->session->get("auth-identity")['cuenta'];
+            $dataView["mesa"] 			= $this->session->get("auth-identity")['mesa'];
 
             $pedidos = new PedidoBSN();
 
@@ -307,7 +310,75 @@ class MenuController extends ControllerBase
         	$this->view->disable();
 
         }
+	}
+
+	/**
+	* miCuenta
+	*
+	* Renderiza modal "Mi cuenta" 
+	*
+	* @author Sebastoán Silva
+	*/
+	public function miCuentaAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/menu/cuenta/modal";
+
+            $this->mifaces->newFaces();
+
+            $pedidos = new PedidoBSN();
+
+            //$dataView["pedidos"] 		= $pedidos->getPedidos();
+
+            $dataView['total_pedido'] 	= number_format($this->getTotalCuenta(), 0, ',', '.')  ;
+
+	        $toRend = $this->view->getPartial($view, $dataView);
+
+	        $this->mifaces->addToRend('orders-modal',$toRend);
+        	$this->mifaces->run();
+
+        } else{
+
+        	$this->view->disable();
+
+        }
 	}	
+
+	/**
+	* miCuenta
+	*
+	* Renderiza modal "Mi cuenta" 
+	*
+	* @author Sebastoán Silva
+	*/
+	public function misPedidosAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/menu/pedidos/modal";
+
+            $this->mifaces->newFaces();
+
+
+            $dataView['pedidos'] 	= $this->getListPedidos();
+
+
+	        $toRend = $this->view->getPartial($view, $dataView);
+
+	        $this->mifaces->addToRend('orders-modal',$toRend);
+        	$this->mifaces->run();
+
+        } else{
+
+        	$this->view->disable();
+
+        }
+	}	
+
+	
 
 	/**
 	 * removePedido
@@ -355,22 +426,139 @@ class MenuController extends ControllerBase
 	 * @author Sebastián Silva
 	 * @return json
 	 */
-	public function getNumPedidosAction() {
+	public function getResumenDatosAction() { //getNumPedidos
 
-		if ($this->session->has("pedidos")) {
+		$data = array();
 
-            $pedidos = $this->session->get("pedidos");
-            
-            $data['success'] 	= true;
-            $data['num'] 		= count($pedidos);
-        } else {
 
-        	$data['success'] 	= true;
-            $data['num'] 		= 0;
-        }
+		$data['total_pedidos'] 	= $this->getNumPedidos();
+		$data['precio_total']	= $this->getTotalPedido();
+
 
         echo json_encode($data);
 	}
+
+	public function getTotalCuenta() {
+
+		$precio_total = 0;
+
+		$pedidos = new PedidoBSN();
+
+		$param = array(
+			'cuenta_id' => $this->session->get("auth-identity")['cuenta']
+		);
+
+		$list = $pedidos->getOrdersWithoutPayment($param);
+
+		if ( !$list ){
+			return 0;
+		}
+
+		foreach ($list as $pedido) {
+
+			$precio_total += $pedido->precio;
+		}
+
+        return $precio_total;
+	}
+
+	private function getListPedidos() {
+
+
+		$precio_total = 0;
+
+		$pedidos = new PedidoBSN();
+
+		$param = array(
+			'cuenta_id' => $this->session->get("auth-identity")['cuenta']
+		);
+
+
+		$list = $pedidos->getAllOrders($param);
+
+		if ( !$list ){
+			return array();
+		}
+
+		$lista_pedidos = array();
+
+		foreach ($list as $pedido) {
+
+
+			if( !empty( $pedido->producto_id ) &&  empty( $pedido->promocion_id ) ) {
+				// Producto
+
+				$lista_pedidos[$pedido->created_at][$pedido->producto_id]['producto'] = $pedido->toArray();
+				$lista_pedidos[$pedido->created_at][$pedido->producto_id]['es_promocion'] = 0;
+
+				if ( !isset($lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad']) ) {
+
+					$lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad'] = 1;
+				} else {
+					$lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad']++;
+				}
+
+			} else {
+				// Promoción
+
+				$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['producto'] = $pedido->toArray();
+				$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['es_promocion'] = 1;
+
+				if ( !isset($lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad']) ) {
+
+					$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['cantidad'] = 1;
+				} else {
+					$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['cantidad'] ++;
+				}
+			}
+		}
+
+        return $lista_pedidos;
+	}
+
+	private function getTotalPedido() {
+
+		$precio_total = 0;
+
+		if ( $this->session->has("pedidos") ) {
+
+			$pedidos = $this->session->get("pedidos");
+
+			$prod = new ProductoBSN();
+			$prom = new PromocionBSN();
+
+		
+			foreach ($pedidos as $pedido) {
+
+				if($pedido['es_promocion']) {
+
+					$precio = $prom->getPrecioById($pedido['producto_id']);
+					$precio_total += $precio * $pedido['cantidad'];
+				} else {
+
+
+					$precio = $prod->getPrecioById($pedido['producto_id']);
+					$precio_total += $precio * $pedido['cantidad'];
+				}
+			}
+        }
+
+        return $precio_total;
+
+	}
+
+	private function getNumPedidos() {
+
+		if ($this->session->has("pedidos")) {	
+
+            $pedidos = $this->session->get("pedidos");
+            return count($pedidos);
+        } else {
+
+            return 0;
+        }
+	}
+
 
 	/**
 	 * deleteAllPedidos

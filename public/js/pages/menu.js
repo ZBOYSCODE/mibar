@@ -1,10 +1,6 @@
+$(document).on('ready', function() {
 
-
- $(document).on('ready', function() {
-
- 	var menuNav = "opcion1";
  	var url 	= $("#frm").val();
-	$('#'+menuNav).addClass('active');
 
   	actualizar_info();
 
@@ -106,15 +102,13 @@
 
  		var datos = {}
 
-   		fun = $.xajax(datos, url+'/getNumPedidos');
+   		fun = $.xajax(datos, url+'/getResumenDatos');//getNumPedidos
 
 		fun.success(function (data)
 		{
-			if(data.success) {
 				
-				$(".carro-compra").text(data.num);
-				
-			}
+			$(".carro-compra").text(data.total_pedidos);
+			$(".precio-total").text("$ "+data.precio_total);
 
 		});
 
@@ -126,7 +120,6 @@
 
  		$(".precio_pedidos").text("666.999");
 
- 		console.log("precios actualizados");
  	}
 
 
@@ -194,6 +187,8 @@
    	$(document).on('click', '.menu-prod', function(){
 
 
+		$('.button-active').removeClass('active');
+
         var action = $(this).data("url");
 
         var dataIn = new FormData();
@@ -206,6 +201,8 @@
 
    	$(document).on('click', '.menu-promo', function(){
 
+   		$('.button-active').removeClass('active');
+
         var action = $(this).data("url");
 
         var dataIn = new FormData();
@@ -215,7 +212,20 @@
 
     });
 
-   	$(document).on('click', '.nav-menu-cart', function(e){
+   	$(document).on('click', '.mis-pedidos', function(e){
+
+    	var action = $(this).data("url");
+
+    	var dataIn = new FormData();
+
+    	//mifaces
+    	$.callAjax(dataIn, action, $(this));
+    
+    	e.preventDefault();
+    
+  	}); 
+
+  	$(document).on('click', '.mi-cuenta', function(e) {
 
     	var action = $(this).data("url");
 
@@ -230,6 +240,9 @@
  
 
     $(document).on('change', "#promo-categories",function(){
+
+
+		$('.button-active').removeClass('active');
 
         var tipoPromo = $(this).val();
 
@@ -252,6 +265,8 @@
 
 
     $(document).on('change', "#prod-categories",function(){
+
+		$('.button-active').removeClass('active');
 
         var subcategoria = $(this).val();
 
@@ -353,37 +368,35 @@
 
 		if(options.callName != null ) {
 			if(options.callName == "changeMenu") {
-				active_Menu();
+				//active_Menu();
 			}
 
 			if(options.callName == "ordersButton") {
 				openMyOrdersModal();
+			}
+
+			if(options.callName == "openmodalcuenta") {
+				openMiCuentaModal();
 			}
 		}
 
 	}); 
 
 
- 	function active_Menu() {
+	$(document).on('click', '.button-active', function(){
 
-		$('.button-active').removeClass('active');
+		$(".button-active").removeClass('active');
+		$(this).addClass('active');
+	});
 
-		if (menuNav == "opcion0"){
-			$('#opcion0').addClass('active');
-		}
-
-		if (menuNav == "opcion1"){
-			$('#opcion1').addClass('active');
-		}
-
-		if (menuNav == "opcion2"){
-			$('#opcion2').addClass('active');
-		}
-	}
 
 	 function openMyOrdersModal(){
 
 	    $('#products-modal').modal('show');
+	 }
+
+	 function openMiCuentaModal() {
+	 	$('#products-modal').modal('show');
 	 }
 
 

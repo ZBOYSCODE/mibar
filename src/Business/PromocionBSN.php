@@ -179,7 +179,25 @@
             }
                 
 
-        }           
+        }   
+
+
+        /**
+         * getPrecioById
+         * funcion corta
+         * @author Sebastián Silva 
+         * @param $id identificador producto 
+         */   
+        public function getPrecioById($id) {
+
+            $producto = Promociones::findFirstById($id);
+
+            if(!$producto) {
+                return 0;
+            } else {
+                return $producto->precio;
+            }
+        }        
 
 
     }

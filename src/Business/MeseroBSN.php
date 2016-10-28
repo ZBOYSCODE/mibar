@@ -19,6 +19,7 @@
     use App\Models\FuncionarioMesa;
     use App\Models\Cuentas;
     use App\Models\Pedidos;
+    use App\Models\EstadosMesa;
     /**
      * Modelo de negocio
      *
@@ -35,80 +36,157 @@
          */
         public  $error;
 
+        private $ESTADO_CUENTA_PENDIENTE = 1;
+        private $ESTADO_MESA_ACTIVA = 1;
+        private $ESTADO_PEDIDO_PENDIENTE = 1;
+
+        public $estado_cancelado = 6;
+
+
         /**
-         * Obtiene mesas según parametro (Todas las mesas de un bar o todas las mesas asignadas a un mesero)
-         * En TestController es posible getCuentaAction, es posible encontrar la forma de acceder a sus valores 
-         *
-         * @author rsoto
-         * @param $param = [ 
-         *                    "funcionario_id" => integer
-         *                     "turno_id"       => integer
-         *                    "fecha"          => Date
+        *
+        * Obtiene mesas para un funcionario
+        *
+        * @author osanmartin
+        *
+        * @param $param['funcionario_id'] : ID de funcionario
+        * @return lista de objetos Mesa asociados
+        *
+        *
+        */
 
-         *                 ]
-         * @return boolean
-         */
+        public function getMesas($param){
 
-        public function getMesas($param = null){
-
-            if(isset($param)&&!empty($param)){
-                
-                if( isset($param['funcionario_id']) AND 
-                    isset($param['turno_id']) AND 
-                    isset($param['fecha'])) {
-                
-
-                    $funcionario_id = $param['funcionario_id'];
-                    $turno_id       = $param['turno_id'];
-                    $fecha          = $param['fecha'];
-
-                    $fechaY         = $fecha->format('Y');
-                    $fechaM         = $fecha->format('m');
-                    $fechaD         = $fecha->format('d');
-
-                    $mesas = FuncionarioMesa::query()
-                        ->where("funcionario_id         = {$funcionario_id}")
-                        ->andWhere("turno_id            = {$turno_id}")
-                        ->andWhere("YEAR(fecha) = {$fechaY}")
-                        ->andWhere("MONTH(fecha) = {$fechaM}")
-                        ->andWhere("DAY(fecha)   = {$fechaD}")
-                        ->execute();
-
-                    if(!$mesas->count()){
-                        $this->error = $this->errors->NO_RECORDS_FOUND;
-                        return false;
-                    }
-                    return $mesas;
-
-                }
-            
-
-                if(isset($param['bar_id'])){
-
-                    $barId  = $param['bar_id'];
-
-                    $mesas = Mesas::query()
-                        ->where(" bar_id = {$barId}")
-                        ->execute();
-
-                    if(!$mesas->count()){
-                        $this->error = $this->errors->NO_RECORDS_FOUND;
-                        return false;
-                    }
-                    return $mesas;
-                }else{
-
-                    $this->error[] = $this->errors->MISSING_PARAMETERS;
-                    return false;
-
-                }
-
-            }else{
+            if(!isset($param['funcionario_id'])){
                 $this->error[] = $this->errors->MISSING_PARAMETERS;
                 return false;
+            }
+
+            $result = Mesas::query()
+                    ->leftJoin("App\Models\FuncionarioMesa","App\Models\Mesas.id = fm.mesa_id","fm")
+                    ->where("fm.funcionario_id = {$param['funcionario_id']}")
+                    ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
+        }
+
+
+        /**
+        *
+        * Obtiene pedidos pendientes de mesas de un funcionario
+        *
+        * @author osanmartin
+        *
+        * @param $param['funcionario_id'] : ID de funcionario
+        * @return array con formato [$id_mesa] = $cantidad_pedidos
+        *
+        *
+        */        
+
+        public function getPedidosPendientesMesasFuncionario($param){
+
+            if(!isset($param['funcionario_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Pedidos::query()
+                    ->columns(['mesa_id' => 'm.id','cantidad_pedidos'=>'count(App\Models\Pedidos.id)'])
+                    ->leftJoin("App\Models\Cuentas","c.id = App\Models\Pedidos.cuenta_id","c")
+                    ->leftJoin("App\Models\Mesas","m.id = c.mesa_id","m")
+                    ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
+                    ->where("fm.funcionario_id = {$param['funcionario_id']}")
+                    ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->andWhere("App\Models\Pedidos.estado_id = {$this->ESTADO_PEDIDO_PENDIENTE}")
+                    ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            $mesas = $this->getMesas($param);
+            $pedidosPendientes = $result;
+
+            foreach ($mesas as $val) {
+
+                $arr[$val->id] = 0;
 
             }
+
+            foreach ($pedidosPendientes as $key => $val) {
+
+                if(isset($arr[$val->mesa_id]))
+                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+
+            }
+
+            return $arr;
+
         }
+
+        /**
+        *
+        * Obtiene pedidos totales de mesas de un funcionario
+        *
+        * @author osanmartin
+        *
+        * @param $param['funcionario_id'] : ID de funcionario
+        * @return array con formato [$id_mesa] = $cantidad_pedidos
+        *
+        *
+        */        
+
+        public function getPedidosTotalesMesasFuncionario($param){
+
+            if(!isset($param['funcionario_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Pedidos::query()
+                    ->columns(['mesa_id' => 'm.id','cantidad_pedidos'=>'count(App\Models\Pedidos.id)'])
+                    ->leftJoin("App\Models\Cuentas","c.id = App\Models\Pedidos.cuenta_id","c")
+                    ->leftJoin("App\Models\Mesas","m.id = c.mesa_id","m")
+                    ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
+                    ->where("fm.funcionario_id = {$param['funcionario_id']}")
+                    ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            $mesas = $this->getMesas($param);
+            $pedidosTotales = $result;
+
+            foreach ($mesas as $val) {
+
+                $arr[$val->id] = 0;
+
+            }
+
+            foreach ($pedidosTotales as $key => $val) {
+
+                if(isset($arr[$val->mesa_id]))
+                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+
+            }
+
+            return $arr;
+
+        }        
         
         /**
          * Obtiene las cuentas según el identificador de la mesa
@@ -278,7 +356,6 @@
          *
          * @return boolean
          */
-
         private function esPromo($param){
 
             if(isset($param['pedido_id']) OR !empty($param['pedido_id'])){
@@ -293,6 +370,145 @@
                 }
             }
         }
+
+        /**
+         * liberarMesas
+         *
+         * la cuenta pasará a estado cancelado
+         * y se cancelaran los pedidos asociados
+         */
+        public function liberarMesas($param) {
+
+            // verificamos que viene el id de la cuenta
+            if( !isset($param['cuenta_id'])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $this->db->begin();
+
+            $cuenta = Cuentas::findFirstById($param['cuenta_id']);
+
+            // verificamos que haya encontrado la cuenta
+            if(!$cuenta) {
+                $this->error = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            // cambiamos el estado de la cuanta a cancelado
+            $cuenta->estado = $this->estado_cancelado;
+
+            // verificamos que se actualice correctamente
+            if($cuenta->save() == false ) {
+                $this->error = $this->errors->$FILE_WRITE_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+
+            $pedidos = Pedidos::findByCuentaId($param['cuenta_id']);
+
+            if( $pedidos->count() > 0) {
+
+                foreach ($pedidos as $pedido) {
+
+                    $pedido->estado_id = $this->estado_cancelado;
+
+                    if( !$pedido->save()) {
+
+                        $this->db->rollback();
+                        return false;
+                    }
+                }
+            }
+
+
+            $this->db->commit();
+            return true;
+        }
+
+
+        /**
+        *
+        * Obtiene mesas para un funcionario
+        *
+        * @author osanmartin
+        *
+        * @return lista de objetos estados mesa asociados
+        *
+        */
+
+        public function getEstadosMesa(){
+
+
+            $result = EstadosMesa::find();
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
+        }
+
+
+        /**
+        *
+        * Obtiene cuentas para una mesa
+        *
+        * @author osanmartin
+        *
+        * @param $param['mesa_id'] = ID de mesa 
+        *
+        * @return array con formato [$cuenta_id] = ['subtotal'=>$subtotal,
+        *                                           'cantidad'=>$cantidad]
+        *
+        */
+
+        public function getDataPedidosByCuenta($param){
+
+            if(!isset($param['mesa_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Cuentas::query()
+                        ->columns(['cuenta_id' => 'App\Models\Cuentas.id',
+                                   'subtotal'  => 'SUM(p.precio)',
+                                   'cantidad'  => 'COUNT(p.id)'] )
+                        ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")                        
+                        ->leftJoin("App\Models\Pedidos","App\Models\Cuentas.id = p.cuenta_id","p")
+                        ->where("m.id = {$param['mesa_id']}")
+                        ->execute();
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            $cuentas = $this->getDetalleMesa($param);
+
+
+            foreach ($cuentas as $val) {
+                
+                $arr[$val->id] = ['subtotal'=>0,'cantidad'=>0];
+
+            }
+
+
+            foreach ($result as $key => $val) {
+
+                if(isset($arr[$val->cuenta_id]))
+                    $arr[$val->cuenta_id] = ['subtotal' => $val->subtotal,
+                                  'cantidad' => $val->cantidad];
+
+            }
+
+            return $arr;
+
+        }  
+
 
     }
 
