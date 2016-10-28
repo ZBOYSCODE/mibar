@@ -362,8 +362,9 @@ class MenuController extends ControllerBase
 
             $this->mifaces->newFaces();
 
+            $dataView['lista_pedidos'] 	= $this->getListPedidos();
 
-            $dataView['pedidos'] 	= $this->getListPedidos();
+            $dataView['total_pedido'] 	= number_format($this->getTotalCuenta(), 0, ',', '.');
 
 
 	        $toRend = $this->view->getPartial($view, $dataView);
@@ -480,40 +481,95 @@ class MenuController extends ControllerBase
 			return array();
 		}
 
+		
 		$lista_pedidos = array();
 
 		foreach ($list as $pedido) {
 
 
+			$date = new \DateTime($pedido->created_at);
+			
+			$fecha =  $date->format('H:i d-m-Y');
+			
+			//$fecha 	= date('H:i d-m-Y', $pedido->created_at);
+			
+
+
 			if( !empty( $pedido->producto_id ) &&  empty( $pedido->promocion_id ) ) {
 				// Producto
+				$id 	= $pedido->producto_id;
 
-				$lista_pedidos[$pedido->created_at][$pedido->producto_id]['producto'] = $pedido->toArray();
-				$lista_pedidos[$pedido->created_at][$pedido->producto_id]['es_promocion'] = 0;
+				$lista_pedidos[$fecha]['fecha'] 						= $fecha;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 		= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['es_promocion'] 	= 0;
+				$lista_pedidos[$fecha]['pedidos'][$id]['color'] 		= $this->getColorState($pedido->estado_id);
+				$lista_pedidos[$fecha]['pedidos'][$id]['color_nombre'] 	= $pedido->Estados->nombre;
 
-				if ( !isset($lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad']) ) {
 
-					$lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad'] = 1;
+				if ( !isset($lista_pedidos[$fecha]['total']) ) {
+					$lista_pedidos[$fecha]['total'] = $pedido->precio;
 				} else {
-					$lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad']++;
+					$lista_pedidos[$fecha]['total'] += $pedido->precio;
+				}
+
+
+				if ( !isset($lista_pedidos[$fecha]['pedidos'][$id]['cantidad']) ) {
+
+					$lista_pedidos[$fecha]['pedidos'][$id]['cantidad'] = 1;
+				} else {
+					$lista_pedidos[$fecha]['pedidos'][$id]['cantidad']++;
 				}
 
 			} else {
 				// Promoción
+				$id 	= $pedido->promocion_id;
 
-				$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['producto'] = $pedido->toArray();
-				$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['es_promocion'] = 1;
+				$lista_pedidos[$fecha]['fecha'] 						= $fecha;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 		= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['es_promocion'] 	= 1;
+				$lista_pedidos[$fecha]['pedidos'][$id]['color'] 		= $this->getColorState($pedido->estado_id);
+				$lista_pedidos[$fecha]['pedidos'][$id]['color_nombre'] 	= $pedido->Estados->nombre;
 
-				if ( !isset($lista_pedidos[$pedido->created_at][$pedido->producto_id]['cantidad']) ) {
 
-					$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['cantidad'] = 1;
+				if ( !isset($lista_pedidos[$fecha]['total']) ) {
+
+					$lista_pedidos[$fecha]['total'] = $pedido->precio;
 				} else {
-					$lista_pedidos[$pedido->created_at][$pedido->promocion_id]['cantidad'] ++;
+					$lista_pedidos[$fecha]['total'] += $pedido->precio;
+				}
+
+				if ( !isset($lista_pedidos[$fecha]['pedidos'][$id]['cantidad']) ) {
+
+					$lista_pedidos[$fecha]['pedidos'][$id]['cantidad'] = 1;
+				} else {
+					$lista_pedidos[$fecha]['pedidos'][$id]['cantidad'] ++;
 				}
 			}
 		}
 
         return $lista_pedidos;
+	}
+
+	private function getColorState($estado) {
+
+		switch ($estado) {
+			case 1:
+				return 'red';
+				break;
+
+			case 2:
+				return 'orange';
+				break;
+
+			case 3:
+				return 'azul';
+				break;
+
+			case 5:
+				return 'green';
+				break;
+		}
+
 	}
 
 	private function getTotalPedido() {
