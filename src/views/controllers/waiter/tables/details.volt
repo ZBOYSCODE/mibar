@@ -28,5 +28,5 @@
     {% endfor %}
 			   
     
-    <div id="table-modal-orders_render"></div>
+    <div id="table_modal_orders_render"></div>
 	

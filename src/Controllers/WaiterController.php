@@ -138,7 +138,7 @@ class WaiterController extends ControllerBase
 
             $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('table-modal-orders_render',$toRend);
+            $this->mifaces->addToRend('table_modal_orders_render',$toRend);
             $this->mifaces->run();
 
         } else{

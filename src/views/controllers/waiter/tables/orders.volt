@@ -33,8 +33,8 @@
 								<div class="card" id='pedido-{{pedido.id}}'>
 							      	<div class="product-item-modal">
 										<div class="wine-switch">
-						                   <input class="checkPedido"name="approve_consent[]" type="checkbox" checked="checked" value="{{pedido.id}}"/>
-						                   <label for="approve_consent" class="label-success"></label>
+						                   <input id="{{pedido.id}}" class="checkPedido" name="approve_order[]" type="checkbox" checked="checked" value="{{pedido.id}}"/>
+						                   <label for="{{pedido.id}}" class="label-success"></label>
 						               </div>
 							      		<p class="title">{{ title }}</p>
 							      		<div class="row">
@@ -60,7 +60,7 @@
 
 			<div class="menu-footer">
 				<div class="row menu-footer-buttons card">
-					<button id="btn-validar-pedidos" class="btn btn-main" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos">VALIDAR PEDIDOS</button>
+					<button id="btn-validar-pedidos" class="btn btn-main btnAjax" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos">VALIDAR PEDIDOS</button>
 				</div>
 			</div>	
 		    
