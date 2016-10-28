@@ -19,33 +19,34 @@
 			    	</div>
 			    </div>
 			    <div class="modal-body">
-			      <!-- Products -->
+			      <!-- Pedidos -->
 					
 					<div class="lista_pedidos">
 
-						{% for pedido in pedidos %}
+						{% for lista in lista_pedidos %}
 
-							<div class="card" id='pedido-{{pedido.num_pedido}}'>
+							<div class="card" class='item-pedido'>
 						      	<div class="product-item-modal">
-						      		<button type="button" data-pedido="{{ pedido.num_pedido }}" class="btn btn-small btn-main pull-right delete-pedido">Eliminar</button>
-						      		<p class="title">{{ pedido.nombre }}</p>
-						      		<div class="row">
-						      			<div class="col-xs-6 col-md-6">
-						      				<p><b><i class="fa fa-bar-chart"></i> Cantidad: </b>{{ pedido.cantidad }}</p>
-						      			</div>
-						      			<div class="col-xs-6 col-md-6">
-						      				<p><b><i class="fa fa-calculator"></i> Total Pedido: </b>$<span>{{ pedido.precio }}</span></p>
-						      			</div>
-						      		</div>
-						      		<div class="comment">
-						      			<b><i class="fa fa-commenting"></i> Comentario:</b>
-						      			<p>{{ pedido.comentario }}</p>
+						      	
+						      		<h3>{{ lista['fecha'] }}  Total $<?php echo number_format($lista['total'], '0', ',', '.') ?></h3>
+
+						      		<div>
+										{% for pedido in lista['pedidos'] %}
+											
+							      			<div class="row" id='producto-{{ pedido['producto'].producto_id }}'>
+							      				<div class="col-xs-12">
+								      					{{ pedido['cantidad'] }} {{ pedido['producto'].Productos.nombre }} $<span><?php echo number_format($pedido['producto']->precio, '0', ',', '.') ?> </span>
+
+								      					<div class="led-{{pedido['color']}} led pull-right" id='estado-{{pedido['producto'].estado_id}}' ></div>
+														<span class='pull-right'>{{pedido['color_nombre'] }}</span>
+								      			</div>
+								      		</div>
+
+								      	{% endfor %}
 						      		</div>
 						      	</div>
 					        </div>
-
 						{% endfor %}
-
 					</div>
 
 					
@@ -55,12 +56,15 @@
 			    </div>
 			    <div class="modal-footer card">
 			    	<div class="row">
-			    		<div class='col-xs-5'>
-							<span class="precio-total">$ {{ total_pedido }}</span>
+			    		<div class='col-xs-12'>
+							<span class="precio-total">Total a pagar $ {{ total_pedido }}</span>
 						</div>
+						
+						{#
 						<div class='col-xs-7'>
 							<button id="Send-Products" type="button" class="btn btn-main pull-right">ENVIAR PEDIDO</button>
 						</div>
+						#}
 			    	</div>
 				    	
 			      
