@@ -134,11 +134,15 @@ $(function(){
 		// callName: nombre de la llamada manejar el ajaxComplete en cualquier lado
 		// dejamos el id ó el atributo data-callName
 		// si no tiene ninguno definido lo dejamos como string vacio
+
+		console.log(parent);
 		var callName = "";
 		if(parent.data('callname')!== undefined)
 			callName = parent.data('callname');
 		else if(parent.attr('id')!== undefined)
 			callName = parent.attr("id");
+
+		var btnContent = parent.html();
 
         var objRet;
 		if (typeof NProgress !== "undefined" && NProgress != null)
@@ -296,7 +300,11 @@ $(function(){
 					//var fn = new Function(parent.data('eval'));
 					//console.log(parent.data('eval')+':'+fn() !== undefined); // true, strict mode				
 				}
-				
+
+
+				if(parent.hasClass("btnAjax"))
+					App.stopAnimation("btnAjax",parent, btnContent);
+
 				//TODO, config especiales no se si tendre que sacarlas y colocarlas en un mejor lugar
 				if(parent.data('scroll')!==undefined)
 					parent.data('scroll','true');

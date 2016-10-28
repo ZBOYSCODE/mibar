@@ -47,9 +47,9 @@
         {{ javascript_include('js/plugins/chosen.jquery.min.js') }}
        
         {# CSS CUSTOM #}
+        {{ javascript_include('js/main/app.js') }}
         {{ javascript_include('js/plugins/mifaces.js') }}
         {{ javascript_include('js/plugins/jquery.utilidades.js') }}
-        {{ javascript_include('js/main/app.js') }}
 
         {{ assets.outputJs() }}
 

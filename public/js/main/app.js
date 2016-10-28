@@ -1,4 +1,3 @@
-
 window.App = (function($, win, doc, undefined) {
 
 
@@ -53,23 +52,33 @@ window.App = (function($, win, doc, undefined) {
         $('#until').datepicker();
 
 
-    }
+    },
 
     animations = function () {
 
-        $(document).on('click', ".saveBtn", function () {
+        $(document).on('click', ".btnAjax", function () {
 
             $(this).html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando..')
                 .attr('disabled', 'disabled');
         });
-    }
+    },
 
 
-    stopAnimation = function (animation_name) {
+    stopAnimation = function (animation_name, btn, html) {
+
+        if( typeof html == 'undefined' )
+            html = "";
+
         switch(animation_name) {
-            case "saveBtn":
-                $(".saveBtn").html('<i class="fa fa-floppy-o"></i> Guardar')
-                    .prop("disabled", false);
+            case "btnAjax":
+                if(html != null){
+                    btn.html(html)
+                        .prop("disabled", false);
+                }
+                else if(html != null &&  html == ""){
+                    btn.html("Repetir")
+                        .prop("disabled", false);
+                }
                 break;
             default:
                 return;
@@ -86,8 +95,8 @@ window.App = (function($, win, doc, undefined) {
             uiInit();
             animations();
         },
-        stopAnimation: function(e) {
-            stopAnimation(e);
+        stopAnimation: function(e, btn, html) {
+            stopAnimation(e, btn, html);
         }
     };
 }(jQuery, this, document));
