@@ -39,7 +39,7 @@ class Productos extends \Phalcon\Mvc\Model
      * @var integer
      * @Column(type="integer", length=11, nullable=false)
      */
-    public $categoria_id;
+    public $subcategoria_id;
 
     /**
      *

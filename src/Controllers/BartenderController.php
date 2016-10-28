@@ -3,12 +3,32 @@
 namespace App\Controllers;
 
 
+use App\Business\PedidoBSN;
+use App\Business\ProductoBSN;
 
+use App\library\Constants\Constant;
 
 
 
 class BartenderController extends ControllerBase
 {
+
+    private $constant;
+
+    /**
+     * initialize
+     *
+     * @author Jorge Silva
+     *
+     * inicializa la clase
+     */
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->constant = new Constant();
+    }
+
 
     /**
      * indexAction
@@ -23,6 +43,44 @@ class BartenderController extends ControllerBase
         #js custom
         $this->assets->addJs('js/pages/bartender.js');
 
+
+        #traemos todos los pedidos con estado
+
+        $param = [
+            "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
+        ];
+
+        $paramCat = [
+            "nombre" => $this->constant->PEDIDO_BEBIDA
+        ];
+
+        $pedidobsnObj = new PedidoBSN();
+        $status = $pedidobsnObj->getStatus($param);
+
+        $productoObj = new ProductoBSN();
+        $category = $productoObj->getListCategoriesByName($paramCat);
+
+
+
+        if($status == false OR $category == false)
+        {
+            $orders_drinks_pdte = false;
+        }
+        else {
+
+            $paramOrder = [
+                "category_id"    => $category->id ,
+                "estado_id"      => $status->id
+            ];
+
+            $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
+
+        }
+
+
+
+
+        $this->view->setVar("orders", $orders_drinks_pdte);
         #View
         $this->view->pick("controllers/bartender/_index");
     }

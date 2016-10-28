@@ -92,6 +92,33 @@
 
             return $categorias;
         }
+
+
+        /**
+         * Lista de categorias por id
+         *
+         * retorna el listado de categorías
+         *
+         * @author Jorge Silva A
+         *
+         * @return object
+         */
+        public function getListCategoriesByName($param) {
+
+            if(!isset($param["nombre"])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $categoria = CategoriaProductos::findFirst("nombre = '{$param["nombre"]}'");
+
+            if( $categoria == false ) {
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $categoria;
+        }
         
         /**
          * Lista de subcategorías

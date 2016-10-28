@@ -56,7 +56,7 @@ window.App = (function($, win, doc, undefined) {
 
     animations = function () {
 
-        $(document).on('click', ".btnAjax", function () {
+        $(document).on('click touchstart', ".btnAjax", function () {
 
             $(this).html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Cargando..')
                 .attr('disabled', 'disabled');

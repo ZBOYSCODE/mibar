@@ -18,7 +18,11 @@
     use App\Models\Pedidos;
     use App\Models\ProducPromoPedidos;
     use App\Models\Promociones;
-    
+    use App\Models\Estados;
+    use App\Models\Productos;
+    use App\Models\SubcategoriaProductos;
+    use App\Models\CategoriaProductos;
+
     /**
      * Modelo de negocio
      *
@@ -487,6 +491,54 @@
             return $pedidos;
         }
 
+
+        /**
+         * getOrdersByCategoryStatus
+         *
+         *
+         * Retorna una lista de pedidos dada una catetoria y un estado en particular
+         * en caso de error retorna false
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param ['category_id'   => integer
+         *                      'estado_id'     => integer
+         *                      ]
+         * @return bool
+         *
+         *
+         */
+        public function getOrdersByCategoryStatus($param) {
+
+
+            if( !isset($param["category_id"]) AND !isset($param["estado_id"])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+
+
+            $pedidos = Pedidos::query()
+                ->leftJoin('App\Models\Productos', 'prd.id   = App\Models\Pedidos.producto_id',    'prd')
+                ->leftJoin('App\Models\SubcategoriaProductos', 'scp.id   = prd.subcategoria_id',    'scp')
+                ->leftJoin('App\Models\CategoriaProductos', 'cat.id   = scp.categoria_producto_id',    'cat')
+                ->where("cat.id = '{$param["category_id"]}' ")
+                ->andWhere("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->execute();
+
+
+
+            if($pedidos->count()>0){
+
+                return $pedidos;
+
+            }else{
+
+                $this->error = $this->errors->NO_RECORDS_FOUND_ID;
+                return false;
+            }
+        }
+
         /**
          * getAllOrders
          *
@@ -655,6 +707,46 @@
 
 
 
+        /**
+         * getStatus
+         *
+         * Retorna un objeto Estado dado un nombre, si no se setea el parametro string se traen todos los Estados.
+         *
+         * si retorna false es porque hay errores
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param[ 'nombre' => string ]
+         * @return \App\Models\Estados[]|array|bool|id
+         */
+        public function getStatus($param) {
+
+            $status = array();
+
+            if(isset($param["nombre"])) {
+
+                $status = Estados::findFirst(
+                  array (
+                      "nombre = '{$param['nombre']}' "
+                  )
+                );
+
+            }
+            else{
+                $status = Estados::find();
+            }
+
+            if( $status == false ) {
+                $this->error = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+
+            return $status;
+
+
+
+        }
     }
 
 
