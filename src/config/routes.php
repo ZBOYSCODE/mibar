@@ -24,5 +24,9 @@
         'action'        =>  'logout'
     ));
 
-    
+    $router->add('/cashbox/table/:params', array(
+        'controller'    => 'cashbox',
+        'action'        => 'table',
+        'params'        => 1
+    ));
 	return $router;
