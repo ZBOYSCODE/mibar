@@ -100,14 +100,48 @@ class WaiterController extends ControllerBase
 
 
     /**
-    * CuentaDetails
+    * BillDetails
     *
     *
     * @author osanmartin
     *
-    * Renderiza modal Detalles Mesa via mifaces
+    * Renderiza modal detalles cuenta via mifaces
     *
     */    
+
+    public function billDetailsAction(){
+
+
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            $view = "controllers/waiter/tables/modal_orders";
+
+
+            $cuenta_id = $post['cuenta'];
+            $param['cuenta_id'] = $table_id;
+
+            $tabObj = new MeseroBSN();
+            $tablesDetails = $tabObj->getDetalleMesa($param);
+            
+            $dataView['detalles'] =  $tablesDetails;
+           
+            $toRend = $this->view->getPartial($view, $dataView);
+
+            $this->mifaces->addToRend('table-modal',$toRend);
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
+
+    }
 
 
 
