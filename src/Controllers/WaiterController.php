@@ -30,10 +30,6 @@ class WaiterController extends ControllerBase
     {
 
 
-        $param['mesa_id'] = 1;
-
-        $this->meseroBsn->getDataPedidosByCuenta($param);
-
         //DATO EN BRUTO
         $id_mesero = 1;
 
