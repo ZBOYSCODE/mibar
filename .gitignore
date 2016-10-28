@@ -2,3 +2,4 @@
 last.zip
 src/controllers/PruebaController.php
 vendor/
+src/config/config.php

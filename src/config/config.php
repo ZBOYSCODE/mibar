@@ -2,9 +2,9 @@
 return new \Phalcon\Config([
     'database' => [
         'adapter'  => 'Mysql',
-       'host'      => '64.79.70.108',
-       'username'  => 'testing',
-       'password'  => 'Z3nt1#.',
+       'host'      => 'localhost',//'64.79.70.108',
+       'username'  => 'root',//'testing',
+       'password'  => '',//'Z3nt1#.',
        'dbname'    => 'mibar'
     ],
     'application' => [
@@ -30,7 +30,8 @@ return new \Phalcon\Config([
         'login'     => array('*'    =>  true),
         'acceso'    => array('*'    =>  true),
         'prueba'    => array('*'    =>  true),
-        'test'      => array('*'    =>  true)
+        'test'      => array('*'    =>  true),
+        'waiter'    => array('*'    =>  true)
     ],
     'appTitle'      =>'MiBar',
     'appName'       =>"MiBar",

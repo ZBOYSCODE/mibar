@@ -41,6 +41,12 @@ class Mesas extends \Phalcon\Mvc\Model
      */
     public $bar_id;
 
+     /**
+     *
+     * @var integer
+     */
+    public $estado_mesa_id;
+
     /**
      * Initialize method for model.
      */
@@ -50,6 +56,8 @@ class Mesas extends \Phalcon\Mvc\Model
         $this->hasMany('id', __NAMESPACE__.'\Reservas', 'mesa_id', ['alias' => 'Reservas']);
         $this->hasMany('id', __NAMESPACE__.'\FuncionarioMesa', 'mesa_id', ['alias' => 'FuncionarioMesa']);
         $this->belongsTo('bar_id', __NAMESPACE__.'\Bares', 'id', ['alias' => 'Bares']);
+        $this->belongsTo('estado_mesa_id', __NAMESPACE__.'\EstadosMesa', 'id', ['alias' => 'EstadosMesa']);
+
     }
 
     /**

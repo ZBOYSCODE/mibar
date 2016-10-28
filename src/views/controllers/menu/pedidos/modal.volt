@@ -5,7 +5,7 @@
 		    <div class="modal-content">
 			    <div class="modal-header card">
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
-			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MI CARRO</h4>
+			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MI PEDIDOS</h4>
 			    </div>
 			     <div class="row user-details card">
 			    	<div class="col-xs-2 col-md-2">
@@ -27,7 +27,7 @@
 
 							<div class="card" id='pedido-{{pedido.num_pedido}}'>
 						      	<div class="product-item-modal">
-						      		<button type="button" data-pedido="{{ pedido.num_pedido }}" class="btn btn-small btn-main btn-delete pull-right delete-pedido">Eliminar</button>
+						      		<button type="button" data-pedido="{{ pedido.num_pedido }}" class="btn btn-small btn-main pull-right delete-pedido">Eliminar</button>
 						      		<p class="title">{{ pedido.nombre }}</p>
 						      		<div class="row">
 						      			<div class="col-xs-6 col-md-6">

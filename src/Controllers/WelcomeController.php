@@ -27,6 +27,7 @@ class WelcomeController extends ControllerBase
 
     public function preprocessingAction($numeroMesa) {
 
+
         if(isset($numeroMesa) && is_numeric($numeroMesa)){
             $this->session->set('table_id_tmp', $numeroMesa);
         }

@@ -19,6 +19,7 @@
     use App\Models\FuncionarioMesa;
     use App\Models\Cuentas;
     use App\Models\Pedidos;
+    use App\Models\EstadosMesa;
     /**
      * Modelo de negocio
      *
@@ -425,6 +426,89 @@
             $this->db->commit();
             return true;
         }
+
+
+        /**
+        *
+        * Obtiene mesas para un funcionario
+        *
+        * @author osanmartin
+        *
+        * @return lista de objetos estados mesa asociados
+        *
+        */
+
+        public function getEstadosMesa(){
+
+
+            $result = EstadosMesa::find();
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
+        }
+
+
+        /**
+        *
+        * Obtiene cuentas para una mesa
+        *
+        * @author osanmartin
+        *
+        * @param $param['mesa_id'] = ID de mesa 
+        *
+        * @return array con formato [$cuenta_id] = ['subtotal'=>$subtotal,
+        *                                           'cantidad'=>$cantidad]
+        *
+        */
+
+        public function getDataPedidosByCuenta($param){
+
+            if(!isset($param['mesa_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Cuentas::query()
+                        ->columns(['cuenta_id' => 'App\Models\Cuentas.id',
+                                   'subtotal'  => 'SUM(p.precio)',
+                                   'cantidad'  => 'COUNT(p.id)'] )
+                        ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")                        
+                        ->leftJoin("App\Models\Pedidos","App\Models\Cuentas.id = p.cuenta_id","p")
+                        ->where("m.id = {$param['mesa_id']}")
+                        ->execute();
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            $cuentas = $this->getDetalleMesa($param);
+
+
+            foreach ($cuentas as $val) {
+                
+                $arr[$val->id] = ['subtotal'=>0,'cantidad'=>0];
+
+            }
+
+
+            foreach ($result as $key => $val) {
+
+                if(isset($arr[$val->cuenta_id]))
+                    $arr[$val->cuenta_id] = ['subtotal' => $val->subtotal,
+                                  'cantidad' => $val->cantidad];
+
+            }
+
+            return $arr;
+
+        }  
+
 
     }
 

@@ -9,7 +9,7 @@
 		<div class="row">
 		<div class="col-xs-6 col-sm-6">
 			<div class="nav-filter-item">
-				 <select name="prod-categories" id="prod-categories" class="form-control">
+				 <select name="filtro-mesa" id="filtro-mesa" class="form-control">
 				 	<option value="0">Todas las mesas</option>
 				 	{% for mesa in mesas %}
 				    	<option value="{{ mesa.id }}">Mesa {{ mesa.id }}</option>	
@@ -19,11 +19,12 @@
 		</div>
 		<div class="col-xs-6 col-sm-6">
 			<div class="nav-filter-item">
-				<select name="promo-prices" id="promo-prices" class="form-control">
-				    <option value="Filtrar" class="filter">Filtrar Estado</option>
-					<option value="reservada">Reservadas</option>
-					<option value="disponibles">Disponibles</option>
-					<option value="En proceso">En proceso</option>
+				<select name="filtro-estado-mesa" id="filtro-estado-mesa" class="form-control">
+				    <option value="0" class="filter">Todos los estados</option>
+				 	{% for estadoMesa in estadosMesa %}
+				    	<option value="{{ estadoMesa.id }}">{{estadoMesa.name}}</option>
+					{% endfor %}
+
 				</select>
 			</div>	
 		</div>
