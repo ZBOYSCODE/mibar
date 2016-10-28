@@ -87,6 +87,10 @@ body, html {
   border-radius: 4px;
 }
 
+.card-title{
+  padding: 10px;
+}
+
 .full-card{
   min-height: 100%;
   position: relative;

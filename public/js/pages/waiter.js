@@ -67,6 +67,20 @@ $(document).on('ready', function() {
     
     }); 
 
+    $(document).on('click','.detalle-cuenta',function(e){
+
+        var url = $(this).data('url');
+        var cuenta = $(this).data('cuenta');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta',cuenta);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));        
+        e.preventDefault();
+    });     
+
 
     
 
@@ -81,6 +95,10 @@ $(document).ajaxComplete(function(event,xhr,options){
          if(options.callName == "table-details-button"){
             openTableDetailsModal();
          }
+
+         if(options.callName == "bill-details-button"){
+            openBillDetailsModal();
+         }         
     }
 
 }); 
@@ -88,4 +106,9 @@ $(document).ajaxComplete(function(event,xhr,options){
 function openTableDetailsModal(){
 
     $('#table-details').modal('show');
- }
+}
+
+function openBillDetailsModal(){
+
+    $('#bill-details').modal('show');
+} 

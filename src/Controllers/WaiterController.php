@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Business\MeseroBSN;
+use App\Business\PedidoBSN;
+use App\Business\CajaBSN;
 
 class WaiterController extends ControllerBase
 {
@@ -10,11 +12,15 @@ class WaiterController extends ControllerBase
     // Business
 
     private $meseroBsn;
+    private $pedidoBsn;
+    private $cajaBsn;
 
     public function initialize(){
 
         parent::initialize();
         $this->meseroBsn = new MeseroBSN();
+        $this->pedidoBsn = new PedidoBSN();
+        $this->cajaBsn   = new CajaBSN();
 
     }    
 
@@ -86,7 +92,7 @@ class WaiterController extends ControllerBase
             $tablesDetails = $tabObj->getDataCuentasByMesa($param);
             //print_r($tablesDetails);exit();
 	        $dataView['detalles'] =  $tablesDetails;
-	       
+
 	        $toRend = $this->view->getPartial($view, $dataView);
 
 	        $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
@@ -113,27 +119,26 @@ class WaiterController extends ControllerBase
 
     public function billDetailsAction(){
 
-
-
         if($this->request->isAjax()){
 
             $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
-            $view = "controllers/waiter/tables/modal_orders";
+            $view = "controllers/waiter/tables/orders";
 
 
             $cuenta_id = $post['cuenta'];
-            $param['cuenta_id'] = $table_id;
+            $param['cuenta_id'] = $cuenta_id;
 
-            $tabObj = new MeseroBSN();
-            $tablesDetails = $tabObj->getDetalleMesa($param);
-            
-            $dataView['detalles'] =  $tablesDetails;
-           
+            $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
+            $cuenta         = $this->cajaBsn->getCuentaById($param);
+
+            $dataView['pedidosCuenta']  =  $pedidosCuenta;
+            $dataView['cuenta']         =  $cuenta;
+
             $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('table-modal',$toRend);
+            $this->mifaces->addToRend('table-modal-orders_render',$toRend);
             $this->mifaces->run();
 
         } else{

@@ -24,7 +24,18 @@
                 <button type="button" data-href="{{mesa.numero}}" class="btn btn-small btn-main pull-right table-order-button" data-url="waiter/tableDetails">Crear Pedido</button>
             </div>
         </div>
+
     {% endfor %}   
 </div>
+
+
+    
+    <div id="table-modal">
+        
+    </div>
+
+    <div id="table-modal-orders">
+        
+    </div>    
 
     
