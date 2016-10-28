@@ -47,4 +47,11 @@ class Utility
         $fecha = date("Y-m-d H:i:s", strtotime($fecha));
         return $constant->_timeAgo($fecha);
     }
+
+    function _number_format($number) {
+        if(is_numeric($number))
+            return number_format($number , 0, ',', '.');
+        else
+            return "-";
+    }
 }

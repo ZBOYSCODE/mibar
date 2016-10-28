@@ -39,6 +39,7 @@
         {{ javascript_include('js/plugins/jquery-ui.min.js') }}
         {{ javascript_include('js/plugins/bootstrap.min.js') }}
         {{ javascript_include('js/plugins/jquery.others-plugins.js') }}
+        {{ javascript_include('js/plugins/chosen.jquery.min.js') }}
 
         {# CSS CUSTOM #}
         {{ javascript_include('js/plugins/mifaces.js') }}

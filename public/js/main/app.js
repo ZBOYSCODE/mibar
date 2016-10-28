@@ -44,6 +44,10 @@ window.App = (function($, win, doc, undefined) {
             }
         });
 
+        $('.chosen-select').chosen({width: "100%"});
+
+        $('[data-toggle="tooltip"]').tooltip();
+
 
         $('#since').datepicker();
         $('#until').datepicker();

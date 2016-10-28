@@ -31,7 +31,8 @@ return new \Phalcon\Config([
         'acceso'    => array('*'    =>  true),
         'prueba'    => array('*'    =>  true),
         'test'      => array('*'    =>  true),
-        'waiter'    => array('*'    =>  true)
+        'waiter'    => array('*'    =>  true),
+        'bartender' => array('*'    =>  true)
     ],
     'appTitle'      =>'MiBar',
     'appName'       =>"MiBar",
