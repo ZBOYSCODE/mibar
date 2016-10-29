@@ -6,8 +6,10 @@ $(document).on('ready', function() {
 	$('.table-details-button').on('click',function(e){
 
 	    var action = $(this).data("url");
+        var table_id = $(this).data('table');
 
 	    var dataIn = new FormData();
+        dataIn.append('table_id',table_id);
 
 	    //mifaces
 	    $.callAjax(dataIn, action, $(this));
@@ -65,6 +67,49 @@ $(document).on('ready', function() {
     
     }); 
 
+    $(document).on('click','.detalle-cuenta',function(e){
+
+        var url = $(this).data('url');
+        var cuenta = $(this).data('cuenta');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta',cuenta);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));        
+        e.preventDefault();
+    });     
+
+
+    $(document).on('click','#btn-validar-pedidos',function(e){
+
+        var url = $(this).data('url');
+        var pedidosValidados = [];
+        var pedidosNoValidados = [];
+
+
+        $('.checkPedido').each(function(){
+
+            if($(this).is(':checked')){
+                pedidosValidados.push($(this).val());    
+            } else {
+                pedidosNoValidados.push($(this).val());    
+            }
+            
+
+        });
+        
+        var dataIn = new FormData();
+        dataIn.append('pedidosValidados',pedidosValidados);
+        dataIn.append('pedidosNoValidados',pedidosNoValidados);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));
+        
+        e.preventDefault();
+
+    });  
 
     
 
@@ -79,6 +124,17 @@ $(document).ajaxComplete(function(event,xhr,options){
          if(options.callName == "table-details-button"){
             openTableDetailsModal();
          }
+
+         if(options.callName == "bill-details-button"){
+            openBillDetailsModal();
+         }        
+
+         if(options.callName == "btn-validar-pedidos"){
+            closeBillDetailsModal();
+         }            
+
+
+         
     }
 
 }); 
@@ -86,4 +142,13 @@ $(document).ajaxComplete(function(event,xhr,options){
 function openTableDetailsModal(){
 
     $('#table-details').modal('show');
- }
+}
+
+function openBillDetailsModal(){
+
+    $('#bill-details').modal('show');
+} 
+
+function closeBillDetailsModal(){
+    $('#bill-details').modal('hide');
+}

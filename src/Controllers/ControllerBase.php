@@ -18,6 +18,7 @@
 
             $this->utility = new Utility();
             $this->view->utility = $this->utility;
+
         }
 
 

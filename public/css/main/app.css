@@ -87,6 +87,10 @@ body, html {
   border-radius: 4px;
 }
 
+.card-title{
+  padding: 10px;
+}
+
 .full-card{
   min-height: 100%;
   position: relative;
@@ -98,6 +102,14 @@ body, html {
   background-color: #521852;
   border: 2px solid #fff;
   color: #fff;
+}
+
+.btn-main:focus,
+.btn-main.active{
+  outline: none;
+  background-color: #521852;
+  border: 2px solid #fff;
+  color: #fff !important;
 }
 
 .btn-main:hover{
@@ -118,6 +130,67 @@ body, html {
 
 .btn-width {
   min-width: 120px;
+}
+
+.btn-delete{
+  padding: 3px 7px;
+  border-radius: 30px;
+  font-size: 12px;
+  background-color: #c12020;
+}
+
+/* switches */
+
+/* Switches */
+
+.wine-switch{
+    position: absolute;
+    left: 45%;
+}
+
+.wine-switch > input[type="checkbox"] {
+    display: none;   
+}
+
+.wine-switch > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative; 
+    width: 40px; 
+    background-color: green; 
+}
+
+.wine-switch > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position:absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.wine-switch > label::after {
+    background: #e8e8e8;
+    border-radius: 16px;
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.wine-switch > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+.wine-switch > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    left: 20px;
 }
 
 
@@ -490,7 +563,7 @@ div.menu-types > div:last-child{
 
 .nav-avatar{
   border-radius: 50%;
-  border: 4px solid #74b2db;
+  border: 4px solid white;
   width: 50px;
   position: absolute;
   right: 30px;
@@ -527,6 +600,10 @@ div.menu-types > div:last-child{
   margin-bottom: 10px;
 }
 
+.table-item-footer button{
+  margin: 0 10px;
+}
+
 .lista_pedidos{
   max-height: 60vh;
   overflow: auto;
@@ -534,6 +611,55 @@ div.menu-types > div:last-child{
 
 .precio-total{
     font-size: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+
+
+.led-green {
+    background-image: -webkit-linear-gradient(top, #13fB04 0%, #58e343 50%, #ADED99 100%);
+}
+
+.led-orange {
+    background-image: -webkit-linear-gradient(top, #f9a004 0%, #e0ac45 50%, #ead698 100%);
+}
+
+
+.led-red {
+    background-image: -webkit-linear-gradient(top, #fb1304 0%, #e35843 50%, #edad99 100%);
+}
+
+.led-blue {
+    background-image: -webkit-linear-gradient(top, #0033FF 0%, #4454E4 50%, #9AA5EE 100%);
+}
+
+
+.led {
+    border-radius: 5px;
+    width: 10px;
+    height: 10px;
+    box-shadow: 0px 0px 3px grey;
+    margin: 5px;
+    zoom: 1;
+}
+
+.led:after {
+    display: block;            
+    content: '';
+    margin-left: 1px;
+    margin-right: 1px;
+    width: 8px;
+    height: 6px;
+    -webkit-border-top-right-radius: 4px 3px;
+    -webkit-border-top-left-radius: 4px 3px;
+    -webkit-border-bottom-right-radius: 4px 3px;
+    -webkit-border-bottom-left-radius: 4px 3px;
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
+}
+
+#bill-details .modal-body{
+  padding-bottom: 80px;
 }
 
 

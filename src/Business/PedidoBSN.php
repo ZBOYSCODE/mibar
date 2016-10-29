@@ -18,7 +18,11 @@
     use App\Models\Pedidos;
     use App\Models\ProducPromoPedidos;
     use App\Models\Promociones;
-    
+    use App\Models\Estados;
+    use App\Models\Productos;
+    use App\Models\SubcategoriaProductos;
+    use App\Models\CategoriaProductos;
+
     /**
      * Modelo de negocio
      *
@@ -34,6 +38,9 @@
          * @var array
          */
     	public 	$error;
+
+        private $ESTADO_PEDIDO_VALIDADO = 2;
+        private $ESTADO_PEDIDO_CANCELADO = 6;
 
         private $promocionBsn;
         private $productoBsn;
@@ -460,9 +467,17 @@
                 return false;
             }
 
+            if( isset($param['estado_id']) ) {
+                
+                $where_estado = " AND estado_id = ".$param['estado_id'];
+            } else {
+
+                $where_estado = '';
+            }
+
             $pedidos = Pedidos::find(
                 array(
-                    " cuenta_id = {$param['cuenta_id']} AND pago_id is null ",
+                    " cuenta_id = {$param['cuenta_id']} AND pago_id is null {$where_estado} ",
                     "order" => "id DESC"
                 )
             );
@@ -473,8 +488,55 @@
                 return false;
             }
 
-
             return $pedidos;
+        }
+
+
+        /**
+         * getOrdersByCategoryStatus
+         *
+         *
+         * Retorna una lista de pedidos dada una catetoria y un estado en particular
+         * en caso de error retorna false
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param ['category_id'   => integer
+         *                      'estado_id'     => integer
+         *                      ]
+         * @return bool
+         *
+         *
+         */
+        public function getOrdersByCategoryStatus($param) {
+
+
+            if( !isset($param["category_id"]) AND !isset($param["estado_id"])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+
+
+            $pedidos = Pedidos::query()
+                ->leftJoin('App\Models\Productos', 'prd.id   = App\Models\Pedidos.producto_id',    'prd')
+                ->leftJoin('App\Models\SubcategoriaProductos', 'scp.id   = prd.subcategoria_id',    'scp')
+                ->leftJoin('App\Models\CategoriaProductos', 'cat.id   = scp.categoria_producto_id',    'cat')
+                ->where("cat.id = '{$param["category_id"]}' ")
+                ->andWhere("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->execute();
+
+
+
+            if($pedidos->count()>0){
+
+                return $pedidos;
+
+            }else{
+
+                $this->error = $this->errors->NO_RECORDS_FOUND_ID;
+                return false;
+            }
         }
 
         /**
@@ -541,8 +603,179 @@
                 }
             }
             return $result;
+
+        /**
+         * validarPedidos
+         *
+         * cambia estado a validado a todos los pedidos enviados
+         *
+         * @author osanmartin
+         *
+         * @param array $param listado de pedidos
+         * @return boolean
+         */
+
+        public function validateOrders($param){
+
+            $this->db->begin();
+
+
+            if(!count($param)){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            foreach ($param as $val) {
+
+                $paramPedido['pedido_id'] = $val;
+                $paramPedido['estado_id'] = $this->ESTADO_PEDIDO_VALIDADO;
+
+                $result = $this->updatePedido($paramPedido);
+
+                if(!$result){
+                    $this->db->rollback();
+                    return false;
+                }
+
+            }
+
+            $this->db->commit();
+
+            return true;
+
+        }
+
+
+        /**
+         * anularPedidos
+         *
+         * cambia estado a cancelado todos los pedidos enviados
+         *
+         * @author osanmartin
+         *
+         * @param array $param listado de pedidos
+         * @return boolean
+         */
+
+        public function cancelOrders($param){
+
+            $this->db->begin();
+
+
+            if(!count($param)){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            foreach ($param as $val) {
+
+                $paramPedido['pedido_id'] = $val;
+                $paramPedido['estado_id'] = $this->ESTADO_PEDIDO_CANCELADO;
+
+                $result = $this->updatePedido($paramPedido);
+
+                if(!$result){
+                    $this->db->rollback();
+                    return false;
+                }
+
+            }
+
+            $this->db->commit();
+
+            return true;
+
+        }        
+
+        /**
+        *
+        * updatePedido
+        *
+        * Actualiza el estado de un pedido
+        *
+        * @author osanmartin
+        *
+        * @param $param array de datos de pedido a actualizar
+        *
+        * @return boolean
+        *
+        */
+        public function updatePedido($param){
+
+            if(!isset($param['pedido_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $pedido = Pedidos::findFirstById($param['pedido_id']);
+
+            if(!$pedido){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND_ID;
+                return false;
+            }
+
+            foreach ($param as $key => $val) {
+                $pedido->$key = $val;
+            }
+
+            if ($pedido->update() == false)
+            {
+                foreach ($pedido->getMessages() as $message) {
+                    $this->error[] = $message->getMessage();
+                }
+
+                return false;
+            } else{
+                return true;
+            }            
+
+        }
+
+
+
+        /**
+         * getStatus
+         *
+         * Retorna un objeto Estado dado un nombre, si no se setea el parametro string se traen todos los Estados.
+         *
+         * si retorna false es porque hay errores
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param[ 'nombre' => string ]
+         * @return \App\Models\Estados[]|array|bool|id
+         */
+        public function getStatus($param) {
+
+            $status = array();
+
+            if(isset($param["nombre"])) {
+
+                $status = Estados::findFirst(
+                  array (
+                      "nombre = '{$param['nombre']}' "
+                  )
+                );
+
+            }
+            else{
+                $status = Estados::find();
+            }
+
+            if( $status == false ) {
+                $this->error = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+
+            return $status;
         }
     }
+
 
 
 

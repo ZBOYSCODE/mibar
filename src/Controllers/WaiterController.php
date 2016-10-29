@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Business\MeseroBSN;
+use App\Business\PedidoBSN;
+use App\Business\CajaBSN;
 
 class WaiterController extends ControllerBase
 {
@@ -10,9 +12,16 @@ class WaiterController extends ControllerBase
     // Business
 
     private $meseroBsn;
+    private $pedidoBsn;
+    private $cajaBsn;
 
     public function initialize(){
+
+        parent::initialize();
         $this->meseroBsn = new MeseroBSN();
+        $this->pedidoBsn = new PedidoBSN();
+        $this->cajaBsn   = new CajaBSN();
+
     }    
 
 
@@ -28,11 +37,6 @@ class WaiterController extends ControllerBase
 	
     public function indexAction()
     {
-
-
-        $param['mesa_id'] = 1;
-
-        $this->meseroBsn->getDataPedidosByCuenta($param);
 
         //DATO EN BRUTO
         $id_mesero = 1;
@@ -62,20 +66,36 @@ class WaiterController extends ControllerBase
         $this->view->pick("controllers/waiter/_index");
     }
 
+     /**
+    * TableDetails
+    *
+    *
+    * @author Hernán Feliú
+    *
+    * Renderiza modal Detalles Mesa via mifaces
+    *
+    */
+
     public function tableDetailsAction(){
 
         if($this->request->isAjax()){
 
             $post = $this->request->getPost();
-            $view = "controllers/waiter/tables/modal";
             $this->mifaces->newFaces();
 
+            $view = "controllers/waiter/tables/details";
 
-	        $dataView = "Holiwi";
-	       
+            $table_id = $post['table_id'];
+            $param['mesa_id'] = $table_id;
+
+            $tabObj = new MeseroBSN();
+            $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+            //print_r($tablesDetails);exit();
+	        $dataView['detalles'] =  $tablesDetails;
+
 	        $toRend = $this->view->getPartial($view, $dataView);
 
-	        $this->mifaces->addToRend('table-modal',$toRend);
+	        $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
         	$this->mifaces->run();
 
         } else{
@@ -85,6 +105,109 @@ class WaiterController extends ControllerBase
         }
 
 	}	
+
+
+    /**
+    * BillDetails
+    *
+    *
+    * @author osanmartin
+    *
+    * Renderiza modal detalles cuenta via mifaces
+    *
+    */    
+
+    public function billDetailsAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            $view = "controllers/waiter/tables/orders";
+
+
+            $cuenta_id = $post['cuenta'];
+            $param['cuenta_id'] = $cuenta_id;
+
+            $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
+            $cuenta         = $this->cajaBsn->getCuentaById($param);
+
+            $dataView['pedidosCuenta']  =  $pedidosCuenta;
+            $dataView['cuenta']         =  $cuenta;
+
+            $toRend = $this->view->getPartial($view, $dataView);
+
+            $this->mifaces->addToRend('table-modal-orders_render',$toRend);
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
+
+    }
+
+
+    /**
+    * validateOrders
+    *
+    *
+    * @author osanmartin
+    *
+    * cambia estado a una serie de pedidos 
+    *
+    */
+
+    public function validateOrdersAction(){   
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            
+            if(!empty($pedidosValidados)){
+                $pedidosValidados = explode(',', $post['pedidosValidados']);
+                $resultValidacion = $this->pedidoBsn->validateOrders($pedidosValidados); 
+            } else{
+                $resultValidacion = true;
+            }
+
+            if(!empty($pedidosNoValidados)){
+                $pedidosNoValidados = explode(',', $post['pedidosNoValidados']);
+                $resultCancelacion = $this->pedidoBsn->cancelOrders($pedidosNoValidados); 
+            } else{
+                $resultCancelacion = true;
+            }
+
+            if($resultValidacion AND 
+               $resultCancelacion){
+
+                $this->mifaces->addToMsg('success','Los pedidos han sido validados correctamente!');    
+
+            } else{
+
+                $this->mifaces->addToMsg('danger','No se ha podido validar los pedidos, vuelta a intentarlo.');    
+            }
+
+            
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }      
+
+    }
+
+
+
+
+
 
 
 }
