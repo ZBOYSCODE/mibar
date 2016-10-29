@@ -35,5 +35,5 @@
 	{{ partial("controllers/cashbox/table/_index") }}
 </div>
 
-
+<div></div>
 {% endblock %}

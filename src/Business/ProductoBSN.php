@@ -251,6 +251,28 @@
             }
         }
 
+        /**
+         * getPromocion
+         *
+         * @author jcocina
+         * @param $param['promocion_id'] = ID de promocion
+         * @return objeto Promocion
+         */
+        public function getProducto($param){
 
+            if(!isset($param['producto_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+            }
+
+            if(isset($param['producto_id']))
+                $result = Productos::findFirstById($param['producto_id']);
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+        }
 }
 

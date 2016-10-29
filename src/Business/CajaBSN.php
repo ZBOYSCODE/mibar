@@ -1,6 +1,7 @@
 <?php
 namespace App\Business;
 
+use App\Models\Clientes;
 use Phalcon\Mvc\User\Plugin;
 use App\Models\Cuentas;
 use App\Models\Pedidos;
@@ -20,7 +21,12 @@ class CajaBSN extends Plugin
      * @var array
      */
     public 	$error;
+    private $pedidosBSN;
 
+    public function __construct()
+    {
+        $this->pedidosBSN = new PedidoBSN();
+    }
     /**
      * Trae la lista de cuentas por pagar dada una mesa
      *
@@ -59,7 +65,7 @@ class CajaBSN extends Plugin
             return false;
         }
         $result = 0;
-        $pedidos = Pedidos::find("estado_id <> 5 and cuenta_id = " . $param['cuenta_id']);
+        $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
         foreach ($pedidos as $var) {
             $result = $result + $var->precio;
         }
@@ -78,10 +84,60 @@ class CajaBSN extends Plugin
             $error[] = $this->errors->MISSING_PARAMETERS;
             return false;
         }
-        $result = 0;
-        $pedidos = Pedidos::find("estado_id <> 5 and cuenta_id = " . $param['cuenta_id']);
+
+        $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
+
         return $pedidos->count();
     }
 
+    /**
+     * @param $param
+     * @return array    ['cantidad'][idProducto] cantidad que se pidio del producto
+     *                  ['productos'] lista de productos
+     */
+    public function getProductosDetallesByCuenta($param) {
+        if (!isset($param['cuenta_id'])) {
+            $error[] = $this->errors->MISSING_PARAMETERS;
+            return false;
+        }
 
+        $productos = $this->pedidosBSN->getProductosByCuenta($param);
+        if(!$productos) {
+            $this->error[] = $this->errors->NO_RECORDS_FOUND;
+            return false;
+        }
+        $lista = array();
+        foreach ($productos as $producto) {
+            if (isset($result['cantidad'][$producto->id])) {
+                $result['cantidad'][$producto->id] = $result['cantidad'][$producto->id] + 1;
+            } else {
+                $result['cantidad'][$producto->id] = 1;
+                array_push($lista, $producto);
+            }
+        }
+        $result['productos'] = $lista;
+        return $result;
+    }
+
+    /**
+     * @author jcocina
+     * @param $param array 'cuenta_id'
+     * @return objeto cliente
+     */
+    public function getClienteByCuenta($param) {
+        if (!isset($param['cuenta_id'])) {
+            $error[] = $this->errors->MISSING_PARAMETERS;
+            return false;
+        }
+
+        $cuenta = Cuentas::findFirstById($param['cuenta_id']);
+        $cliente = Clientes::findFirstById($cuenta->cliente_id);
+
+        if(!$cliente->count()) {
+            $error[] = $this->errors->NOT_RECORDS_FOUND;
+            return false;
+        }
+
+        return $cliente;
+    }
 }

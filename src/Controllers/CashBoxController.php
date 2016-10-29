@@ -11,6 +11,10 @@ class CashBoxController extends ControllerBase
 {
     private $cajaBsn;
 
+    public function initialize()
+    {
+        $this->cajaBsn = new CajaBSN();
+    }
 
     public function indexAction() {
         $mesas = Mesas::find();
@@ -20,17 +24,17 @@ class CashBoxController extends ControllerBase
     }
 
     public function TableAction($mesa_id = null){
-        $cajaBsn = new CajaBSN();
+
         if($mesa_id == null or !is_numeric($mesa_id)) {
             $this->contextRedirect('cashbox');
         }
-        $cuentas = $cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
+        $cuentas = $this->cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
         if($cuentas) {
 
             foreach ($cuentas as $var) {
                 $param = array('cuenta_id' => $var->id);
-                $subtotales[$var->id] = number_format($cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
-                $cantidadPedidos[$var->id] = $cajaBsn->getCantidadPedidoByCuenta($param);
+                $subtotales[$var->id] = number_format($this->cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
+                $cantidadPedidos[$var->id] = $this->cajaBsn->getCantidadPedidoByCuenta($param);
                 $clientes[$var->id] = Clientes::findFirstById($var->cliente_id);
             }
 
@@ -44,5 +48,21 @@ class CashBoxController extends ControllerBase
         }
     }
 
+    public function DetallePedidosAction() {
+        if ($this->request->isAjax()) {
 
+            $dataView = $this->cajaBsn->getProductosDetallesByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+            $dateView['cliente'] = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+            $view = "controllers/cashbox/detalles_pedidos/modal";
+            $this->mifaces->newFaces();
+
+            $toRend = $this->view->getPartial($view, $dataView);
+
+            $this->mifaces->addToRend('orders-modal',$toRend);
+            $this->mifaces->run();
+        }
+        else {
+            $this->view->disable();
+        }
+    }
 }
