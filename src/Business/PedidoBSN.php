@@ -574,28 +574,29 @@
         }
 
 
-        public function getProductosByCuenta($param) {
+        public function getProductosByCuenta($param)
+        {
             if (!isset($param['cuenta_id'])) {
                 $error[] = $this->errors->MISSING_PARAMETERS;
                 return false;
             }
 
             $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
-            if(!$pedidos->count()) {
+            if (!$pedidos->count()) {
                 return array();
             }
             $result = array();
             foreach ($pedidos as $pedido) {
-                if($pedido->producto_id != null and $pedido->producto_id != 0) {
+                if ($pedido->producto_id != null and $pedido->producto_id != 0) {
                     $producto = $this->productoBsn->getProducto(array('producto_id' => $pedido->producto_id));
-                    if(!$producto->count()) {
+                    if (!$producto->count()) {
                         $this->error[] = $this->errors->NO_RECORDS_FOUND;
                         return false;
                     }
                     $result[] = $producto;
                 } else {
                     $producto = $this->promocionBsn->getPromocion(array('promocion_id' => $pedido->promocion_id));
-                    if(!$producto->count()) {
+                    if (!$producto->count()) {
                         $this->error[] = $this->errors->NO_RECORDS_FOUND;
                         return false;
                     }
@@ -603,7 +604,7 @@
                 }
             }
             return $result;
-
+        }
         /**
          * validarPedidos
          *
