@@ -4,7 +4,6 @@
 
     {{ partial("partials/nav_bartender") }}
 
-
     <section class="section-content-top">
     <div class="row menu-types">
         <div class="col-xs-6 col-sm-6 no-col-padding">
@@ -30,11 +29,9 @@
     </div>
     </section>
 
-
-
     <div id="tables-content">
 
-        {{ partial("controllers/bartender/tables/_index") }}
+        {{ partial("controllers/bartender/tables/pending") }}
 
     </div>
 

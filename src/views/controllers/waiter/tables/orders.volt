@@ -14,11 +14,29 @@
 			    		<p>{{cuenta.Clientes.nombre}} {{cuenta.Clientes.apellido}}</p>
 			    	</div>
 			    	<div class="col-xs-3 col-md-3">
-			    		<p>Mesa {{ cuenta.Mesas.numero }}</p>
+			    		<p>Mesa: {{ cuenta.Mesas.numero }}</p>
 			    	</div>
 			    </div>
 			    <div class="modal-body">
-			      <!-- Products -->
+
+			    {% if pedidosCuenta == false %}
+
+
+		            <div class="card text-center">
+		               <h3>No hay Pedidos para {{cuenta.Clientes.nombre}} {{cuenta.Clientes.apellido}}</h3>
+		            </div>
+		            </div>
+				    </div>
+
+					<div class="menu-footer">
+						<div class="row menu-footer-buttons card">
+							<button  class="btn btn-main" class="close modal-close" data-dismiss="modal">CERRAR</button>
+						</div>
+					</div>	
+
+
+			    {% else %}
+
 			    	<form id="form-validar">
 						<div class="lista_pedidos">
 
@@ -33,8 +51,8 @@
 								<div class="card" id='pedido-{{pedido.id}}'>
 							      	<div class="product-item-modal">
 										<div class="wine-switch">
-						                   <input class="checkPedido"name="approve_consent[]" type="checkbox" checked="checked" value="{{pedido.id}}"/>
-						                   <label for="approve_consent" class="label-success"></label>
+						                   <input id="{{pedido.id}}" class="checkPedido" name="approve_order[]" type="checkbox" checked="checked" value="{{pedido.id}}"/>
+						                   <label for="{{pedido.id}}" class="label-success"></label>
 						               </div>
 							      		<p class="title">{{ title }}</p>
 							      		<div class="row">
@@ -60,10 +78,10 @@
 
 			<div class="menu-footer">
 				<div class="row menu-footer-buttons card">
-					<button id="btn-validar-pedidos" class="btn btn-main" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos">VALIDAR PEDIDOS</button>
+					<button id="btn-validar-pedidos" class="btn btn-main btnAjax" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos" data-table="{{ cuenta.mesa_id }}">VALIDAR PEDIDOS</button>
 				</div>
 			</div>	
-		    
+		    {% endif %}
 	    </div>
 
 
