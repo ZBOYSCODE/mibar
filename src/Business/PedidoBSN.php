@@ -842,6 +842,61 @@
             return true;
 
         }
+
+        /**
+        *
+        * getPedido
+        *
+        * Obtiene un pedido
+        *
+        * @author osanmartin
+        *
+        * @param $param['pedido_id'] : ID de pedido
+        *
+        * @return boolean
+        *
+        */        
+
+        public function getPedido($param) {
+
+
+            if(!isset($param['pedido_id'])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            $result = Pedidos::findFirstById($param['pedido_id']);
+
+
+            if(!$result){
+
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+
+            }
+
+            if(isset($result->Productos->id)){
+
+                $result->nombre = $result->Productos->nombre;
+                $result->descripcion = $result->Productos->descripcion;
+                $result->avatar = $result->Productos->avatar;
+
+            } else if(isset($result->Promociones->id)) {
+
+                $result->nombre = $result->Promociones->nombre;
+                $result->descripcion = $result->Promociones->descripcion;
+                $result->avatar = $result->Promociones->avatar;
+
+            }
+
+            return $result;
+
+        }
+
+
+
     }
 
 
