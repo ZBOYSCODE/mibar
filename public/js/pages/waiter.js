@@ -9,7 +9,10 @@ $(document).on('ready', function() {
         var table_id = $(this).data('table');
 
 	    var dataIn = new FormData();
-        dataIn.append('table_id',table_id);
+
+        dataIn.append('table_id', table_id);
+        dataIn.append('cuenta_id', $(this).attr('data-cuenta') );
+        dataIn.append('table_numero', $(this).attr('data-numero') );
 
 	    //mifaces
 	    $.callAjax(dataIn, action, $(this));
@@ -59,13 +62,65 @@ $(document).on('ready', function() {
     
     });     
 
-    
-    $('.table-order-button').on('click',function(e){
+    $(document).on('click', '#create-user', function(e){
 
+        e.preventDefault();
+        
+        var url     = $(this).attr('data-url');
+        var mesa    = $(this).attr('data-table');
+
+        var dataIn = new FormData();
+
+        dataIn.append('mesa',   mesa);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this)); 
+    });
+
+    $(document).on('click', '#store-cliente', function(e){
+
+        var url     = $(this).attr('data-url');
+        var mesa    = $(this).attr('data-table');
+
+        var nombre    = $("#nombre-cliente").val();
+
+        if(nombre == '') {
+
+            $("#error-nombre-cliente").text("Debe ingresar el nombre del cliente.");
+            return false;
+        }
+
+        var dataIn = new FormData();
+
+        dataIn.append('table_id',   mesa);
+        dataIn.append('nombre-cliente', nombre);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this)); 
+        e.preventDefault();
+
+    });
+
+    $(document).on('click', '.table-order-button', function(){
+
+        var url     = $(this).attr('url');
+        var cuenta  = $(this).attr('cuenta');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta',cuenta);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));        
+        e.preventDefault();
+
+    });
+
+    /*$('.table-order-button').on('click',function(e){
         var route = "/mibar/qr/"+$(this).data("href");
         location.href= route;
-    
-    }); 
+    });
+    */
 
     $(document).on('click','.detalle-cuenta',function(e){
 
@@ -85,24 +140,20 @@ $(document).on('ready', function() {
     $(document).on('click','#btn-validar-pedidos',function(e){
 
         var url = $(this).data('url');
-        var pedidosValidados = [];
-        var pedidosNoValidados = [];
-
+        var table_id = $(this).data('table');
+        
+        var dataIn = new FormData();
 
         $('.checkPedido').each(function(){
 
             if($(this).is(':checked')){
-                pedidosValidados.push($(this).val());    
+                dataIn.append('pedidosValidados[]', $(this).val());   
             } else {
-                pedidosNoValidados.push($(this).val());    
+                dataIn.append('pedidosNoValidados[]',$(this).val());    
             }
-            
+        });  
 
-        });
-        
-        var dataIn = new FormData();
-        dataIn.append('pedidosValidados',pedidosValidados);
-        dataIn.append('pedidosNoValidados',pedidosNoValidados);
+        dataIn.append('table_id',table_id);
 
         //mifaces
         $.callAjax(dataIn, url, $(this));
@@ -131,9 +182,18 @@ $(document).ajaxComplete(function(event,xhr,options){
 
          if(options.callName == "btn-validar-pedidos"){
             closeBillDetailsModal();
+
          }            
+  
 
+        if (options.callName == "create-user-modal"){
+            openCreateUserModal();
+        }
 
+        if (options.callName == 'store-cliente-success'){
+
+            closeCreateUserModal();
+        }   
          
     }
 
@@ -144,6 +204,11 @@ function openTableDetailsModal(){
     $('#table-details').modal('show');
 }
 
+function openCreateUserModal(){
+
+    $('#create-client-modal').modal('show');
+}
+
 function openBillDetailsModal(){
 
     $('#bill-details').modal('show');
@@ -151,4 +216,15 @@ function openBillDetailsModal(){
 
 function closeBillDetailsModal(){
     $('#bill-details').modal('hide');
+
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+}
+
+function closeCreateUserModal() {
+
+    $('#create-client-modal').modal('hide');
+
+    $('body').removeClass('modal-open');
+    $(".modal-backdrop").remove();
 }
