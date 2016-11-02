@@ -85,24 +85,20 @@ $(document).on('ready', function() {
     $(document).on('click','#btn-validar-pedidos',function(e){
 
         var url = $(this).data('url');
-        var pedidosValidados = [];
-        var pedidosNoValidados = [];
-
+        var table_id = $(this).data('table');
+        
+        var dataIn = new FormData();
 
         $('.checkPedido').each(function(){
 
             if($(this).is(':checked')){
-                pedidosValidados.push($(this).val());    
+                dataIn.append('pedidosValidados[]', $(this).val());   
             } else {
-                pedidosNoValidados.push($(this).val());    
+                dataIn.append('pedidosNoValidados[]',$(this).val());    
             }
-            
+        });  
 
-        });
-        
-        var dataIn = new FormData();
-        dataIn.append('pedidosValidados',pedidosValidados);
-        dataIn.append('pedidosNoValidados',pedidosNoValidados);
+        dataIn.append('table_id',table_id);
 
         //mifaces
         $.callAjax(dataIn, url, $(this));
@@ -132,8 +128,6 @@ $(document).ajaxComplete(function(event,xhr,options){
          if(options.callName == "btn-validar-pedidos"){
             closeBillDetailsModal();
          }            
-
-
          
     }
 
@@ -151,4 +145,6 @@ function openBillDetailsModal(){
 
 function closeBillDetailsModal(){
     $('#bill-details').modal('hide');
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
 }

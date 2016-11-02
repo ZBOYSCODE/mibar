@@ -67,12 +67,12 @@ class WaiterController extends ControllerBase
     }
 
      /**
-    * TableDetails
+    * details
     *
     *
     * @author Hernán Feliú
     *
-    * Renderiza modal Detalles Mesa via mifaces
+    * Renderiza Detalles Mesa via mifaces
     *
     */
 
@@ -83,6 +83,8 @@ class WaiterController extends ControllerBase
             $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
+            if (isset($post['table_id'])){
+           
             $view = "controllers/waiter/tables/details";
 
             $table_id = $post['table_id'];
@@ -90,12 +92,21 @@ class WaiterController extends ControllerBase
 
             $tabObj = new MeseroBSN();
             $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-            //print_r($tablesDetails);exit();
-	        $dataView['detalles'] =  $tablesDetails;
+         
+            $dataView['detalles'] =  $tablesDetails;
+            $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+        
+            $toRend = $this->view->getPartial($view, $dataView);
 
-	        $toRend = $this->view->getPartial($view, $dataView);
+            $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
 
-	        $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+            }else{
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+
+            }
+
+            
         	$this->mifaces->run();
 
         } else{
@@ -124,21 +135,30 @@ class WaiterController extends ControllerBase
             $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
-            $view = "controllers/waiter/tables/orders";
+            if(isset($post['cuenta'])){
+
+                $view = "controllers/waiter/tables/orders";
+                
+                $cuenta_id = $post['cuenta'];
+                $param['cuenta_id'] = $cuenta_id;
 
 
-            $cuenta_id = $post['cuenta'];
-            $param['cuenta_id'] = $cuenta_id;
+                $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
+                $cuenta         = $this->cajaBsn->getCuentaById($param);
 
-            $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
-            $cuenta         = $this->cajaBsn->getCuentaById($param);
+                $dataView['pedidosCuenta']  =  $pedidosCuenta;
+                $dataView['cuenta']         =  $cuenta;
+                //print_r($cuenta);exit();
+                
+                $toRend = $this->view->getPartial($view, $dataView);
 
-            $dataView['pedidosCuenta']  =  $pedidosCuenta;
-            $dataView['cuenta']         =  $cuenta;
+                $this->mifaces->addToRend('table_modal_orders_render',$toRend);
 
-            $toRend = $this->view->getPartial($view, $dataView);
+            }else{
 
-            $this->mifaces->addToRend('table_modal_orders_render',$toRend);
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
             $this->mifaces->run();
 
         } else{
@@ -155,7 +175,7 @@ class WaiterController extends ControllerBase
     * validateOrders
     *
     *
-    * @author osanmartin
+    * @author osanmartin / Hernán Feliú
     *
     * cambia estado a una serie de pedidos 
     *
@@ -168,31 +188,66 @@ class WaiterController extends ControllerBase
             $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
-            
-            if(!empty($pedidosValidados)){
-                $pedidosValidados = explode(',', $post['pedidosValidados']);
-                $resultValidacion = $this->pedidoBsn->validateOrders($pedidosValidados); 
-            } else{
-                $resultValidacion = true;
+            $resultValidacion = false;
+            $resultCancelacion = false;
+
+            if(isset($post['table_id'])) {
+
+                if(isset($post['pedidosValidados'])){
+
+                    $pedidosValidados = $post['pedidosValidados'];
+                    $resultValidacion = $this->pedidoBsn->validateOrders($pedidosValidados);
+
+                    if(!$resultValidacion){
+
+                        $this->mifaces->addToMsg('warning','Los pedidos no han sido validados correctamente!');
+
+                    }
+
+                }
+                elseif(isset($post['pedidosNoValidados'])){
+
+                     $pedidosNoValidados = $post['pedidosNoValidados'];
+                     $resultCancelacion = $this->pedidoBsn->cancelOrders($pedidosNoValidados);
+
+                     if(!$resultCancelacion){
+
+                        $this->mifaces->addToMsg('warning','Los pedidos no han sido cancelados correctamente!');
+
+                    }
+
+                }
+                else {
+                    $this->mifaces->addToMsg('error','Error interno!');
+                }
+
+                    if($resultValidacion || $resultCancelacion){
+
+                         $this->mifaces->addToDataView('resultValidation', 1);
+
+                    }else{
+                        $this->mifaces->addToDataView('resultValidation', 0);
+                    }
+
+                    $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
+                    
+                    $param['mesa_id'] = $post['table_id'];
+
+                    $tabObj = new MeseroBSN();
+                    $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+
+                    $dataView['detalles'] =  $tablesDetails;
+                    $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+
+                    $view = "controllers/waiter/tables/details";
+                 
+                    $toRend = $this->view->getPartial($view, $dataView);
+                    $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+
             }
-
-            if(!empty($pedidosNoValidados)){
-                $pedidosNoValidados = explode(',', $post['pedidosNoValidados']);
-                $resultCancelacion = $this->pedidoBsn->cancelOrders($pedidosNoValidados); 
-            } else{
-                $resultCancelacion = true;
+            else {
+                $this->mifaces->addToMsg('error','Error interno!');
             }
-
-            if($resultValidacion AND 
-               $resultCancelacion){
-
-                $this->mifaces->addToMsg('success','Los pedidos han sido validados correctamente!');    
-
-            } else{
-
-                $this->mifaces->addToMsg('danger','No se ha podido validar los pedidos, vuelta a intentarlo.');    
-            }
-
             
             $this->mifaces->run();
 
@@ -203,12 +258,6 @@ class WaiterController extends ControllerBase
         }      
 
     }
-
-
-
-
-
-
 
 }
 

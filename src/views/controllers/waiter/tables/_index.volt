@@ -10,7 +10,7 @@
                 <div class="col-xs-8 col-sm-8">
 
                     <div class="table-item-details">
-                        <p class="title">MESA {{mesa.numero}} </p>
+                        <p class="title">MESA {{ mesa.numero }} </p>
                         <p class="description">Total Pedidos: {{ pedidosTotales[mesa.id] }}</p>
                         <p class="description">Pedidos Pendientes: {{ pedidosPendientes[mesa.id] }}</p>
                         <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>

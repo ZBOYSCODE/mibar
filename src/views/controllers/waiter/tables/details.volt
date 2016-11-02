@@ -1,10 +1,12 @@
 
+   
     <div class="card">
-        <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA1</h4>
+        <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ numeroMesa }}</h4>
     </div>
 
   <!-- Details -->
     {% for detalle in detalles %}
+       
     	<div class="table-item card" data-categoria="">
     	    <div class="row">
     	        <div class="col-xs-4 col-sm-4">

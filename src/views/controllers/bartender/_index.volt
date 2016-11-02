@@ -4,8 +4,6 @@
 
     {{ partial("partials/nav_bartender") }}
 
-
-
     <div id="tables-content">
         {{ partial("controllers/waiter/tables/_index") }}
 
