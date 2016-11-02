@@ -21,6 +21,11 @@ class CashBoxController extends ControllerBase
     public function indexAction() {
 
         $mesas = Mesas::find();
+
+
+
+
+
         $this->view->setVar('mesas', $mesas);
         $this->view->pick('controllers/cashbox/_index');
 
