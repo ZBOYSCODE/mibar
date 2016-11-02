@@ -2,12 +2,12 @@
 
 {% block content %}
 
-    {{ partial("partials/nav_waiter") }}
+    {{ partial("partials/nav_cashbox") }}
 
     <section class="section-content-top2">
         <div class="nav-filters card tables-filter">
             <div class="row">
-                <div class="col-xs-6 col-sm-6">
+                <div class="col-xs-12 col-sm-12">
                     <div class="nav-filter-item">
                         <select name="prod-categories" id="prod-categories" class="form-control">
                             <option value="0">N° Mesa</option>
@@ -23,8 +23,11 @@
 
     <div id="tables_render">
 
+        {% if mesas == false %}
 
-        <div id="waiter_tables_details_render">
+            <h3>No hay mesas con cuentas</h3>
+
+        {% else %}
             {% for mesa in mesas %}
                 <div class="table-item card" data-mesa="{{mesa.id}}" data-estado-mesa="{{mesa.estado_mesa_id}}">
                     <div class="row">
@@ -37,21 +40,19 @@
 
                             <div class="table-item-details">
                                 <p class="title">MESA {{mesa.numero}} </p>
-                                <p class="description">Total Pedidos: {{ pedidosTotales[mesa.id] }}</p>
-                                <p class="description">Pedidos Pendientes: {{ pedidosPendientes[mesa.id] }}</p>
                                 <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
                                 <div class="row">
-                                    <button type="button" class="btnAjax btn btn-small btn-main pull-right table-details-button" data-callName="table-details-button" data-table="{{ mesa.id }}" data-url="waiter/tableDetails">Detalles</button>
+                                    <a href="{{ url("cashbox/table/")~mesa.id }}" class="btn btn-small btn-main pull-right" data-table="{{ mesa.id }}" data-url="waiter/tableDetails">Ver Cuentas</a>
                                 </div>
                             </div>
 
                         </div>
-                        <button type="button" data-href="{{mesa.numero}}" class="btn btn-small btn-main pull-right table-order-button" data-url="waiter/tableDetails">Crear Pedido</button>
+
                     </div>
                 </div>
 
             {% endfor %}
-        </div>
+        {% endif %}
 
 
     </div>
