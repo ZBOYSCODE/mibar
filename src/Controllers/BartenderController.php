@@ -123,7 +123,6 @@ class BartenderController extends ControllerBase
 
         if($this->request->isAjax()){
 
-            $post = $this->request->getPost();
             $view = "controllers/bartender/tables/_index";
             $this->mifaces->newFaces();
 
@@ -191,7 +190,6 @@ class BartenderController extends ControllerBase
 
         if($this->request->isAjax()){
 
-            $post = $this->request->getPost();
             $view = "controllers/bartender/tables/_index";
             $this->mifaces->newFaces();
 
@@ -256,7 +254,7 @@ class BartenderController extends ControllerBase
     *
     */    
 
-    public function completeOrdersAction(){
+    public function completeOrderAction(){
 
         if($this->request->isAjax()){
 
@@ -264,44 +262,69 @@ class BartenderController extends ControllerBase
             $view = "controllers/bartender/tables/_index";
             $this->mifaces->newFaces();
 
-            $param = [
-                "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
-            ];
 
-            $paramCat = [
-                "nombre" => $this->constant->PEDIDO_BEBIDA
-            ];
-
-            $pedidobsnObj = new PedidoBSN();
-            $status = $pedidobsnObj->getStatus($param);
-
-            $productoObj = new ProductoBSN();
-            $category = $productoObj->getListCategoriesByName($paramCat);
+            if(isset($post['pedido'])){
 
 
+                $param['pedido_id'] = $post['pedido'];
 
-            if($status == false OR $category == false)
-            {
-                $orders_drinks_pdte = false;
+                $pedidoBsn = new PedidoBSN();
+                $result = $pedidoBsn->concretarPedido($param);
+
+                if($result){
+
+                    $param = [
+                        "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
+                    ];
+
+                    $paramCat = [
+                        "nombre" => $this->constant->PEDIDO_BEBIDA
+                    ];
+
+                    $pedidobsnObj = new PedidoBSN();
+                    $status = $pedidobsnObj->getStatus($param);
+
+                    $productoObj = new ProductoBSN();
+                    $category = $productoObj->getListCategoriesByName($paramCat);
+
+
+
+                    if($status == false OR $category == false)
+                    {
+                        $orders_drinks_pdte = false;
+                    }
+                    else {
+
+                        $paramOrder = [
+                            "category_id"    => $category->id ,
+                            "estado_id"      => $status->id
+                        ];
+
+                        $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
+
+                    }
+
+                    $dataView['orders'] = $orders_drinks_pdte;
+
+
+                    $toRend = $this->view->getPartial($view, $dataView);
+
+                    $this->mifaces->addToRend('tables-content',$toRend);
+                    $this->mifaces->addToMsg('success','Pedido concretado exitosamente!');
+
+                } else{
+
+                    $this->mifaces->addToMsg('danger','No se pudo completar el pedido.');                   
+                }
+
+            } else{
+
+                $this->mifaces->addToMsg('danger','Error inesperado.');
+
             }
-            else {
-
-                $paramOrder = [
-                    "category_id"    => $category->id ,
-                    "estado_id"      => $status->id
-                ];
-
-                $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
-
-            }
-
-            $dataView['orders'] = $orders_drinks_pdte;
 
 
-            $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('tables-content',$toRend);
-            $this->mifaces->addToDataView("menuNav", "opcion0");
 
             $this->mifaces->run();
 

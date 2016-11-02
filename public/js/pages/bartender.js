@@ -13,6 +13,21 @@ $(document).on('ready', function() {
 
 	});
 
+	$(document).on('click','.btn-concretar',function(){
+
+		var url = $(this).data('url');
+		var pedido = $(this).data('pedido');
+
+
+        var dataIn = new FormData();
+
+        dataIn.append('pedido',pedido);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));		
+
+	});	
+
 
 
 });

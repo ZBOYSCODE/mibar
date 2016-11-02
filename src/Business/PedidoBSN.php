@@ -41,6 +41,7 @@
 
         private $ESTADO_PEDIDO_VALIDADO = 2;
         private $ESTADO_PEDIDO_CANCELADO = 6;
+        private $ESTADO_PEDIDO_CONCRETADO = 3;
 
         private $promocionBsn;
         private $productoBsn;
@@ -803,6 +804,43 @@
 
 
             return $status;
+        }
+
+
+        /**
+        *
+        * Concreta el pedido de parte del Barman
+        *
+        * Actualiza el estado de un pedido a concretado
+        *
+        * @author osanmartin
+        *
+        * @param $param['pedido_id'] : ID de pedido
+        *
+        * @return boolean
+        *
+        */
+
+        public function concretarPedido($param){
+
+            if(!isset($param['pedido_id'])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+
+            $paramPedido['pedido_id'] = $param['pedido_id'];
+            $paramPedido['estado_id']    = $this->ESTADO_PEDIDO_CONCRETADO;
+
+            $result  = $this->updatePedido($paramPedido);
+
+            if(!$result)
+                return false;
+
+            return true;
+
         }
     }
 
