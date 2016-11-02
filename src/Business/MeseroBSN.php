@@ -78,6 +78,36 @@
 
         }
 
+        /**
+         * getMesasPorEstado
+         *
+         * @author Jorge Silva
+         *
+         * trae todas las mesas dependiendo de un estado
+         *
+         * @param array $param["estado_mesa_id"] int
+         * @return bool| Object Mesas
+         */
+        public function getMesasPorEstado($param){
+            if(!isset($param['estado_mesa_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Mesas::query()
+                ->leftJoin("App\Models\EstadosMesa","App\Models\Mesas.estado_mesa_id = estado.id","estado")
+                ->where("estado.id = {$param['estado_mesa_id']}")
+                ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+        }
+
 
         /**
         *
@@ -261,14 +291,14 @@
                     $pedido->estado_id = 5;
                     if ($pedido->save() === false) {
 
-                        $this->error = $this->errors->$FILE_WRITE_FAIL;
+                        $this->error = $this->errors->FILE_WRITE_FAIL;
                         return false;
                     }else{
                         return true;
                     }
                 }
             }else{
-                $this->error = $this->errors->$MISSING_PARAMETERS;
+                $this->error = $this->errors->MISSING_PARAMETERS;
                 return false;
 
             }
@@ -304,7 +334,7 @@
                         $bandera = "a";
                         $productoPromo->estado = 5;
                         if ($productoPromo->save() === false) {
-                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           $this->error = $this->errors->FILE_WRITE_FAIL;
                            return false;
                        }
                    }
@@ -327,7 +357,7 @@
 
                         $productoPromo->estado = 5;
                         if ($productoPromo->save() === false) {
-                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           $this->error = $this->errors->FILE_WRITE_FAIL;
                            return false;
                        }
                     }
@@ -339,7 +369,7 @@
                 }
 
             }else{
-                $this->error = $this->errors->$MISSING_PARAMETERS;
+                $this->error = $this->errors->MISSING_PARAMETERS;
                 return false;
             }
 
@@ -400,7 +430,7 @@
 
             // verificamos que se actualice correctamente
             if($cuenta->save() == false ) {
-                $this->error = $this->errors->$FILE_WRITE_FAIL;
+                $this->error = $this->errors->FILE_WRITE_FAIL;
                 $this->db->rollback();
                 return false;
             }
@@ -442,6 +472,37 @@
 
 
             $result = EstadosMesa::find();
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
+        }
+
+
+        /**
+         * getEstadosMesa
+         *
+         * Obtiene Los estado dado un nombre de estado
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param["name"]
+         *
+         * @return \App\Models\EstadosMesa[]|bool
+         */
+        public function getEstadosMesaPorNombre($param){
+
+            if(!isset($param["name"])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = EstadosMesa::findFirst("name ='{$param["name"]}'");
 
             if(!$result->count()){
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
@@ -511,7 +572,36 @@
 
             return $arr;
 
-        }  
+        }
+
+
+        /**
+         * getMesaPorId
+         *
+         * @author Jorge Silva
+         *
+         *
+         * Trae un objeto mesa por un id en especifico
+         *
+         * @param $param
+         * @return Mesas|bool
+         */
+        public function getMesaPorId($param) {
+            if(!isset($param["id"])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+            else {
+                $result = Mesas::findFirst("id = '{$param["id"]}'");
+
+                if(!$result->count()){
+                    $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                    return false;
+                }
+            }
+
+            return $result;
+        }
 
 
     }

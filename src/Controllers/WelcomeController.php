@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Business\MeseroBSN;
 
 
 class WelcomeController extends ControllerBase
@@ -18,6 +19,30 @@ class WelcomeController extends ControllerBase
     		$this->contextRedirect("menu");
 
     	} else {
+
+    	    $mesa = new MeseroBSN();
+
+            if($this->session->get("auth-identity")['table_id_tmp'] == null){
+                $param = [
+                    "id" => 1
+                ];
+            }
+            else {
+                $param = [
+                    "id" => $this->session->get("auth-identity")['table_id_tmp']
+                ];
+            }
+
+
+            $mesa_actual = $mesa->getMesaPorId($param);
+
+            if($mesa_actual){
+                $this->view->setVar("mesa", $mesa_actual);
+            }
+            else{
+                $this->view->setVar("mesa", " - ");
+            }
+
     		$this->view->pick("controllers/welcome/_index");
     	}
 
