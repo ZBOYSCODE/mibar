@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Business\AccessBSN;
 use App\Business\MeseroBSN;
 use App\Business\PedidoBSN;
 use App\Business\CajaBSN;
+use App\library\Constants\Constant;
 
 class WaiterController extends ControllerBase
 {
@@ -14,6 +16,7 @@ class WaiterController extends ControllerBase
     private $meseroBsn;
     private $pedidoBsn;
     private $cajaBsn;
+    private $constant;
 
     public function initialize(){
 
@@ -21,6 +24,7 @@ class WaiterController extends ControllerBase
         $this->meseroBsn = new MeseroBSN();
         $this->pedidoBsn = new PedidoBSN();
         $this->cajaBsn   = new CajaBSN();
+        $this->constant = new Constant();
 
     }    
 
@@ -34,10 +38,8 @@ class WaiterController extends ControllerBase
     * Carga lista de mesas para un mesero determinado.
     *
     */
-	
     public function indexAction()
     {
-
         //DATO EN BRUTO
         $id_mesero = 1;
 
@@ -50,10 +52,11 @@ class WaiterController extends ControllerBase
                        'fecha' => $datetime->format('Y-m-d'),
                        'turno' => $datetime->format('H:i:s')];
 
-        $mesas = $this->meseroBsn->getMesas($paramMesas);
-        $estadosMesa = $this->meseroBsn->getEstadosMesa($paramMesas);
-        $pedidosPendientes = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
-        $pedidosTotales = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
+        $mesas      = $this->meseroBsn->getMesas($paramMesas);
+
+        $estadosMesa        = $this->meseroBsn->getEstadosMesa();
+        $pedidosPendientes  = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
+        $pedidosTotales     = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
 
         if(!$mesas)
             $mesas = array();
@@ -63,6 +66,7 @@ class WaiterController extends ControllerBase
         $this->view->setVar("pedidosPendientes",$pedidosPendientes) ;
         $this->view->setVar("pedidosTotales",$pedidosTotales) ;
         $this->view->setVar("estadosMesa",$estadosMesa) ;
+
         $this->view->pick("controllers/waiter/_index");
     }
 
@@ -80,31 +84,42 @@ class WaiterController extends ControllerBase
 
         if($this->request->isAjax()){
 
-            $post = $this->request->getPost();
             $this->mifaces->newFaces();
 
-            if (isset($post['table_id'])){
+            if (isset($_POST['table_id'])){
            
-            $view = "controllers/waiter/tables/details";
+                $view = "controllers/waiter/tables/details";
 
-            $table_id = $post['table_id'];
-            $param['mesa_id'] = $table_id;
+                
+                $param['mesa_id'] = $this->request->getPost("table_id", "int");
 
-            $tabObj = new MeseroBSN();
-            $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-         
-            $dataView['detalles'] =  $tablesDetails;
-            $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
-        
-            $toRend = $this->view->getPartial($view, $dataView);
+                $tabObj = new MeseroBSN();
+                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
-            $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+                $dataView['detalles'] =  $tablesDetails;
+                $dataView['numeroMesa'] = reset($tablesDetails)['cuenta']->Mesas->numero;
+
+                $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
+                $dataView['table_id']    = $this->request->getPost("table_id", "int");
+                $dataView['table_numero']    = $this->request->getPost("table_numero", "int");
+
+
+
+            
+                $toRend = $this->view->getPartial($view, $dataView);
+
+                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
 
             }else{
 
                 $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
 
             }
+
+                
+
+    	        //$toRend = $this->view->getPartial($view, $dataView);
+
 
             
         	$this->mifaces->run();
@@ -127,7 +142,6 @@ class WaiterController extends ControllerBase
     * Renderiza modal detalles cuenta via mifaces
     *
     */    
-
     public function billDetailsAction(){
 
         if($this->request->isAjax()){
@@ -234,9 +248,10 @@ class WaiterController extends ControllerBase
 
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-
+               
                 $dataView['detalles'] =  $tablesDetails;
                 $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+
 
                 $view = "controllers/waiter/tables/details";
              
@@ -244,17 +259,188 @@ class WaiterController extends ControllerBase
                 $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
 
             }
+
             else {
                 $this->mifaces->addToMsg('error','Error interno!');
             }
             
+            $this->mifaces->run();
+        } else{
+
+            $this->view->disable();
+
+        }
+    }
+
+    /**
+     * createUser
+     *
+     * levanta el modal para crear un usuario
+     *
+     * @author Sebastián Silva
+     */
+    public function createUserAction(){
+
+        if($this->request->isAjax()) {
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            $view = "controllers/waiter/modal_create_user";
+
+            $dataView['mesa_id']    =  $post['mesa'];
+
+            $toRend = $this->view->getPartial($view, $dataView);
+
+            $this->mifaces->addToRend('table_modal_orders_render',$toRend);
             $this->mifaces->run();
 
         } else{
 
             $this->view->disable();
 
-        }      
+        }
+    }
+
+    /**
+     * storeClient
+     * 
+     * persiste el cliente desde la vista mesero
+     */
+    public function storeClientAction() {
+
+        if($this->request->isAjax()) {
+
+            $cuenta_id  = $this->request->getPost("cuenta_id", "int");
+            $table_id   = $this->request->getPost("table_id", "int");
+            $nombre     = $this->request->getPost("nombre-cliente", "string");
+
+            if( empty($table_id)    OR 
+                empty($nombre)) {
+
+                $this->mifaces->addToMsg('danger','Faltan datos para crear cliente, vuelta a intentarlo.');  
+                $this->mifaces->run();
+                return false;
+            }
+
+            if($cuenta_id == 0 OR empty($cuenta_id)){
+                $cuenta_id = null;
+            }
+
+            
+
+
+            // creo el usuario y le asigno la cuenta
+            $mesero = new MeseroBSN();
+
+            $param = array(
+                'nombre'    => $nombre,
+                'cuenta_id' => $cuenta_id,
+                'table_id'  => $table_id
+            );
+            
+
+            if( $mesero->setNewClient( $param ) ) {
+
+
+                
+                $this->mifaces->newFaces();
+
+                $view = "controllers/waiter/tables/details";
+
+                
+                $param['mesa_id'] = $table_id;
+
+
+
+                $tabObj = new MeseroBSN();
+                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+                //print_r($tablesDetails);exit();
+                $dataView['detalles'] =  $tablesDetails;
+
+                $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
+                $dataView['table_id']    = $this->request->getPost("table_id", "int");
+
+                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+
+
+                $toRend = $this->view->getPartial($view, $dataView);
+
+                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+                $this->mifaces->run();
+
+                
+            } else{
+                $this->mifaces->newFaces();
+                $this->mifaces->addToMsg('danger','No se ha podido crear el cliente, vuelta a intentarlo.');
+                $this->mifaces->run();
+            }
+
+            
+            
+
+        } else{
+            $this->mifaces->newFaces();
+            $this->view->disable();
+            $this->mifaces->run();
+        }
+
+    }
+
+    /**
+    * BillDetails
+    *
+    *
+    * @author osanmartin
+    *
+    * Renderiza modal detalles cuenta via mifaces
+    *
+    */    
+    public function getPendingOrdersAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            if(isset($post['cuenta'])){
+
+                $view = "controllers/waiter/tables/pending_orders";
+
+                $param = [
+                    "nombre" => $this->constant->ESTADO_PEDIDO_PENDIENTE
+                ];
+
+                $pedidobsnObj = new PedidoBSN();
+                $status = $pedidobsnObj->getStatus($param);
+
+                $cuenta_id = $post['cuenta'];
+                $param['cuenta_id'] = $cuenta_id;
+                $param['estado_id'] = $status->id; 
+
+                $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
+                $cuenta         = $this->cajaBsn->getCuentaById($param);
+
+                $dataView['pedidosCuenta']  =  $pedidosCuenta;
+                $dataView['cuenta']         =  $cuenta;
+
+                $toRend = $this->view->getPartial($view, $dataView);
+
+                $this->mifaces->addToRend('table_modal_pending_orders_render',$toRend);
+
+            }else{
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
 
     }
 

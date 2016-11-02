@@ -1,7 +1,15 @@
 
    
     <div class="card">
+
         <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ numeroMesa }}</h4>
+    </div>
+
+    <div class="card text-center">
+        <a href="#" id='create-user' data-url="{{ url('waiter/createUser') }}" data-callName="create-user-modal" data-table='{{ table_id }}' class="btn btn-main btn-width">
+            <i class="fa fa-list-alt"></i> Crear cliente
+        </a>
+
     </div>
 
   <!-- Details -->
@@ -24,11 +32,13 @@
     	        </div>
     	    </div>
     	    <div class="table-item-footer">
-				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Detalles</button>
+				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Validar</button>
+				<button type="button" class="btn btn-main btn-width pedidos-pendientes" data-callName="pedidos-pendientes" data-url="{{ url('waiter/getPendingOrders') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Pendientes</button>
     	    </div>
     	</div>
     {% endfor %}
 			   
     
     <div id="table_modal_orders_render"></div>
+    <div id="table_modal_pending_orders_render"></div>
 	
