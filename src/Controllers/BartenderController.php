@@ -86,30 +86,6 @@ class BartenderController extends ControllerBase
 
 
     /**
-     * getOrdersAction
-     *
-     * @author Jorge Silva
-     *
-     * @param $_POST
-     *
-     * Método para mostrar ordenes al barman recibe por post un tipo ya sea pendientes o listos
-     *
-     * retorna vista json via mifaces
-     */
-    public function getOrdersAction()
-    {
-        if($this->request->isAjax()){
-
-            //nothing
-
-        }
-        else {
-            $this->defaultRedirect();
-        }
-    }
-
-
-    /**
     * changeCompletedOrders
     *
     * @author osanmartin
@@ -231,13 +207,12 @@ class BartenderController extends ControllerBase
             $toRend = $this->view->getPartial($view, $dataView);
 
             $this->mifaces->addToRend('tables-content',$toRend);
-            $this->mifaces->addToDataView("menuNav", "opcion0");
 
             $this->mifaces->run();
 
         } else{
 
-            $this->view->disable();
+            $this->defaultRedirect();
 
         }
 
@@ -264,7 +239,6 @@ class BartenderController extends ControllerBase
 
 
             if(isset($post['pedido'])){
-
 
                 $param['pedido_id'] = $post['pedido'];
 
@@ -323,14 +297,11 @@ class BartenderController extends ControllerBase
 
             }
 
-
-
-
             $this->mifaces->run();
 
         } else{
 
-            $this->view->disable();
+            $this->defaultRedirect();
 
         }
 
