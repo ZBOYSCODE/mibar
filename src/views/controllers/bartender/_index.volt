@@ -10,7 +10,7 @@
         <div class="col-xs-6 col-sm-6 no-col-padding">
 
 
-            <div class="menu-type-item card menu-promo" data-url="bartender/changePendingOrders" data-categoria="0" data-callName="changeMenu">
+            <div class="menu-type-item card" data-url="bartender/changePendingOrders"  data-callName="changeMenu">
                 <button type="button" id="opcion0" class="active button-active">
                     {{ image("img/icons/bar-pendiente.png", "alt":"Promos", "class":"img-responsive") }}
                     <p>Pendientes / En Proceso</p>
@@ -19,7 +19,7 @@
         </div>
         <div class="col-xs-6 col-sm-6 no-col-padding">
 
-            <div class="menu-type-item card menu-prod" data-url="bartender/changeCompletedOrders" data-callName="changeMenu">
+            <div class=" menu-type-item card" data-url="bartender/completeOrders"  data-callName="changeMenu">
                 <button type="button" id="opcion1" class="button-active">
 
                     {{ image("img/icons/bar-entregado.png", "alt":"Bebidas", "class":"img-responsive") }}
