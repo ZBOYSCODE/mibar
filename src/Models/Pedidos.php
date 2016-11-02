@@ -69,6 +69,14 @@ class Pedidos extends \Phalcon\Mvc\Model
      */
     public $updated_at;
 
+
+
+    /* Atributos extras al modelo */
+
+    public $nombre;
+    public $descripcion;
+    public $avatar;
+
     /**
      * Initialize method for model.
      */

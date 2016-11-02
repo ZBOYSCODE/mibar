@@ -18,7 +18,11 @@
     use App\Models\Pedidos;
     use App\Models\ProducPromoPedidos;
     use App\Models\Promociones;
-    
+    use App\Models\Estados;
+    use App\Models\Productos;
+    use App\Models\SubcategoriaProductos;
+    use App\Models\CategoriaProductos;
+
     /**
      * Modelo de negocio
      *
@@ -37,6 +41,7 @@
 
         private $ESTADO_PEDIDO_VALIDADO = 2;
         private $ESTADO_PEDIDO_CANCELADO = 6;
+        private $ESTADO_PEDIDO_CONCRETADO = 3;
 
         private $promocionBsn;
         private $productoBsn;
@@ -415,7 +420,7 @@
                 }
 
                 # recorremos los pedidos
-                foreach ($pedidos as $key => &$pedido) { 
+                foreach ($pedidos as $key => $pedido) {
 
                     #separamos las promociones de los productos
                     if( $pedido->es_promocion ) {
@@ -487,6 +492,83 @@
             return $pedidos;
         }
 
+
+        /**
+         * getOrdersByCategoryStatus
+         *
+         *
+         * Retorna una lista de pedidos dada una categoria y un estado en particular
+         * en caso de error retorna false
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param ['category_id'   => integer
+         *                      'estado_id'     => integer
+         *                      ]
+         * @return bool
+         *
+         *
+         */
+        public function getOrdersByCategoryStatus($param) {
+
+
+            if( !isset($param["category_id"]) AND !isset($param["estado_id"])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+
+
+            $pedidosProd = Pedidos::query()
+                ->leftJoin('App\Models\Productos', 'prd.id   = App\Models\Pedidos.producto_id',    'prd')
+
+                ->leftJoin('App\Models\SubcategoriaProductos', 'scp.id   = prd.subcategoria_id',    'scp')
+                ->leftJoin('App\Models\CategoriaProductos', 'cat.id   = scp.categoria_producto_id',    'cat')
+                ->where("cat.id = '{$param["category_id"]}' ")
+                ->andWhere("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->andWhere("App\Models\Pedidos.promocion_id is NULL")
+                ->orderBy("App\Models\Pedidos.created_at ASC")
+                ->execute();
+
+            $pedidosPromo = Pedidos::query()
+                ->leftJoin('App\Models\Promociones','prm.id  =
+                App\Models\Pedidos.promocion_id',   'prm')            
+                ->where("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->andWhere("App\Models\Pedidos.producto_id is NULL")
+                ->orderBy("App\Models\Pedidos.created_at ASC")
+                ->execute();
+
+            if($pedidosProd->count() OR 
+               $pedidosPromo->count()){
+
+                foreach ($pedidosProd as $val) {
+
+                    $val->nombre = $val->Productos->nombre;
+                    $val->descripcion = $val->Productos->descripcion;
+                    $val->avatar = $val->Productos->avatar;
+                    $arr[$val->id] = $val;
+
+                }
+
+                foreach ($pedidosPromo as $key => $val) {
+
+                    $val->nombre = $val->Promociones->nombre;
+                    $val->descripcion = $val->Promociones->descripcion;
+                    $val->avatar = $val->Promociones->avatar;
+                    $arr[$val->id] = $val;
+
+                }
+
+                return $arr;
+
+
+            }else{
+
+                $this->error = $this->errors->NO_RECORDS_FOUND_ID;
+                return false;
+            }
+        }
+
         /**
          * getAllOrders
          *
@@ -522,6 +604,37 @@
         }
 
 
+        public function getProductosByCuenta($param)
+        {
+            if (!isset($param['cuenta_id'])) {
+                $error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
+            if (!$pedidos->count()) {
+                return array();
+            }
+            $result = array();
+            foreach ($pedidos as $pedido) {
+                if ($pedido->producto_id != null and $pedido->producto_id != 0) {
+                    $producto = $this->productoBsn->getProducto(array('producto_id' => $pedido->producto_id));
+                    if (!$producto->count()) {
+                        $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                        return false;
+                    }
+                    $result[] = $producto;
+                } else {
+                    $producto = $this->promocionBsn->getPromocion(array('promocion_id' => $pedido->promocion_id));
+                    if (!$producto->count()) {
+                        $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                        return false;
+                    }
+                    $result[] = $producto;
+                }
+            }
+            return $result;
+        }
         /**
          * validarPedidos
          *
@@ -655,6 +768,80 @@
 
 
 
+        /**
+         * getStatus
+         *
+         * Retorna un objeto Estado dado un nombre, si no se setea el parametro string se traen todos los Estados.
+         *
+         * si retorna false es porque hay errores
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param[ 'nombre' => string ]
+         * @return \App\Models\Estados[]|array|bool|id
+         */
+        public function getStatus($param) {
+
+            $status = array();
+
+            if(isset($param["nombre"])) {
+
+                $status = Estados::findFirst(
+                  array (
+                      "nombre = '{$param['nombre']}' "
+                  )
+                );
+
+            }
+            else{
+                $status = Estados::find();
+            }
+
+            if( $status == false ) {
+                $this->error = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+
+            return $status;
+        }
+
+
+        /**
+        *
+        * Concreta el pedido de parte del Barman
+        *
+        * Actualiza el estado de un pedido a concretado
+        *
+        * @author osanmartin
+        *
+        * @param $param['pedido_id'] : ID de pedido
+        *
+        * @return boolean
+        *
+        */
+
+        public function concretarPedido($param){
+
+            if(!isset($param['pedido_id'])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+
+            $paramPedido['pedido_id'] = $param['pedido_id'];
+            $paramPedido['estado_id']    = $this->ESTADO_PEDIDO_CONCRETADO;
+
+            $result  = $this->updatePedido($paramPedido);
+
+            if(!$result)
+                return false;
+
+            return true;
+
+        }
     }
 
 

@@ -135,7 +135,6 @@ $(function(){
 		// dejamos el id ó el atributo data-callName
 		// si no tiene ninguno definido lo dejamos como string vacio
 
-		console.log(parent);
 		var callName = "";
 		if(parent.data('callname')!== undefined)
 			callName = parent.data('callname');
