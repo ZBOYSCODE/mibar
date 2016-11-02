@@ -419,7 +419,7 @@
                 }
 
                 # recorremos los pedidos
-                foreach ($pedidos as $key => &$pedido) { 
+                foreach ($pedidos as $key => $pedido) {
 
                     #separamos las promociones de los productos
                     if( $pedido->es_promocion ) {
