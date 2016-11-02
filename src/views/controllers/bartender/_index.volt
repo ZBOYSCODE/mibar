@@ -34,7 +34,7 @@
 
     <div id="tables-content">
 
-        {{ partial("controllers/bartender/tables/_index") }}
+        {{ partial("controllers/bartender/tables/pending") }}
 
     </div>
 

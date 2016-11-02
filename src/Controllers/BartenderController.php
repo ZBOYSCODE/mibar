@@ -99,7 +99,7 @@ class BartenderController extends ControllerBase
 
         if($this->request->isAjax()){
 
-            $view = "controllers/bartender/tables/_index";
+            $view = "controllers/bartender/tables/complete";
             $this->mifaces->newFaces();
 
 
@@ -166,7 +166,7 @@ class BartenderController extends ControllerBase
 
         if($this->request->isAjax()){
 
-            $view = "controllers/bartender/tables/_index";
+            $view = "controllers/bartender/tables/pending";
             $this->mifaces->newFaces();
 
 
@@ -234,7 +234,7 @@ class BartenderController extends ControllerBase
         if($this->request->isAjax()){
 
             $post = $this->request->getPost();
-            $view = "controllers/bartender/tables/_index";
+            $view = "controllers/bartender/tables/pending";
             $this->mifaces->newFaces();
 
 
