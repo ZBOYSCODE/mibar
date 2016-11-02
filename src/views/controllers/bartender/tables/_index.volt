@@ -3,7 +3,7 @@
     {% if orders == false %}
 
 
-        <div class="table-item card" data-pedido="{{pedido.id}}" data-estado="1">
+        <div class="table-item card">
             <h3>No hay pedidos asociados </h3>
         </div>
 

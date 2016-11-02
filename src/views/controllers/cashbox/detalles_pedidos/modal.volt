@@ -1,5 +1,5 @@
 
-	<div id="products-modal" class="menu-products-list-modal modal fade" role="dialog">
+	<div id="cuentas-modal" class="menu-products-list-modal modal fade" role="dialog">
 	    <div class="modal-dialog">
 	    <!-- Modal content-->
 		    <div class="modal-content">
@@ -11,11 +11,8 @@
 			    	<div class="col-xs-6 col-md-6">
 			    		<p>Cliente: {{ cliente.nombre  }} {% if cliente.apellido != null %}{{ cliente.apellido }}{% endif %}</p>
 			    	</div>
-					 <div class="col-xs-5 col-md-5">
+					 <div class="col-xs-6 col-md-6">
 						 <p>Mesa: </p>
-					 </div>
-					 <div class="col-xs-1 col-md-1">
-						 {{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
 					 </div>
 			    </div>
 			    <div class="modal-body">
@@ -23,37 +20,33 @@
 					
 					<div class="lista_pedidos">
 
-						{% for producto in productos %}
 
-							<div class="card" id='pedido-{{producto.id}}'>
-						      	<div class="product-item-modal">
-						      		<p class="title">{{ pedido.nombre }}</p>
-						      		<div class="row">
+							{% for producto in productos %}
 
-						      			<div class="col-xs-4 col-md-4">
-											<img src="{{ pedido.avatar }}" alt="" class="img-responsive">
-						      			</div>
-						      			<div class="col-xs-8 col-md-8">
-											<div class="row">
-												<div class="col-xs-6 col-md-6">
-													<p><b><i class="fa fa-money"></i> Precio: </b>$<span>{{ producto.precio }}</span></p>
-												</div>
-												<div class="col-xs-6 col-md-6">
-													<p><b><i class="fa fa-money"></i> Cantidad: </b><span>{{ cantidad[producto.id] }}</span></p>
-												</div>
-												<div lass="col-xs-12 col-md-12">
-													<p><b><i class="fa fa-calculator"></i> Toral: </b>$<span>{{ producto.precio * cantidad[producto.id] }}</span></p>
-												</div>
-												<div lass="col-xs-12 col-md-12">
-													<p><b><i class="fa fa-comment-o"></i> Descripción: </b>$<span>{{ producto.descripcion }}</span></p>
-												</div>
+								<div class="card" id='pedido-{{ producto.id }}'>
+									<div class="product-item-modal">
+										<p class="title">{{ producto.nombre }}</p>
+										<div class="row">
+
+											<div class="col-xs-6 col-md-6">
+												<p><b><i class="fa fa-money"></i> Precio: </b>$<span>{{ producto.precio }}</span></p>
 											</div>
-						      			</div>
-						      		</div>
-						      	</div>
-					        </div>
+											<div class="col-xs-6 col-md-6">
+												<p><b><i class="fa fa-money"></i> Cantidad: </b><span> - </span></p>
+											</div>
+											<div class="col-xs-12 col-md-12">
+												<p><b><i class="fa fa-calculator"></i> Total: </b>$<span>0 {# items.precio * items[producto.id] #}</span></p>
+											</div>
+											<div class="col-xs-12 col-md-12">
+												<p><b><i class="fa fa-comment-o"></i> Descripción: </b>$<span> {{ producto.descripcion }} </span></p>
+											</div>
 
-						{% endfor %}
+										</div>
+									</div>
+								</div>
+
+							{% endfor %}
+
 
 					</div>
 

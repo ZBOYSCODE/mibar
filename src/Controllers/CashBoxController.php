@@ -13,21 +13,31 @@ class CashBoxController extends ControllerBase
 
     public function initialize()
     {
+
+        parent::initialize();
         $this->cajaBsn = new CajaBSN();
     }
 
     public function indexAction() {
+
         $mesas = Mesas::find();
         $this->view->setVar('mesas', $mesas);
-
         $this->view->pick('controllers/cashbox/_index');
+
     }
 
-    public function TableAction($mesa_id = null){
+    public function tableAction($mesa_id = null){
+
+
+        #js custom
+        $this->assets->addJs('js/pages/cashbox.js');
+
 
         if($mesa_id == null or !is_numeric($mesa_id)) {
             $this->contextRedirect('cashbox');
         }
+
+
         $cuentas = $this->cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
         if($cuentas) {
 
@@ -39,26 +49,36 @@ class CashBoxController extends ControllerBase
             }
 
             $this->view->setVar('cuentas', $cuentas);
-            $this->view->setVar('subtotales', $subtotales);
-            $this->view->setVar('cantidadPedidos', $cantidadPedidos);
-            $this->view->setVar('clientes', $clientes);
-            $this->view->pick('controllers/cashbox/table');
+
         } else {
-            //TO DO
+            $this->view->setVar('cuentas', false);
         }
+
+        $this->view->setVar('subtotales', $subtotales);
+        $this->view->setVar('cantidadPedidos', $cantidadPedidos);
+        $this->view->setVar('clientes', $clientes);
+        $this->view->pick('controllers/cashbox/_index');
     }
 
-    public function DetallePedidosAction() {
+    public function detallepedidosAction() {
         if ($this->request->isAjax()) {
 
-            $dataView = $this->cajaBsn->getProductosDetallesByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
-            $dateView['cliente'] = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+            $items = $this->cajaBsn->getProductosDetallesByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+            $dataView['cliente'] = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+
+            $dataView['productos'] = $items["productos"];
+            $dataView['cantidad'] = $items["cantidad"];
+
+
             $view = "controllers/cashbox/detalles_pedidos/modal";
+
+
+
             $this->mifaces->newFaces();
 
             $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('table-modal',$toRend);
+            $this->mifaces->addToRend('modal_cuenta_render',$toRend);
             $this->mifaces->run();
         }
         else {
