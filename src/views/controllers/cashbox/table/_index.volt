@@ -13,10 +13,11 @@
                     <p class="description">Total Pedidos: {{ cantidadPedidos[cuenta.id] }}</p>
                     <p class="description">Subtotal: ${{ subtotales[cuenta.id] }}</p>
                     <div class="row">
-                        <form action="{{ url("cashbox/detallepedidos") }}" class="form-horizontal" data-type="ajax" method="post">
+                        <form action="{{ url("cashbox/DetallePedidos") }}" class="form-horizontal" data-type="ajax" method="post">
                             <input type="hidden" name="cuenta_id" value="{{ cuenta.id }}">
-                            <input type="submit" class="btn btn-small btn-main pull-right table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Detalles</input>
+                            <input type="submit" value="Detalles" class="btn btn-small btn-main pull-right table-details-button">
                         </form>
+
                     </div>
                 </div>  
             </div>

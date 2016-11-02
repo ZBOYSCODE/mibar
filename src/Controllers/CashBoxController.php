@@ -58,7 +58,7 @@ class CashBoxController extends ControllerBase
 
             $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('orders-modal',$toRend);
+            $this->mifaces->addToRend('table-modal',$toRend);
             $this->mifaces->run();
         }
         else {
