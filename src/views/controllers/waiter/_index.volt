@@ -11,9 +11,11 @@
 			<div class="nav-filter-item">
 				 <select name="filtro-mesa" id="filtro-mesa" class="form-control">
 				 	<option value="0">Todas las mesas</option>
+
 				 	{% for mesa in mesas %}
-				    	<option value="{{ mesa.id }}">Mesa {{ mesa.id }}</option>	
+				    	<option value="{{ mesa.id }}">Mesa {{ mesa.numero }}</option>	
 					{% endfor %}
+
 				</select>
 			</div>	
 		</div>

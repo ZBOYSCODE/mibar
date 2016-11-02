@@ -111,7 +111,7 @@
          *
          * @author Sebastián Silva
          */
-        private function initCuenta(\App\Models\Clientes $cliente) {
+        public function initCuenta(\App\Models\Clientes $cliente) {
 
             $cuenta = new Cuentas();
 

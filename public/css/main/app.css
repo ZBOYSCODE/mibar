@@ -614,7 +614,10 @@ div.menu-types > div:last-child{
     margin-left: 20px;
 }
 
-
+.box-errors .error {
+  color: red;
+  margin-top: 5px;
+}
 
 .led-green {
     background-image: -webkit-linear-gradient(top, #13fB04 0%, #58e343 50%, #ADED99 100%);

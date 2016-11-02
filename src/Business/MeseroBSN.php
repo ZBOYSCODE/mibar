@@ -591,24 +591,19 @@
             }
             
             # em¡n caso de que no exista una cuenta la creamos para el cliente
-            if( is_null($param['cuenta_id']) ) {
 
-                $access = new AccessBSN();
-    
-                $cuenta = $access->initCuenta($cliente);
+            $access = new AccessBSN();
 
-                if(!$cuenta) {
+            $cuenta = $access->initCuenta($cliente);
 
-                    $this->error[] = $this->errors->WS_CONNECTION_FAIL;
-                    $this->db->rollback();
-                    return false;
-                }
+            if(!$cuenta) {
 
-                $cuenta_id = $cuenta->id;
-            } else {
-
-                $cuenta_id = $param['cuenta_id'];
+                $this->error[] = $this->errors->WS_CONNECTION_FAIL;
+                $this->db->rollback();
+                return false;
             }
+
+            $cuenta_id = $cuenta->id;
 
             
             # seteamos la mesa a la cuenta
