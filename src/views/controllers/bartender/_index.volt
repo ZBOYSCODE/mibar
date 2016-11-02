@@ -39,4 +39,7 @@
     </div>
 
 
+    <div id="modal-content"></div>
+
+
 {% endblock %}
