@@ -19,7 +19,7 @@
         </div>
         <div class="col-xs-6 col-sm-6 no-col-padding">
 
-            <div class="menu-type-item card menu-prod" data-url="menu/changeMenuDrinks" data-callName="changeMenu">
+            <div class="menu-type-item card menu-prod" data-url="bartender/changeCompletedOrders" data-callName="changeMenu">
                 <button type="button" id="opcion1" class="button-active">
 
                     {{ image("img/icons/bar-entregado.png", "alt":"Bebidas", "class":"img-responsive") }}

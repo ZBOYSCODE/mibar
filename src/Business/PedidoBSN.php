@@ -496,7 +496,7 @@
          * getOrdersByCategoryStatus
          *
          *
-         * Retorna una lista de pedidos dada una catetoria y un estado en particular
+         * Retorna una lista de pedidos dada una categoria y un estado en particular
          * en caso de error retorna false
          *
          * @author Jorge Silva
@@ -518,19 +518,48 @@
 
 
 
-            $pedidos = Pedidos::query()
+            $pedidosProd = Pedidos::query()
                 ->leftJoin('App\Models\Productos', 'prd.id   = App\Models\Pedidos.producto_id',    'prd')
+
                 ->leftJoin('App\Models\SubcategoriaProductos', 'scp.id   = prd.subcategoria_id',    'scp')
                 ->leftJoin('App\Models\CategoriaProductos', 'cat.id   = scp.categoria_producto_id',    'cat')
                 ->where("cat.id = '{$param["category_id"]}' ")
                 ->andWhere("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->andWhere("App\Models\Pedidos.promocion_id is NULL")
+                ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
+            $pedidosPromo = Pedidos::query()
+                ->leftJoin('App\Models\Promociones','prm.id  =
+                App\Models\Pedidos.promocion_id',   'prm')            
+                ->where("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->andWhere("App\Models\Pedidos.producto_id is NULL")
+                ->orderBy("App\Models\Pedidos.created_at ASC")
+                ->execute();
 
+            if($pedidosProd->count() OR 
+               $pedidosPromo->count()){
 
-            if($pedidos->count()>0){
+                foreach ($pedidosProd as $val) {
 
-                return $pedidos;
+                    $val->nombre = $val->Productos->nombre;
+                    $val->descripcion = $val->Productos->descripcion;
+                    $val->avatar = $val->Productos->avatar;
+                    $arr[$val->id] = $val;
+
+                }
+
+                foreach ($pedidosPromo as $key => $val) {
+
+                    $val->nombre = $val->Promociones->nombre;
+                    $val->descripcion = $val->Promociones->descripcion;
+                    $val->avatar = $val->Promociones->avatar;
+                    $arr[$val->id] = $val;
+
+                }
+
+                return $arr;
+
 
             }else{
 
