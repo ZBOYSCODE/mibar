@@ -31,7 +31,7 @@
                         </div>
 
                     </div>
-                    <button type="button" data-pedido=" {{ pedido.id }}" class="btn btn-small btn-main pull-right table-order-button" data-url="waiter/tableDetails">Entregar Pedidos</button>
+                    <button type="button" data-pedido=" {{ pedido.id }}" class="btn btn-small btn-main pull-right table-order-button" data-url="bartender/completeOrder">Concretar Pedido</button>
                 </div>
             </div>
 

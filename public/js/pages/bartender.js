@@ -1,6 +1,8 @@
 $(document).on('ready', function() {
 
-	$(document).on('click','menu-type-item',function(){
+	$(document).on('click','.menu-type-item',function(){
+
+		$('.button-active').removeClass('active');
 
 		var url = $(this).data('url');
 

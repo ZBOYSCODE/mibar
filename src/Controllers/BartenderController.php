@@ -114,12 +114,12 @@ class BartenderController extends ControllerBase
     *
     * @author osanmartin
     *
-    * Renderiza la vista de bebidas según el parámetro seleccionado
+    * Renderiza la vista de pedidos listos
     *
     *
     */    
 
-    public function changeCompletedOrders(){
+    public function changeCompletedOrdersAction(){
 
         if($this->request->isAjax()){
 
@@ -159,6 +159,8 @@ class BartenderController extends ControllerBase
 
             }
 
+            $dataView['orders'] = $orders_drinks_pdte;
+
 
             $toRend = $this->view->getPartial($view, $dataView);
 
@@ -173,6 +175,142 @@ class BartenderController extends ControllerBase
 
         }
 
-    }    
+    } 
+
+    /**
+    * changeCompletedOrders
+    *
+    * @author osanmartin
+    *
+    * Renderiza la vista de pedidos completos
+    *
+    *
+    */    
+
+    public function changePendingOrdersAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/bartender/tables/_index";
+            $this->mifaces->newFaces();
+
+
+            $param = [
+                "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
+            ];
+
+            $paramCat = [
+                "nombre" => $this->constant->PEDIDO_BEBIDA
+            ];
+
+            $pedidobsnObj = new PedidoBSN();
+            $status = $pedidobsnObj->getStatus($param);
+
+            $productoObj = new ProductoBSN();
+            $category = $productoObj->getListCategoriesByName($paramCat);
+
+
+
+            if($status == false OR $category == false)
+            {
+                $orders_drinks_pdte = false;
+            }
+            else {
+
+                $paramOrder = [
+                    "category_id"    => $category->id ,
+                    "estado_id"      => $status->id
+                ];
+
+                $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
+
+            }
+
+            $dataView['orders'] = $orders_drinks_pdte;
+
+
+            $toRend = $this->view->getPartial($view, $dataView);
+
+            $this->mifaces->addToRend('tables-content',$toRend);
+            $this->mifaces->addToDataView("menuNav", "opcion0");
+
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
+    }       
+
+
+    /**
+    * completeOrders
+    *
+    * @author osanmartin
+    *
+    * Cambia el estado de un pedido
+    *
+    *
+    */    
+
+    public function completeOrdersAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/bartender/tables/_index";
+            $this->mifaces->newFaces();
+
+            $param = [
+                "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
+            ];
+
+            $paramCat = [
+                "nombre" => $this->constant->PEDIDO_BEBIDA
+            ];
+
+            $pedidobsnObj = new PedidoBSN();
+            $status = $pedidobsnObj->getStatus($param);
+
+            $productoObj = new ProductoBSN();
+            $category = $productoObj->getListCategoriesByName($paramCat);
+
+
+
+            if($status == false OR $category == false)
+            {
+                $orders_drinks_pdte = false;
+            }
+            else {
+
+                $paramOrder = [
+                    "category_id"    => $category->id ,
+                    "estado_id"      => $status->id
+                ];
+
+                $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
+
+            }
+
+            $dataView['orders'] = $orders_drinks_pdte;
+
+
+            $toRend = $this->view->getPartial($view, $dataView);
+
+            $this->mifaces->addToRend('tables-content',$toRend);
+            $this->mifaces->addToDataView("menuNav", "opcion0");
+
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
+    }        
 
 }
