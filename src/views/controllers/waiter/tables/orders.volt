@@ -23,7 +23,7 @@
 
 
 		            <div class="card text-center">
-		               <h3>No hay Pedidos para {{cuenta.Clientes.nombre}} {{cuenta.Clientes.apellido}}</h3>
+		               <h3>No hay Pedidos Pendidentes.</h3>
 		            </div>
 		            </div>
 				    </div>

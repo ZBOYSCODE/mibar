@@ -141,6 +141,7 @@ class WaiterController extends ControllerBase
                 
                 $cuenta_id = $post['cuenta'];
                 $param['cuenta_id'] = $cuenta_id;
+                $param['estado_id'] = 1; 
 
 
                 $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
@@ -205,11 +206,12 @@ class WaiterController extends ControllerBase
                     }
 
                 }
-                elseif(isset($post['pedidosNoValidados'])){
+
+                if(isset($post['pedidosNoValidados'])){
 
                      $pedidosNoValidados = $post['pedidosNoValidados'];
                      $resultCancelacion = $this->pedidoBsn->cancelOrders($pedidosNoValidados);
-
+                     
                      if(!$resultCancelacion){
 
                         $this->mifaces->addToMsg('warning','Los pedidos no han sido cancelados correctamente!');
@@ -217,32 +219,29 @@ class WaiterController extends ControllerBase
                     }
 
                 }
-                else {
-                    $this->mifaces->addToMsg('error','Error interno!');
+
+                if($resultValidacion || $resultCancelacion){
+
+                     $this->mifaces->addToDataView('resultValidation', 1);
+
+                }else{
+                    $this->mifaces->addToDataView('resultValidation', 0);
                 }
 
-                    if($resultValidacion || $resultCancelacion){
+                $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
+                
+                $param['mesa_id'] = $post['table_id'];
 
-                         $this->mifaces->addToDataView('resultValidation', 1);
+                $tabObj = new MeseroBSN();
+                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
-                    }else{
-                        $this->mifaces->addToDataView('resultValidation', 0);
-                    }
+                $dataView['detalles'] =  $tablesDetails;
+                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
 
-                    $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
-                    
-                    $param['mesa_id'] = $post['table_id'];
-
-                    $tabObj = new MeseroBSN();
-                    $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-
-                    $dataView['detalles'] =  $tablesDetails;
-                    $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
-
-                    $view = "controllers/waiter/tables/details";
-                 
-                    $toRend = $this->view->getPartial($view, $dataView);
-                    $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+                $view = "controllers/waiter/tables/details";
+             
+                $toRend = $this->view->getPartial($view, $dataView);
+                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
 
             }
             else {

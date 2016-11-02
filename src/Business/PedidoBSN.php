@@ -586,12 +586,29 @@
                 return false;
             }
 
-            $pedidos = Pedidos::find(
-                array(
-                    " cuenta_id = {$param['cuenta_id']} ",
-                    "order" => "id DESC"
-                )
-            );
+            if(isset($param['estado_id'])){
+
+                $pedidos = Pedidos::find(
+                    array(
+                        " cuenta_id = {$param['cuenta_id']} AND 
+                        estado_id = {$param['estado_id']} ",
+                        "order" => "id DESC"
+                    )
+                );
+
+            } else {
+
+                $pedidos = Pedidos::find(
+                    array(
+                        " cuenta_id = {$param['cuenta_id']}" ,
+
+                        "order" => "id DESC"
+                    )
+                );
+
+            }
+
+
 
 
             if( $pedidos->count() == 0) {
@@ -693,7 +710,6 @@
         public function cancelOrders($param){
 
             $this->db->begin();
-
 
             if(!count($param)){
 

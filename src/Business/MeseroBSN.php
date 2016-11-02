@@ -43,7 +43,7 @@
         private $ESTADO_CUENTA_PENDIENTE = 1;
         private $ESTADO_MESA_ACTIVA = 1;
         private $ESTADO_PEDIDO_PENDIENTE = 1;
-
+        private $ESTADO_PEDIDO_CANCELADO = 6;
         PRIVATE $ESTADO_MESA_OCUPADA = 2;
 
         public $estado_cancelado = 6;
@@ -205,6 +205,7 @@
                     ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->andWhere("App\Models\Pedidos.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
                     ->execute();
 
 
@@ -524,6 +525,7 @@
                         ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")                        
                         ->leftJoin("App\Models\Pedidos","App\Models\Cuentas.id = p.cuenta_id","p")
                         ->where("m.id = {$param['mesa_id']}")
+                        ->andWhere("p.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
                         ->execute();
 
             if(!$result->count()) {
