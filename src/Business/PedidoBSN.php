@@ -42,6 +42,7 @@
         private $ESTADO_PEDIDO_VALIDADO = 2;
         private $ESTADO_PEDIDO_CANCELADO = 6;
         private $ESTADO_PEDIDO_CONCRETADO = 3;
+        private $ESTADO_PEDIDO_ENTREGADO = 5;
 
         private $promocionBsn;
         private $productoBsn;
@@ -915,6 +916,49 @@
             }
 
             return $result;
+
+        }
+
+          /**
+         * entregarPedidos
+         *
+         * cambia estado a validado a todos los pedidos entregados
+         *
+         * @author Hernán Feliú
+         *
+         * @param array $param listado de pedidos entregados
+         * @return boolean
+         */
+
+        public function deliverOrders($param){
+
+            $this->db->begin();
+
+
+            if(!count($param)){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            foreach ($param as $val) {
+
+                $paramPedido['pedido_id'] = $val;
+                $paramPedido['estado_id'] = $this->ESTADO_PEDIDO_ENTREGADO;
+
+                $result = $this->updatePedido($paramPedido);
+
+                if(!$result){
+                    $this->db->rollback();
+                    return false;
+                }
+
+            }
+
+            $this->db->commit();
+
+            return true;
 
         }
 

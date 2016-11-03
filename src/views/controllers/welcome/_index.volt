@@ -21,6 +21,7 @@
 
 
 				<p>Estas ubicado en la mesa #{{ mesa.numero }}</p>
+				
 				<h3>Por Favor, ingresa tu nombre</h3>
 				<p><?php $this->flashSession->output() ?></p>
 				<form action="acceso/login" method='POST'>

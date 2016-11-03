@@ -22,14 +22,17 @@ class WelcomeController extends ControllerBase
 
     	    $mesa = new MeseroBSN();
 
-            if($this->session->get("auth-identity")['table_id_tmp'] == null){
+            if($this->session->get('table_id_tmp') == null){
+
+                $this->session->set('table_id_tmp',  1);
+
                 $param = [
                     "id" => 1
                 ];
             }
             else {
                 $param = [
-                    "id" => $this->session->get("auth-identity")['table_id_tmp']
+                    "id" => $this->session->get('table_id_tmp')
                 ];
             }
 

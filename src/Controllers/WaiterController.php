@@ -68,6 +68,8 @@ class WaiterController extends ControllerBase
         $pedidosPendientes  = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
         $pedidosTotales     = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
 
+        
+
         if(!$mesas)
             $mesas = array();
 
@@ -89,58 +91,37 @@ class WaiterController extends ControllerBase
     * Renderiza Detalles Mesa via mifaces
     *
     */
+    public function tableDetailsAction($table_id) {
 
-    public function tableDetailsAction(){
-
-        if($this->request->isAjax()){
-
-            $this->mifaces->newFaces();
-
-            if (isset($_POST['table_id'])){
-           
-                $view = "controllers/waiter/tables/details";
-
-                
-                $param['mesa_id'] = $this->request->getPost("table_id", "int");
-
-                $tabObj = new MeseroBSN();
-                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-
-                $dataView['detalles'] =  $tablesDetails;
-                $dataView['numeroMesa'] = reset($tablesDetails)['cuenta']->Mesas->numero;
-
-                $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
-                $dataView['table_id']    = $this->request->getPost("table_id", "int");
-                $dataView['table_numero']    = $this->request->getPost("table_numero", "int");
+            /**
+             * Al llegar acá se eliminarán los pedidos en el carro de compras
+             */
+            $this->session->remove("pedidos");
 
 
+            $param = array(
+                'mesa_id' => $table_id
+            );
 
-            
-                $toRend = $this->view->getPartial($view, $dataView);
+            $tabObj = new MeseroBSN();
+            $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
-                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+            #$estados_cuenta = $tabObj->getListEstadosCuenta();
+            #$this->view->setVar("estados_cuenta",   $estados_cuenta);
 
-            }else{
+            $cuentas = $tabObj->getCuentasByTableId($table_id);
 
-                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
 
-            }
+            $this->assets->addJs('js/pages/waiter.js');
 
-                
-
-    	        //$toRend = $this->view->getPartial($view, $dataView);
-
+            $this->view->setVar("numeroMesa",       reset($tablesDetails)['cuenta']->Mesas->numero);
+            $this->view->setVar("table_id",         $table_id);        
+            $this->view->setVar("detalles",         $tablesDetails);
+            $this->view->setVar("cuentas",         $cuentas);
 
             
-        	$this->mifaces->run();
-
-        } else{
-
-        	$this->view->disable();
-
-        }
-
-	}	
+            $this->view->pick("controllers/waiter/_details");
+        }   	
 
 
     /**
@@ -258,11 +239,12 @@ class WaiterController extends ControllerBase
 
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-               
+
+                $tableParams = $tabObj->getMesaPorId($param);
+        
                 $dataView['detalles'] =  $tablesDetails;
-                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
-
-
+                $dataView['Mesa'] = $tableParams;
+               
                 $view = "controllers/waiter/tables/details";
              
                 $toRend = $this->view->getPartial($view, $dataView);
@@ -373,7 +355,9 @@ class WaiterController extends ControllerBase
                 $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
                 $dataView['table_id']   = $this->request->getPost("table_id", "int");
 
-                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+                $tableParams = $tabObj->getMesaPorId($param);
+        
+                $dataView['Mesa'] = $tableParams;
 
 
                 $toRend = $this->view->getPartial($view, $dataView);
@@ -451,12 +435,12 @@ class WaiterController extends ControllerBase
     }
 
     /*
-    * BillDetails
+    * GetPendingOrders
     *
     *
-    * @author osanmartin
+    * @author Hernán Felíu
     *
-    * Renderiza modal detalles cuenta via mifaces
+    * Renderiza modal detalles pedidos pendientes via mifaces
     *
     */    
     public function getPendingOrdersAction(){
@@ -471,7 +455,7 @@ class WaiterController extends ControllerBase
                 $view = "controllers/waiter/tables/pending_orders";
 
                 $param = [
-                    "nombre" => $this->constant->ESTADO_PEDIDO_PENDIENTE
+                    "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
                 ];
 
                 $pedidobsnObj = new PedidoBSN();
@@ -483,7 +467,7 @@ class WaiterController extends ControllerBase
 
                 $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
                 $cuenta         = $this->cajaBsn->getCuentaById($param);
-
+                //print_r($pedidosCuenta);exit();
                 $dataView['pedidosCuenta']  =  $pedidosCuenta;
                 $dataView['cuenta']         =  $cuenta;
 
@@ -504,6 +488,126 @@ class WaiterController extends ControllerBase
 
         }
 
+    }
+
+     /**
+    * deliverOrders
+    *
+    *
+    * @author Hernán Feliú
+    *
+    * cambia estado a entregado a una serie de pedidos 
+    *
+    */
+
+    public function deliverOrdersAction(){   
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            $resultValidacion = false;
+            
+            if(isset($post['table_id'])) {
+
+                if(isset($post['pedidosValidados'])){
+
+                    $pedidosValidados = $post['pedidosValidados'];
+                    $resultValidacion = $this->pedidoBsn->deliverOrders($pedidosValidados);
+
+                    if(!$resultValidacion){
+
+                        $this->mifaces->addToMsg('warning','Los pedidos no han sido entregados correctamente!');
+
+                    }
+
+                }
+
+                if($resultValidacion){
+
+                     $this->mifaces->addToDataView('resultValidation', 1);
+
+                }else{
+                    $this->mifaces->addToDataView('resultValidation', 0);
+                }
+
+                $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
+                
+                $param['mesa_id'] = $post['table_id'];
+
+                $tabObj = new MeseroBSN();
+                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+                 $tableParams = $tabObj->getMesaPorId($param);
+               
+                $dataView['detalles'] =  $tablesDetails;   
+                $dataView['Mesa'] = $tableParams;
+
+                $view = "controllers/waiter/tables/details";
+             
+                $toRend = $this->view->getPartial($view, $dataView);
+                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+
+            }
+
+            else {
+                $this->mifaces->addToMsg('error','Error interno!');
+            }
+            
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+    }
+
+    /**
+     * deleteCuentaAction
+     *
+     * @author Sebastián Silva
+     */
+    public function deleteCuentaAction(){
+
+        if($this->request->isAjax()){
+
+            $cuenta_id = $this->request->getPost("cuenta_id", "int");
+
+            
+            $this->mifaces->newFaces();
+
+            if( !empty($cuenta_id) ){
+
+
+
+                if( $this->meseroBsn->deleteCuenta($cuenta_id) ) {
+
+                    $this->mifaces->addToJsonView('delete_state', 1 );
+                } else {
+
+                    $this->mifaces->addToJsonView('delete_state', 0 );
+                }
+
+                
+
+
+                $this->mifaces->addToMsg('success','Cuenta eliminada correctamente.');
+
+            }else{
+
+                $this->mifaces->addToJsonView('delete_state', 0 );
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+        
+        } else{
+
+            $this->view->disable();
+
+        }
     }
 
 }

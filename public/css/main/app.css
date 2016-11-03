@@ -77,6 +77,11 @@ body, html {
   margin-bottom: 0 !important;
 }
 
+.nav-user-details h2{
+  position: absolute;
+  left: 90px;
+}
+
 /* Card Layouts */
 
 .card {
@@ -168,7 +173,7 @@ body, html {
     margin-top: -8px;
     position:absolute;
     opacity: 0.3;
-    transition: all 0.4s ease-in-out;
+    transition: all 0.2s ease-in-out;
     width: 40px;
 }
 .wine-switch > label::after {
@@ -196,7 +201,7 @@ body, html {
 /* Paddings & Margins */
 
 .section-content-top{
-  margin-top: 70px;
+  margin-top: 73px;
 }
 
 .section-content-top2{
@@ -288,7 +293,7 @@ body, html {
 /* ========== MENU =========== */
 
 .menu-types{
-  margin: 30px 5px 0px 5px !important;
+  margin: 5px 5px 0px 5px !important;
 }
 
 
@@ -302,7 +307,7 @@ div.menu-types > div:last-child{
 
 .menu-type-item{
   padding: 0;
-  margin: 10px 5px 0 5px;
+  margin: 0px 5px 0 5px;
   height: 130px;
   text-align: center;
 }
@@ -491,6 +496,7 @@ div.menu-types > div:last-child{
 
 .menu-products-list-modal .modal-body{
   padding: 0;
+  padding-bottom: 70px;
 }
 
 .menu-products-list-modal .modal-content{
@@ -567,6 +573,12 @@ div.menu-types > div:last-child{
   position: absolute;
   right: 30px;
 }
+
+.avatar-sm-card{
+  top: 90px !important;
+  left: 30px !important;
+}
+
 
 .table-item{
   padding: 30px;
@@ -662,6 +674,13 @@ div.menu-types > div:last-child{
 
 #bill-details .modal-body{
   padding-bottom: 80px;
+}
+
+
+.pull-right-top{
+    position: absolute;
+    top: 0;
+    right: 10px;
 }
 
 
