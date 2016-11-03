@@ -108,14 +108,29 @@ class CajaBSN extends Plugin
         }
         $lista = array();
         foreach ($productos as $producto) {
-            if (isset($result['cantidad'][$producto->id])) {
-                $result['cantidad'][$producto->id] = $result['cantidad'][$producto->id] + 1;
+            $class = get_class($producto);
+            $class = explode('\\', $class);
+            $class = $class[sizeof($class)-1];
+            if (isset($result['cant'.$class][$producto->id])) {
+                $result['cant'.$class][$producto->id] = $result['cant'.$class][$producto->id] + 1;
+                $result['total'.$class][$producto->id] = $producto->precio + $result['total'.$class][$producto->id];
             } else {
-                $result['cantidad'][$producto->id] = 1;
-                array_push($lista, $producto);
+                $result['cant'.$class][$producto->id] = 1;
+                $result[strtolower($class)][] = $producto;
+                $result['total'.$class][$producto->id] = $producto->precio;
             }
         }
-        $result['productos'] = $lista;
+        if(!isset($result['productos'])) {
+            $result['productos'] = array();
+            $result['cantProductos'] = array();
+            $result['totalProductos'] = array();
+        }
+        if(!isset($result['promociones'])) {
+            $result['promociones'] = array();
+            $result['cantPromociones'] = array();
+            $result['totalPromociones'] = array();
+        }
+
         return $result;
     }
 

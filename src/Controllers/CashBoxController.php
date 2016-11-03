@@ -4,18 +4,21 @@
 namespace App\Controllers;
 
 use App\Business\CajaBSN;
+use App\Business\ClienteBSN;
 use App\Models\Clientes;
 use App\Models\Mesas;
 
 class CashBoxController extends ControllerBase
 {
     private $cajaBsn;
+    private $clienteBsn;
 
     public function initialize()
     {
 
         parent::initialize();
         $this->cajaBsn = new CajaBSN();
+        $this->clienteBsn = new ClienteBSN();
     }
 
     public function indexAction() {
@@ -27,8 +30,6 @@ class CashBoxController extends ControllerBase
     }
 
     public function tableAction($mesa_id = null){
-
-
         #js custom
         $this->assets->addJs('js/pages/cashbox.js');
 
@@ -36,7 +37,7 @@ class CashBoxController extends ControllerBase
         if($mesa_id == null or !is_numeric($mesa_id)) {
             $this->contextRedirect('cashbox');
         }
-
+        //$errors = array();
 
         $cuentas = $this->cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
         if($cuentas) {
@@ -45,7 +46,11 @@ class CashBoxController extends ControllerBase
                 $param = array('cuenta_id' => $var->id);
                 $subtotales[$var->id] = number_format($this->cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
                 $cantidadPedidos[$var->id] = $this->cajaBsn->getCantidadPedidoByCuenta($param);
-                $clientes[$var->id] = Clientes::findFirstById($var->cliente_id);
+                $clientes[$var->id] = $this->clienteBsn->getClienteById(array('id' => $var->cliente_id));
+                if($clientes[$var->id] == false || $subtotales[$var->id] == false || $cantidadPedidos[$var->id] == false) {
+                    $cuentas = false;
+                    break;
+                }
             }
 
             $this->view->setVar('cuentas', $cuentas);
@@ -53,7 +58,13 @@ class CashBoxController extends ControllerBase
         } else {
             $this->view->setVar('cuentas', false);
         }
-
+        /*foreach ($this->cajaBsn->error as $err) {
+            $errors[] = $err;
+        }
+        foreach ($this->clienteBsn->error as $err) {
+            $errors[] = $err;
+        }
+        $this->view->setVar('errores', $errors);*/
         $this->view->setVar('subtotales', $subtotales);
         $this->view->setVar('cantidadPedidos', $cantidadPedidos);
         $this->view->setVar('clientes', $clientes);
@@ -62,23 +73,38 @@ class CashBoxController extends ControllerBase
 
     public function detallepedidosAction() {
         if ($this->request->isAjax()) {
-
-            $items = $this->cajaBsn->getProductosDetallesByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
-            $dataView['cliente'] = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
-
-            $dataView['productos'] = $items["productos"];
-            $dataView['cantidad'] = $items["cantidad"];
-
-
-            $view = "controllers/cashbox/detalles_pedidos/modal";
-
-
-
             $this->mifaces->newFaces();
+            if (isset($_POST["cuenta_id"])) {
+                $items = $this->cajaBsn->getProductosDetallesByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+                $cliente = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+                $dataView['total'] = $this->cajaBsn->getSubTotalByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+                $dataView['cliente'] = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+                if($items == false
+                    || $cliente == false
+                    || $dataView['total'] == false
+                    || $dataView['cliente'] == false) {
+                    $this->mifaces->addToMsg('warning', 'Error inesperado, reintente más tarde.');
+                }
+                else {
+                    $dataView['total'] = number_format($dataView['total'], 0, ',', '.');
+                    $dataView['productos'] = $items["productos"];
+                    $dataView['cantProductos'] = $items["cantProductos"];
+                    $dataView['promociones'] = $items["promociones"];
+                    $dataView['cantPromociones'] = $items["cantPromociones"];
+                    $dataView['totalProductos'] = $items['totalProductos'];
+                    $dataView['totalPromociones'] = $items['totalPromociones'];
+                    $dataView['cliente'] = $cliente;
+                    $view = "controllers/cashbox/detalles_pedidos/modal";
 
-            $toRend = $this->view->getPartial($view, $dataView);
+                    $toRend = $this->view->getPartial($view, $dataView);
 
-            $this->mifaces->addToRend('modal_cuenta_render',$toRend);
+                    $this->mifaces->addToRend('modal_cuenta_render',$toRend);
+
+                }
+            }
+            else {
+                $this->mifaces->addToMsg('warning', 'Faltan parámetros.');
+            }
             $this->mifaces->run();
         }
         else {
