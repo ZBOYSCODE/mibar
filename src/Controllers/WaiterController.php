@@ -98,6 +98,7 @@ class WaiterController extends ControllerBase
 
                 $dataView['detalles'] =  $tablesDetails;
                 $dataView['numeroMesa'] = reset($tablesDetails)['cuenta']->Mesas->numero;
+                print_r($tablesDetails);exit();
 
                 $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
                 $dataView['table_id']    = $this->request->getPost("table_id", "int");
@@ -116,12 +117,8 @@ class WaiterController extends ControllerBase
 
             }
 
-                
+    	    //$toRend = $this->view->getPartial($view, $dataView);
 
-    	        //$toRend = $this->view->getPartial($view, $dataView);
-
-
-            
         	$this->mifaces->run();
 
         } else{

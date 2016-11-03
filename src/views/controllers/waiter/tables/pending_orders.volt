@@ -18,14 +18,15 @@
 			    	</div>
 			    </div>
 			    
-
-			    {% if pedidosCuenta == false %}
-
                 <div class="modal-body">
+
+                {% if pedidosCuenta == false %}
+
 
 		            <div class="card text-center">
 		               <h3>No hay Pedidos Pendientes.</h3>
 		            </div>
+		        </div>
 		        </div>
 				   
 				<div class="menu-footer">
@@ -34,11 +35,11 @@
 					</div>
 				</div>	
 
-
+                
 			    {% else %}
 
-			    <div class="modal-body">
-			    	<form id="form-validar">
+			
+			    	<form id="form-entregar">
 						<div class="lista_pedidos">
 
 							{% for pedido in pedidosCuenta %}
@@ -74,7 +75,7 @@
 					        {% endfor %}
 						</div>
 					</form>
-			    </div>
+					</div>
 		    </div>
 
 			<div class="menu-footer">
