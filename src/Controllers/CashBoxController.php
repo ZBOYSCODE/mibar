@@ -74,10 +74,12 @@ class CashBoxController extends ControllerBase
     }
 
 
-    public function tableAction($mesa_id = null){
+    public function tableAction($mesa_id){
         #js custom
         $this->assets->addJs('js/pages/cashbox.js');
-
+        if(!isset($mesa_id)) {
+            $mesa_id = null;
+        }
         if($mesa_id != null and is_numeric($mesa_id)) {
 
 
@@ -104,10 +106,6 @@ class CashBoxController extends ControllerBase
 
             $mesaObj = new MeseroBSN();
 
-            $this->view->setVar('subtotales', $subtotales);
-            $this->view->setVar('cantidadPedidos', $cantidadPedidos);
-            $this->view->setVar('clientes', $clientes);
-            $this->view->pick('controllers/cashbox/_index');
             $param = [
                 "id" => $mesa_id
             ];
