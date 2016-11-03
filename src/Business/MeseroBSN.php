@@ -24,6 +24,9 @@
     use App\Models\Cuentas;
     use App\Models\Pedidos;
     use App\Models\EstadosMesa;
+    use App\Models\Estados;
+
+
     /**
      * Modelo de negocio
      *
@@ -733,7 +736,11 @@
             return true;
         }
 
-
+        /**
+         * getTableByCuenta
+         *
+         * @author Sebastián Silva
+         */
         public function getTableByCuenta($param){
 
             if(!isset($param['cuenta_id'])){
@@ -754,6 +761,11 @@
 
         }
 
+        /**
+         * getClientByCuenta
+         *
+         * @author Sebastián Silva
+         */
         public function getClientByCuenta($param){
 
             if(!isset($param['cuenta_id'])){
@@ -772,6 +784,42 @@
 
             return $cuenta->Clientes;
 
+        }
+
+        /**
+         * getListEstadosCuenta
+         *
+         * @author Sebastián Silva
+         */
+        public function getListEstadosCuenta() {
+
+            $list = Estados::find();
+
+
+            if(!$list->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+            return $list;
+        }
+
+        /**
+         * getCuentasByTableId
+         *
+         * @author Sebastián Silva
+         */
+        public function getCuentasByTableId($table_id) {
+
+            $cuentas = Cuentas::find(" mesa_id = {$table_id} AND estado = 1");
+
+            if(!$cuentas->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+
+            return $cuentas;
         }
 
 

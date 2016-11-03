@@ -90,56 +90,36 @@ class WaiterController extends ControllerBase
     *
     */
 
-    public function tableDetailsAction(){
+    public function tableDetailsAction($table_id) {
 
-        if($this->request->isAjax()){
-
-            $this->mifaces->newFaces();
-
-            if (isset($_POST['table_id'])){
-           
-                $view = "controllers/waiter/tables/details";
-
-                
-                $param['mesa_id'] = $this->request->getPost("table_id", "int");
-
-                $tabObj = new MeseroBSN();
-                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-
-                $dataView['detalles'] =  $tablesDetails;
-                $dataView['numeroMesa'] = reset($tablesDetails)['cuenta']->Mesas->numero;
-
-                $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
-                $dataView['table_id']    = $this->request->getPost("table_id", "int");
-                $dataView['table_numero']    = $this->request->getPost("table_numero", "int");
+        /**
+         * Al llegar acá se eliminarán los pedidos en el carro de compras
+         */
+        $this->session->remove("pedidos");
 
 
+        $param = array(
+            'mesa_id' => $table_id
+        );
 
-            
-                $toRend = $this->view->getPartial($view, $dataView);
+        $tabObj = new MeseroBSN();
+        $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
-                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+        #$estados_cuenta = $tabObj->getListEstadosCuenta();
+        #$this->view->setVar("estados_cuenta",   $estados_cuenta);
 
-            }else{
-
-                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
-
-            }
-
-                
-
-    	        //$toRend = $this->view->getPartial($view, $dataView);
+        $cuentas = $tabObj->getCuentasByTableId($table_id);
 
 
-            
-        	$this->mifaces->run();
+        $this->assets->addJs('js/pages/waiter.js');
 
-        } else{
+        $this->view->setVar("numeroMesa",       reset($tablesDetails)['cuenta']->Mesas->numero);
+        $this->view->setVar("table_id",         $table_id);        
+        $this->view->setVar("detalles",         $tablesDetails);
+        $this->view->setVar("cuentas",         $cuentas);
 
-        	$this->view->disable();
-
-        }
-
+        
+        $this->view->pick("controllers/waiter/_details");
 	}	
 
 
