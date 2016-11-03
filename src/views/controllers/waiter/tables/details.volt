@@ -20,7 +20,7 @@
   <!-- Details -->
     {% for detalle in detalles %}
        
-    	<div class="table-item card" data-categoria="">
+    	<div class="table-item card" data-cuenta="{{ detalle['cuenta'].id }}" data-estado-mesa="{{ detalle['cuenta'].estado }}">
     	    <div class="row">
     	        <div class="col-xs-4 col-sm-4">
     	            <div class="table-item-img">
@@ -42,8 +42,6 @@
 
 {#
 				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Detalles</button>
-    
-
                 <button type="button" class="btn btn-main btn-width" id='crear-pedido' data-callName="crear-pedido-button" data-url="{{ url('waiter/createOrder') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Crear pedido</button>
  #}
 

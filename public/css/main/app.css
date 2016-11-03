@@ -677,6 +677,13 @@ div.menu-types > div:last-child{
 }
 
 
+.pull-right-top{
+    position: absolute;
+    top: 0;
+    right: 10px;
+}
+
+
 /* ========== MEDIAQUERIES ===========*/
 
 @media (max-width:768px){

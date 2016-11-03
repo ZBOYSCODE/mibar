@@ -42,6 +42,26 @@ $(document).on('ready', function() {
     
     }); 
 
+    $(document).on('change','#filtro-cuenta',function(){
+
+        var filtroMesa = $(this).val();
+
+        if(filtroMesa == 0){
+
+            $(".table-item").show();      
+
+        } else{
+
+            $(".table-item").hide();
+
+            tables = $(".table-item").filter("[data-cuenta='"+filtroMesa+"']");
+
+            tables.show();
+
+        }        
+    
+    }); 
+
     $(document).on('change','#filtro-estado-mesa',function(){
 
         var filtroEstadoMesa = $(this).val();

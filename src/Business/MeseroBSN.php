@@ -24,6 +24,9 @@
     use App\Models\Cuentas;
     use App\Models\Pedidos;
     use App\Models\EstadosMesa;
+    use App\Models\Estados;
+
+
     /**
      * Modelo de negocio
      *
@@ -181,13 +184,9 @@
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
                     ->andWhere("App\Models\Pedidos.estado_id = {$this->ESTADO_PEDIDO_PENDIENTE}")
+                    ->groupBy(" m.id ")
                     ->execute();
 
-
-            if(!$result->count()){
-                $this->error[] = $this->errors->NO_RECORDS_FOUND;
-                return false;
-            }
 
             $mesas = $this->getMesas($param);
             $pedidosPendientes = $result;
@@ -200,9 +199,11 @@
 
             foreach ($pedidosPendientes as $key => $val) {
 
-                if(isset($arr[$val->mesa_id]))
-                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+                if(isset($arr[$val->mesa_id]) AND 
+                $val->cantidad_pedidos != 0){
 
+                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+                }
             }
 
             return $arr;
@@ -236,6 +237,7 @@
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
                     ->andWhere("App\Models\Pedidos.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
+                    ->groupBy(" m.id ")
                     ->execute();
 
 
@@ -733,7 +735,11 @@
             return true;
         }
 
-
+        /**
+         * getTableByCuenta
+         *
+         * @author Sebastián Silva
+         */
         public function getTableByCuenta($param){
 
             if(!isset($param['cuenta_id'])){
@@ -754,6 +760,11 @@
 
         }
 
+        /**
+         * getClientByCuenta
+         *
+         * @author Sebastián Silva
+         */
         public function getClientByCuenta($param){
 
             if(!isset($param['cuenta_id'])){
@@ -772,6 +783,42 @@
 
             return $cuenta->Clientes;
 
+        }
+
+        /**
+         * getListEstadosCuenta
+         *
+         * @author Sebastián Silva
+         */
+        public function getListEstadosCuenta() {
+
+            $list = Estados::find();
+
+
+            if(!$list->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+            return $list;
+        }
+
+        /**
+         * getCuentasByTableId
+         *
+         * @author Sebastián Silva
+         */
+        public function getCuentasByTableId($table_id) {
+
+            $cuentas = Cuentas::find(" mesa_id = {$table_id} AND estado = 1");
+
+            if(!$cuentas->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+
+            return $cuentas;
         }
 
 

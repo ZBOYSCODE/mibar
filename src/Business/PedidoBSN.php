@@ -621,7 +621,11 @@
             return $pedidos;
         }
 
-
+        /**
+         * Trae la lista de productos y promociones que pertenecen a una cuenta
+         * @param $param array  'cuenta_id'
+         * @return array|bool
+         */
         public function getProductosByCuenta($param)
         {
             if (!isset($param['cuenta_id'])) {
@@ -631,7 +635,8 @@
 
             $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
             if (!$pedidos->count()) {
-                return array();
+                $error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
             }
             $result = array();
             foreach ($pedidos as $pedido) {
@@ -641,6 +646,7 @@
                         $this->error[] = $this->errors->NO_RECORDS_FOUND;
                         return false;
                     }
+                    $producto->precio = $pedido->precio;
                     $result[] = $producto;
                 } else {
                     $producto = $this->promocionBsn->getPromocion(array('promocion_id' => $pedido->promocion_id));
@@ -648,6 +654,7 @@
                         $this->error[] = $this->errors->NO_RECORDS_FOUND;
                         return false;
                     }
+                    $producto->precio = $pedido->precio;
                     $result[] = $producto;
                 }
             }
