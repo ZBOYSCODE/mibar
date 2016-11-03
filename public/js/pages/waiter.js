@@ -134,7 +134,7 @@ $(document).on('ready', function() {
         //mifaces
         $.callAjax(dataIn, url, $(this));        
         e.preventDefault();
-    });     
+    });    
 
 
     $(document).on('click','#btn-validar-pedidos',function(e){
@@ -162,6 +162,20 @@ $(document).on('ready', function() {
 
     });  
 
+    $(document).on('click','.pedidos-pendientes',function(e){
+
+        var url = $(this).data('url');
+        var cuenta = $(this).data('cuenta');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta',cuenta);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));        
+        e.preventDefault();
+    });   
+
     
     $(document).on('click', '#crear-pedido', function(e){
 
@@ -176,8 +190,6 @@ $(document).on('ready', function() {
 
         //mifaces
         $.callAjax(dataIn, url, $(this)); 
-
-
     });
 
 	
@@ -201,7 +213,6 @@ $(document).ajaxComplete(function(event,xhr,options){
 
          }            
   
-
         if (options.callName == "create-user-modal"){
             openCreateUserModal();
         }
@@ -209,7 +220,12 @@ $(document).ajaxComplete(function(event,xhr,options){
         if (options.callName == 'store-cliente-success'){
 
             closeCreateUserModal();
-        }   
+        }  
+
+         if (options.callName == 'pedidos-pendientes'){
+
+            openPendingOrdersModal();
+        }  
          
     }
 
@@ -230,6 +246,11 @@ function openBillDetailsModal(){
     $('#bill-details').modal('show');
 } 
 
+function openPendingOrdersModal(){
+
+    $('#pending_orders').modal('show');
+} 
+
 function closeBillDetailsModal(){
     $('#bill-details').modal('hide');
 
@@ -241,6 +262,13 @@ function closeCreateUserModal() {
 
     $('#create-client-modal').modal('hide');
 
+    $('body').removeClass('modal-open');
+    $(".modal-backdrop").remove();
+}
+
+function closePendingOrdersModal() {
+
+    $('#pending_orders').modal('hide');
     $('body').removeClass('modal-open');
     $(".modal-backdrop").remove();
 }

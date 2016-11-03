@@ -10,11 +10,11 @@
 
         {%  for cuenta in cuentas %}
 
-            <div class="table-item card" data-categoria="">
+            <div class="table-item card">
                 <div class="row">
                     <div class="col-xs-4 col-sm-4">
                         <div class="table-item-img">
-                            {{ image("img/avatars/table.png", "alt":"", "class":"img-responsive") }}
+                            {{ image("img/avatars/cuenta.png", "alt":"", "class":"img-responsive") }}
                         </div>
                     </div>
                     <div class="col-xs-8 col-sm-8">

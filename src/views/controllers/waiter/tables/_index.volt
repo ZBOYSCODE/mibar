@@ -4,7 +4,6 @@
     {% for mesa in mesas %}
 
 
-
         <div class="table-item card" data-mesa="{{mesa.id}}" data-estado-mesa="{{mesa.estado_mesa_id}}">
             <div class="row">
 
@@ -27,8 +26,6 @@
                     </div>  
                     
                 </div>
-
-
 
                 <button type="button" data-href="{{mesa.numero}}" data-mesaid="{{ mesa.id }}" data-cuenta="{{ mesa.cuenta_id }}" class="btn btn-small btn-main pull-right table-order-button" data-url="waiter/tableDetails">Crear Pedido</button>
             </div>

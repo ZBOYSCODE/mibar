@@ -31,12 +31,20 @@
     	        </div>
     	    </div>
     	    <div class="table-item-footer">
+
+
+{#
 				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Detalles</button>
+    
 
                 <button type="button" class="btn btn-main btn-width" id='crear-pedido' data-callName="crear-pedido-button" data-url="{{ url('waiter/createOrder') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Crear pedido</button>
+ #}
 
+                <a href="{{ url('waiter/createOrder') }}/{{ detalle['cuenta'].id }}" class='btn btn-main btn-width'>Crear pedido</a>
 
-                <a href="{{ url('waiter/createOrder') }}/{{ detalle['cuenta'].id }}"> crear pedido</a>
+				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Validar</button>
+				<button type="button" class="btn btn-main btn-width pedidos-pendientes" data-callName="pedidos-pendientes" data-url="{{ url('waiter/getPendingOrders') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Pendientes</button>
+
     	    </div>
     	</div>
 
@@ -44,4 +52,5 @@
 			   
     
     <div id="table_modal_orders_render"></div>
+    <div id="table_modal_pending_orders_render"></div>
 	

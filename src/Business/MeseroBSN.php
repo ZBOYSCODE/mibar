@@ -43,7 +43,7 @@
         private $ESTADO_CUENTA_PENDIENTE = 1;
         private $ESTADO_MESA_ACTIVA = 1;
         private $ESTADO_PEDIDO_PENDIENTE = 1;
-
+        private $ESTADO_PEDIDO_CANCELADO = 6;
         PRIVATE $ESTADO_MESA_OCUPADA = 2;
 
         public $estado_cancelado = 6;
@@ -90,6 +90,36 @@
             }
 
             return $list_mesas;
+        }
+
+        /**
+         * getMesasPorEstado
+         *
+         * @author Jorge Silva
+         *
+         * trae todas las mesas dependiendo de un estado
+         *
+         * @param array $param["estado_mesa_id"] int
+         * @return bool| Object Mesas
+         */
+        public function getMesasPorEstado($param){
+            if(!isset($param['estado_mesa_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Mesas::query()
+                ->leftJoin("App\Models\EstadosMesa","App\Models\Mesas.estado_mesa_id = estado.id","estado")
+                ->where("estado.id = {$param['estado_mesa_id']}")
+                ->execute();
+
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
         }
 
         /**
@@ -205,6 +235,7 @@
                     ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->andWhere("App\Models\Pedidos.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
                     ->execute();
 
 
@@ -306,14 +337,14 @@
                     $pedido->estado_id = 5;
                     if ($pedido->save() === false) {
 
-                        $this->error = $this->errors->$FILE_WRITE_FAIL;
+                        $this->error = $this->errors->FILE_WRITE_FAIL;
                         return false;
                     }else{
                         return true;
                     }
                 }
             }else{
-                $this->error = $this->errors->$MISSING_PARAMETERS;
+                $this->error = $this->errors->MISSING_PARAMETERS;
                 return false;
 
             }
@@ -349,7 +380,7 @@
                         $bandera = "a";
                         $productoPromo->estado = 5;
                         if ($productoPromo->save() === false) {
-                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           $this->error = $this->errors->FILE_WRITE_FAIL;
                            return false;
                        }
                    }
@@ -372,7 +403,7 @@
 
                         $productoPromo->estado = 5;
                         if ($productoPromo->save() === false) {
-                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           $this->error = $this->errors->FILE_WRITE_FAIL;
                            return false;
                        }
                     }
@@ -384,7 +415,7 @@
                 }
 
             }else{
-                $this->error = $this->errors->$MISSING_PARAMETERS;
+                $this->error = $this->errors->MISSING_PARAMETERS;
                 return false;
             }
 
@@ -445,7 +476,7 @@
 
             // verificamos que se actualice correctamente
             if($cuenta->save() == false ) {
-                $this->error = $this->errors->$FILE_WRITE_FAIL;
+                $this->error = $this->errors->FILE_WRITE_FAIL;
                 $this->db->rollback();
                 return false;
             }
@@ -498,6 +529,37 @@
 
 
         /**
+         * getEstadosMesa
+         *
+         * Obtiene Los estado dado un nombre de estado
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param["name"]
+         *
+         * @return \App\Models\EstadosMesa[]|bool
+         */
+        public function getEstadosMesaPorNombre($param){
+
+            if(!isset($param["name"])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = EstadosMesa::findFirst("name ='{$param["name"]}'");
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
+        }
+
+
+        /**
         *
         * Obtiene cuentas para una mesa
         *
@@ -524,7 +586,10 @@
                         ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")                        
                         ->leftJoin("App\Models\Pedidos","App\Models\Cuentas.id = p.cuenta_id","p")
                         ->where("m.id = {$param['mesa_id']}")
+                        ->andWhere("p.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
+                        ->groupBy(" App\Models\Cuentas.id ")
                         ->execute();
+
 
             if(!$result->count()) {
                 return array();
@@ -558,6 +623,36 @@
             return $arr;
 
         }
+
+
+        /**
+         * getMesaPorId
+         *
+         * @author Jorge Silva
+         *
+         *
+         * Trae un objeto mesa por un id en especifico
+         *
+         * @param $param
+         * @return Mesas|bool
+         */
+        public function getMesaPorId($param)
+        {
+            if (!isset($param["id"])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            } else {
+                $result = Mesas::findFirst("id = '{$param["id"]}'");
+
+                if (!$result->count()) {
+                    $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                    return false;
+                }
+            }
+
+            return $result;
+        }
+
 
         /**
          * setNewClient

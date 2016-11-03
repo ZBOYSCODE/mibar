@@ -6,6 +6,7 @@ use App\Business\AccessBSN;
 use App\Business\MeseroBSN;
 use App\Business\PedidoBSN;
 use App\Business\CajaBSN;
+use App\library\Constants\Constant;
 
 
 use App\Business\ProductoBSN;
@@ -19,6 +20,7 @@ class WaiterController extends ControllerBase
     private $meseroBsn;
     private $pedidoBsn;
     private $cajaBsn;
+    private $constant;
 
     private $ID_CATEGORY_BEBIDAS = 1;
     private $ID_CATEGORY_COMIDAS = 2;
@@ -29,6 +31,7 @@ class WaiterController extends ControllerBase
         $this->meseroBsn = new MeseroBSN();
         $this->pedidoBsn = new PedidoBSN();
         $this->cajaBsn   = new CajaBSN();
+        $this->constant = new Constant();
 
         $this->productoBsn = new ProductoBSN();
         $this->promocionBsn = new PromocionBSN();
@@ -100,14 +103,11 @@ class WaiterController extends ControllerBase
                 
                 $param['mesa_id'] = $this->request->getPost("table_id", "int");
 
-
-
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-             
-                $dataView['detalles'] =  $tablesDetails;
-                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
 
+                $dataView['detalles'] =  $tablesDetails;
+                $dataView['numeroMesa'] = reset($tablesDetails)['cuenta']->Mesas->numero;
 
                 $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
                 $dataView['table_id']    = $this->request->getPost("table_id", "int");
@@ -165,6 +165,7 @@ class WaiterController extends ControllerBase
                 
                 $cuenta_id = $post['cuenta'];
                 $param['cuenta_id'] = $cuenta_id;
+                $param['estado_id'] = 1; 
 
 
                 $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
@@ -229,11 +230,12 @@ class WaiterController extends ControllerBase
                     }
 
                 }
-                elseif(isset($post['pedidosNoValidados'])){
+
+                if(isset($post['pedidosNoValidados'])){
 
                      $pedidosNoValidados = $post['pedidosNoValidados'];
                      $resultCancelacion = $this->pedidoBsn->cancelOrders($pedidosNoValidados);
-
+                     
                      if(!$resultCancelacion){
 
                         $this->mifaces->addToMsg('warning','Los pedidos no han sido cancelados correctamente!');
@@ -241,35 +243,33 @@ class WaiterController extends ControllerBase
                     }
 
                 }
-                else {
-                    $this->mifaces->addToMsg('error','Error interno!');
+
+                if($resultValidacion || $resultCancelacion){
+
+                     $this->mifaces->addToDataView('resultValidation', 1);
+
+                }else{
+                    $this->mifaces->addToDataView('resultValidation', 0);
                 }
 
-                    if($resultValidacion || $resultCancelacion){
+                $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
+                
+                $param['mesa_id'] = $post['table_id'];
 
-                         $this->mifaces->addToDataView('resultValidation', 1);
-
-                    }else{
-                        $this->mifaces->addToDataView('resultValidation', 0);
-                    }
-
-                    $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
-                    
-                    $param['mesa_id'] = $post['table_id'];
-
-                    $tabObj = new MeseroBSN();
-                    $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-
-                    $dataView['detalles'] =  $tablesDetails;
-                    $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+                $tabObj = new MeseroBSN();
+                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+               
+                $dataView['detalles'] =  $tablesDetails;
+                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
 
 
-                    $view = "controllers/waiter/tables/details";
-                 
-                    $toRend = $this->view->getPartial($view, $dataView);
-                    $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+                $view = "controllers/waiter/tables/details";
+             
+                $toRend = $this->view->getPartial($view, $dataView);
+                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
 
             }
+
             else {
                 $this->mifaces->addToMsg('error','Error interno!');
             }
@@ -408,10 +408,6 @@ class WaiterController extends ControllerBase
      */
     public function createOrderAction($cuenta_id){
 
-        
-
-
-
         #js custom
         $this->assets->addJs('js/pages/menu.js');
 
@@ -452,6 +448,62 @@ class WaiterController extends ControllerBase
         
         #vista
         $this->view->pick("controllers/menu/_index_waiter");
+    }
+
+    /*
+    * BillDetails
+    *
+    *
+    * @author osanmartin
+    *
+    * Renderiza modal detalles cuenta via mifaces
+    *
+    */    
+    public function getPendingOrdersAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            if(isset($post['cuenta'])){
+
+                $view = "controllers/waiter/tables/pending_orders";
+
+                $param = [
+                    "nombre" => $this->constant->ESTADO_PEDIDO_PENDIENTE
+                ];
+
+                $pedidobsnObj = new PedidoBSN();
+                $status = $pedidobsnObj->getStatus($param);
+
+                $cuenta_id = $post['cuenta'];
+                $param['cuenta_id'] = $cuenta_id;
+                $param['estado_id'] = $status->id; 
+
+                $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
+                $cuenta         = $this->cajaBsn->getCuentaById($param);
+
+                $dataView['pedidosCuenta']  =  $pedidosCuenta;
+                $dataView['cuenta']         =  $cuenta;
+
+                $toRend = $this->view->getPartial($view, $dataView);
+
+                $this->mifaces->addToRend('table_modal_pending_orders_render',$toRend);
+
+            }else{
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
     }
 
 }

@@ -42,7 +42,7 @@ class FuncionarioMesa extends \Phalcon\Mvc\Model
 
     public function initialize()
     {
-        $this->belongsTo('funcionario_id', __NAMESPACE__.'\Funcionarios', 'id', array('alias' => 'Funcionarios'));
+        $this->belongsTo('funcionario_id', __NAMESPACE__.'\Funcionarios', 'id', ['alias' => 'Funcionarios']);
         $this->belongsTo('mesa_id', __NAMESPACE__.'\Mesas', 'id', array('alias' => 'Mesas'));
         $this->belongsTo('turno_id', __NAMESPACE__.'\Turnos', 'id', array('alias' => 'Turnos'));
 

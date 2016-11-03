@@ -8,6 +8,8 @@ use App\Business\ProductoBSN;
 
 use App\library\Constants\Constant;
 
+use App\Models\FuncionarioMesa;
+
 
 
 class BartenderController extends ControllerBase
@@ -224,7 +226,7 @@ class BartenderController extends ControllerBase
     *
     * @author osanmartin
     *
-    * Cambia el estado de un pedido
+    * Cambia el estado los pedidos a concretados
     *
     *
     */    
@@ -305,6 +307,76 @@ class BartenderController extends ControllerBase
 
         }
 
-    }        
+    }  
+
+
+
+    /**
+    * orderDetails
+    *
+    * @author osanmartin
+    *
+    * Muestra el detalle de un pedido
+    *
+    *
+    */    
+
+    public function orderDetailsAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $view = "controllers/bartender/tables/details";
+            $this->mifaces->newFaces();
+
+
+            if(isset($post['pedido'])){
+
+                $param['pedido_id'] = $post['pedido'];
+
+                $pedidoBsn = new PedidoBSN();
+
+                $result = $pedidoBsn->getPedido($param);
+
+                if($result){
+
+                    $pedido = $result;
+
+                    $dataView['pedido'] = $pedido;
+
+                    $datetime = new \DateTime($pedido->created_at);
+
+                    $dataView['fecha']  = $datetime->format('d-m-Y');
+                    $dataView['hora']  = $datetime->format('H:i');
+
+
+                    $dataView['mesero'] = $pedido->Cuentas->Mesas->FuncionarioMesa->getFirst()->Funcionarios; 
+
+                    $toRend = $this->view->getPartial($view, $dataView);
+
+                    $this->mifaces->addToRend('modal-content',$toRend);
+                
+                } else {
+
+                    $this->mifaces->addToMsg('danger','Error inesperado con el pedido.');
+
+                }
+                
+
+            } else{
+
+                $this->mifaces->addToMsg('danger','Error inesperado.');
+
+            }
+
+            $this->mifaces->run();
+
+        } else{
+
+            $this->defaultRedirect();
+
+        }
+
+    }           
 
 }

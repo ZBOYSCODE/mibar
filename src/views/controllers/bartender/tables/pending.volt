@@ -26,7 +26,7 @@
                             <p id="estado" class="description">{{ pedido.descripcion }}</p>
                             <p id="estado" class="description">{{ pedido.comentario }}</p>
                             <div class="row">
-                                <button type="button" class="btn btn-small btn-main pull-right table-details-button" data-callName="table-details-button" data-table="{{ pedido.id }}" data-url="bartender/tabledetails">Detalles</button>
+                                <button type="button" class="btn btn-small btn-main pull-right table-details-button pedido-details" data-callName="pedido-details" data-pedido="{{ pedido.id }}" data-url="bartender/orderDetails">Detalles</button>
                             </div>
                         </div>
 

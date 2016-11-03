@@ -19,6 +19,9 @@ class Constant extends Component
     public $ESTADO_PEDIDO_ENTREGADO    = "Entregado";
     public $ESTADO_PEDIDO_CONCRETADO    = "Concretado";
     public $ESTADO_PEDIDO_EN_PROCESO    = "En Proceso";
+    public $ESTADO_MESA_DISPONBLE       = "Disponible";
+    public $ESTADO_MESA_OCUPADA         = "Ocupada";
+    public $ESTADO_MESA_RESERVADA       = "Reservada";
 
     private $days_full	= array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
 
