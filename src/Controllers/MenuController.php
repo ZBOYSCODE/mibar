@@ -53,6 +53,10 @@ class MenuController extends ControllerBase
         $this->view->setVar("subcategorias", $subcategorias);
 
 
+        $this->view->setVar("nombre_cliente", $this->session->get("nombre") );
+        $this->view->setVar("numero_mesa", $this->session->get("mesa") );
+
+
         #vista
         $this->view->pick("controllers/menu/_index");
     }
@@ -257,7 +261,7 @@ class MenuController extends ControllerBase
 	        	$this->deleteAllPedidos();
 	        } else {
 
-	        	print_r($pedidos->error);
+	        	#print_r($pedidos->error);
 
 	        	$data['success'] = false;
 	        	$data['msg'] = $pedidos->error;
