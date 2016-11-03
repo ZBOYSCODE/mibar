@@ -66,9 +66,12 @@ class CajaBSN extends Plugin
         }
         $result = 0;
         $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
-        foreach ($pedidos as $var) {
-            $result = $result + $var->precio;
+        if($pedidos->count() != 0) {
+            foreach ($pedidos as $var) {
+                $result = $result + $var->precio;
+            }
         }
+
         return $result;
     }
 
@@ -189,5 +192,23 @@ class CajaBSN extends Plugin
         return $result;
     }
 
+    /**
+     * Trae la lista de productos asociados a una cuenta
+     * @param $param 'cuenta_id'
+     * @return array|bool Lista de objetos productos
+     */
+    public function getProductosCuenta($param) {
+        if (!isset($param['cuenta_id'])) {
+            $error[] = $this->errors->MISSING_PARAMETERS;
+            return false;
+        }
+
+        $productos = $this->pedidosBSN->getProductosByCuenta($param);
+        if(!$productos) {
+            $this->error[] = $this->errors->NO_RECORDS_FOUND;
+            return false;
+        }
+        return $productos;
+    }
 
 }

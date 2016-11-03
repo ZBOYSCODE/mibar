@@ -91,9 +91,16 @@ class CashBoxController extends ControllerBase
                     $subtotales[$var->id] = number_format($this->cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
                     $cantidadPedidos[$var->id] = $this->cajaBsn->getCantidadPedidoByCuenta($param);
                     $clientes[$var->id] = $this->clienteBsn->getClienteById(array('id' => $var->cliente_id));
-                    if ($clientes[$var->id] == false || $subtotales[$var->id] == false || $cantidadPedidos[$var->id] == false) {
+
+                    if(!$clientes[$var->id]){
                         $cuentas = false;
                         break;
+                    }
+                    if(!$subtotales[$var->id]){
+                        $subtotales[$var->id] = 0;
+                    }
+                    if (!$cantidadPedidos[$var->id]) {
+                        $cantidadPedidos[$var->id] = 0;
                     }
                 }
 
@@ -161,5 +168,42 @@ class CashBoxController extends ControllerBase
         else {
             $this->view->disable();
         }
+    }
+
+    public function pagarCuentaAction(){
+        if ($this->request->isAjax()) {
+            $this->mifaces->newFaces();
+            if (isset($_POST["cuenta_id"])) {
+                $dataView['productos'] = $this->cajaBsn->getProductosCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+                $dataView['subtotal'] = $this->cajaBsn->getSubTotalByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+                $dataView['cliente'] = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
+                $dataView['cuenta'] = $this->formatearNumeroCuenta($_POST["cuenta_id"]);
+                if ($dataView['productos'] == false
+                    or $dataView['subtotal'] == false
+                    or $dataView['cliente'] == false) {
+                    $this->mifaces->addToMsg('warning', 'Error inesperado, reintente más tarde.');
+                } else {
+                    $view = "controllers/cashbox/pagar/modal";
+
+                    $toRend = $this->view->getPartial($view, $dataView);
+
+                    $this->mifaces->addToRend('modal_pagar_render',$toRend);
+                }
+            }
+            else {
+                $this->mifaces->addToMsg('warning', 'Faltan parámetros.');
+            }
+            $this->mifaces->run();
+        }
+        else {
+            $this->view->disable();
+        }
+    }
+
+    private function formatearNumeroCuenta($cuenta_id) {
+        while (strlen($cuenta_id) <= 10) {
+            $cuenta_id = '0' . $cuenta_id;
+        }
+        return $cuenta_id;
     }
 }

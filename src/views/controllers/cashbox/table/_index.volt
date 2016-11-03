@@ -30,18 +30,18 @@
 
                             <p class="description">Total Pedidos: {{ cantidadPedidos[cuenta.id] }}</p>
                             <p class="description">Subtotal: ${{ subtotales[cuenta.id] }}</p>
-
+                             {% if subtotales[cuenta.id] > 0 %}
                             <div class="row">
 
                                 <span class="btn btn-small btn-main pull-right table-details-button"
-                                      data-callName="detallePedido"
-                                      data-url="{{ url("cashbox/detallepedidos") }}"
+                                      data-callName="pagarCuenta"
+                                      data-url="{{ url("cashbox/pagarCuenta") }}"
                                       data-cuenta="{{ cuenta.id }}">
                                     Detalles
                                 </span>
 
                             </div>
-
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -52,3 +52,5 @@
 </div>
 
 <div id="modal_cuenta_render"></div>
+
+<div id="modal_pagar_render"></div>
