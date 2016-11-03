@@ -14,9 +14,7 @@
 					<input type="text" id='nombre-cliente' class='form-control'>
 					<div class="box-errors">
 						<p class='error' id='error-nombre-cliente'></p>
-					</div>
-					
-						
+					</div>	
 			    </div>
 			    <div class="modal-footer card">
 			    	<div class="row">
