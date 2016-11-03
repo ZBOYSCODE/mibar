@@ -137,11 +137,23 @@ body, html {
   min-width: 120px;
 }
 
+.btn-round{
+  border-radius: 50%;
+}
+
 .btn-delete{
   padding: 3px 7px;
   border-radius: 30px;
   font-size: 12px;
   background-color: #c12020;
+}
+
+.create-user-button{
+  width: 40px;
+  height: 35px;
+}
+#store-cliente{
+  margin-left: 10px;
 }
 
 /* switches */

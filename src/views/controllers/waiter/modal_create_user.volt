@@ -21,6 +21,7 @@
 
 						<div class='col-xs-12'>
 							<button id="store-cliente" type="button" data-url="{{ url('waiter/storeClient') }}" data-callName="store-cliente-success" data-table='{{ mesa_id }}' data-cuenta='{{ cuenta_id }}' class="btn btn-main pull-right">CREAR</button>
+							<button  class="btn btn-secondary" class="close modal-close" data-dismiss="modal">CERRAR</button>
 						</div>
 			    	</div>
 				    	

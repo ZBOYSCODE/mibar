@@ -1,13 +1,16 @@
 
    
     <div class="card">
-        <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ numeroMesa }}</h4>
-    </div>
-
-    <div class="card text-center">
-        <a href="#" id='create-user' data-url="{{ url('waiter/createUser') }}" data-callName="create-user-modal" data-table='{{ table_id }}' class="btn btn-main btn-width">
-            <i class="fa fa-user-plus"></i>
-        </a>
+	    <div class="row">
+	    	<div class="col-xs-6 col-sm-6">
+	    		 <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ numeroMesa }}</h4>
+	    	</div>
+	    	<div class="col-xs-6 col-sm-6">
+	    		<h4 class="pull-right"><a href="#" id='create-user' data-url="{{ url('waiter/createUser') }}" data-callName="create-user-modal" data-table='{{ table_id }}' class="btn btn-main btn-round create-user-button">
+	            <i class="fa fa-user-plus"></i>
+	        </a></h4>
+	    	</div>
+	    </div>  
     </div>
 
     {% if detalles == false %}
