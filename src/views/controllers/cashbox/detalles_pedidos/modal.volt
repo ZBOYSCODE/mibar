@@ -83,7 +83,11 @@
 							<span class="precio-total"><i class="fa fa-usd"></i> {{ total }}</span>
 						</div>
 						<div class='col-xs-7'>
-							<button id="Send-Products" type="button" class="btn btn-main pull-right">Ir a Pagar</button>
+							<!-- <button id="Send-Products" type="button" class="btn btn-main pull-right">Ir a Pagar</button> -->
+							<span id="btn-pagar" class="btn btn-small btn-main pull-right table-details-button"
+							data-callName="pagarCuenta"
+							data-url="{{ url("cashbox/pagarcuenta") }}"
+							data-cuenta="{{ cuenta.id }}"></span>
 						</div>
 			    	</div>
 				    	
