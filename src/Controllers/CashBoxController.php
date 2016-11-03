@@ -78,49 +78,50 @@ class CashBoxController extends ControllerBase
         #js custom
         $this->assets->addJs('js/pages/cashbox.js');
 
-        if($mesa_id == null or !is_numeric($mesa_id)) {
-            $this->contextRedirect('cashbox');
-        }
+        if($mesa_id != null and is_numeric($mesa_id)) {
 
-        $cuentas = $this->cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
 
-        if ($cuentas) {
-            foreach ($cuentas as $var) {
-                $param = array('cuenta_id' => $var->id);
-                $subtotales[$var->id] = number_format($this->cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
-                $cantidadPedidos[$var->id] = $this->cajaBsn->getCantidadPedidoByCuenta($param);
-                $clientes[$var->id] = $this->clienteBsn->getClienteById(array('id' => $var->cliente_id));
-                if($clientes[$var->id] == false || $subtotales[$var->id] == false || $cantidadPedidos[$var->id] == false) {
-                    $cuentas = false;
-                    break;
+            $cuentas = $this->cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
+
+            if ($cuentas) {
+                foreach ($cuentas as $var) {
+                    $param = array('cuenta_id' => $var->id);
+                    $subtotales[$var->id] = number_format($this->cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
+                    $cantidadPedidos[$var->id] = $this->cajaBsn->getCantidadPedidoByCuenta($param);
+                    $clientes[$var->id] = $this->clienteBsn->getClienteById(array('id' => $var->cliente_id));
+                    if ($clientes[$var->id] == false || $subtotales[$var->id] == false || $cantidadPedidos[$var->id] == false) {
+                        $cuentas = false;
+                        break;
+                    }
                 }
+
+                $this->view->setVar('cuentas', $cuentas);
+
+            } else {
+                $this->view->setVar('cuentas', false);
+
             }
 
-            $this->view->setVar('cuentas', $cuentas);
+            $mesaObj = new MeseroBSN();
 
+            $this->view->setVar('subtotales', $subtotales);
+            $this->view->setVar('cantidadPedidos', $cantidadPedidos);
+            $this->view->setVar('clientes', $clientes);
+            $this->view->pick('controllers/cashbox/_index');
+            $param = [
+                "id" => $mesa_id
+            ];
+
+            $mesa = $mesaObj->getMesaPorId($param);
+
+            $this->view->setVar('subtotales', $subtotales);
+            $this->view->setVar('cantidadPedidos', $cantidadPedidos);
+            $this->view->setVar('clientes', $clientes);
+            $this->view->setVar('mesa', $mesa);
+            $this->view->pick('controllers/cashbox/_index');
         } else {
-            $this->view->setVar('cuentas', false);
-
+            $this->contextRedirect('cashbox');
         }
-
-        $mesaObj = new MeseroBSN();
-
-        $this->view->setVar('subtotales', $subtotales);
-        $this->view->setVar('cantidadPedidos', $cantidadPedidos);
-        $this->view->setVar('clientes', $clientes);
-        $this->view->pick('controllers/cashbox/_index');
-        $param = [
-            "id" => $mesa_id
-        ];
-
-        $mesa = $mesaObj->getMesaPorId($param);
-
-        $this->view->setVar('subtotales', $subtotales);
-        $this->view->setVar('cantidadPedidos', $cantidadPedidos);
-        $this->view->setVar('clientes', $clientes);
-        $this->view->setVar('mesa', $mesa);
-        $this->view->pick('controllers/cashbox/_index');
-
     }
 
     public function detallepedidosAction() {
