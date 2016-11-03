@@ -15,6 +15,10 @@
     namespace App\Business;
     
     use Phalcon\Mvc\User\Plugin;
+
+    use App\Business\AccessBSN;
+
+    use App\Models\Clientes;
     use App\Models\Mesas;
     use App\Models\FuncionarioMesa;
     use App\Models\Cuentas;
@@ -39,6 +43,8 @@
         private $ESTADO_CUENTA_PENDIENTE = 1;
         private $ESTADO_MESA_ACTIVA = 1;
         private $ESTADO_PEDIDO_PENDIENTE = 1;
+        private $ESTADO_PEDIDO_CANCELADO = 6;
+        PRIVATE $ESTADO_MESA_OCUPADA = 2;
 
         public $estado_cancelado = 6;
 
@@ -68,6 +74,45 @@
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
                     ->execute();
 
+            
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            // recorremos la lista de mesas
+            // y le insertamos la cuenta asociada
+            $list_mesas = array();
+            foreach ($result as $mesa) {
+
+                $mesa->cuenta_id = $this->getCuentaByMesa($mesa->id);
+                array_push($list_mesas, $mesa );
+            }
+
+            return $list_mesas;
+        }
+
+        /**
+         * getMesasPorEstado
+         *
+         * @author Jorge Silva
+         *
+         * trae todas las mesas dependiendo de un estado
+         *
+         * @param array $param["estado_mesa_id"] int
+         * @return bool| Object Mesas
+         */
+        public function getMesasPorEstado($param){
+            if(!isset($param['estado_mesa_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = Mesas::query()
+                ->leftJoin("App\Models\EstadosMesa","App\Models\Mesas.estado_mesa_id = estado.id","estado")
+                ->where("estado.id = {$param['estado_mesa_id']}")
+                ->execute();
+
 
             if(!$result->count()){
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
@@ -75,9 +120,39 @@
             }
 
             return $result;
-
         }
 
+        /**
+         * getCuentaByMesa
+         *
+         * retorna la cuenta activa asociada a una mesa
+         *
+         * @author Sebastián Silva
+         * 
+         * @param integer $mesa_id
+         * @return integer
+         */
+        private function getCuentaByMesa($mesa_id) {
+
+            if(!isset($mesa_id)){
+                return 0;
+            }
+
+            $cuenta = Cuentas::find(array(
+                "estado = 1 AND mesa_id = {$mesa_id} ",
+                'order' => 'id desc'
+            ));
+
+            if(!$cuenta->count())
+                return 0;
+
+            $list_cuentas = array();
+
+            foreach ($cuenta as $c) {
+                array_push($list_cuentas, $c->id);    
+            }
+            return implode('-', $list_cuentas);
+        }
 
         /**
         *
@@ -160,6 +235,7 @@
                     ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->andWhere("App\Models\Pedidos.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
                     ->execute();
 
 
@@ -261,14 +337,14 @@
                     $pedido->estado_id = 5;
                     if ($pedido->save() === false) {
 
-                        $this->error = $this->errors->$FILE_WRITE_FAIL;
+                        $this->error = $this->errors->FILE_WRITE_FAIL;
                         return false;
                     }else{
                         return true;
                     }
                 }
             }else{
-                $this->error = $this->errors->$MISSING_PARAMETERS;
+                $this->error = $this->errors->MISSING_PARAMETERS;
                 return false;
 
             }
@@ -304,7 +380,7 @@
                         $bandera = "a";
                         $productoPromo->estado = 5;
                         if ($productoPromo->save() === false) {
-                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           $this->error = $this->errors->FILE_WRITE_FAIL;
                            return false;
                        }
                    }
@@ -327,7 +403,7 @@
 
                         $productoPromo->estado = 5;
                         if ($productoPromo->save() === false) {
-                           $this->error = $this->errors->$FILE_WRITE_FAIL;
+                           $this->error = $this->errors->FILE_WRITE_FAIL;
                            return false;
                        }
                     }
@@ -339,7 +415,7 @@
                 }
 
             }else{
-                $this->error = $this->errors->$MISSING_PARAMETERS;
+                $this->error = $this->errors->MISSING_PARAMETERS;
                 return false;
             }
 
@@ -400,7 +476,7 @@
 
             // verificamos que se actualice correctamente
             if($cuenta->save() == false ) {
-                $this->error = $this->errors->$FILE_WRITE_FAIL;
+                $this->error = $this->errors->FILE_WRITE_FAIL;
                 $this->db->rollback();
                 return false;
             }
@@ -437,11 +513,41 @@
         * @return lista de objetos estados mesa asociados
         *
         */
-
         public function getEstadosMesa(){
 
 
             $result = EstadosMesa::find();
+
+            if(!$result->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $result;
+
+        }
+
+
+        /**
+         * getEstadosMesa
+         *
+         * Obtiene Los estado dado un nombre de estado
+         *
+         * @author Jorge Silva
+         *
+         * @param array $param["name"]
+         *
+         * @return \App\Models\EstadosMesa[]|bool
+         */
+        public function getEstadosMesaPorNombre($param){
+
+            if(!isset($param["name"])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $result = EstadosMesa::findFirst("name ='{$param["name"]}'");
 
             if(!$result->count()){
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
@@ -480,15 +586,20 @@
                         ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")                        
                         ->leftJoin("App\Models\Pedidos","App\Models\Cuentas.id = p.cuenta_id","p")
                         ->where("m.id = {$param['mesa_id']}")
+                        ->andWhere("p.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
+                        ->groupBy(" App\Models\Cuentas.id ")
                         ->execute();
 
-            if(!$result->count()){
-                $this->error[] = $this->errors->NO_RECORDS_FOUND;
-                return false;
+
+            if(!$result->count()) {
+                return array();
             }
 
-
             $cuentas = $this->getDetalleMesa($param);
+
+            if(!$cuentas) {
+                return array();
+            }
 
             foreach ($cuentas as $val) {
                 
@@ -511,7 +622,157 @@
 
             return $arr;
 
-        }  
+        }
+
+
+        /**
+         * getMesaPorId
+         *
+         * @author Jorge Silva
+         *
+         *
+         * Trae un objeto mesa por un id en especifico
+         *
+         * @param $param
+         * @return Mesas|bool
+         */
+        public function getMesaPorId($param)
+        {
+            if (!isset($param["id"])) {
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            } else {
+                $result = Mesas::findFirst("id = '{$param["id"]}'");
+
+                if (!$result->count()) {
+                    $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                    return false;
+                }
+            }
+
+            return $result;
+        }
+
+
+        /**
+         * setNewClient
+         * 
+         * asigna un nuevo cliente a una mesa disponible
+         * en caso de no haber una cuenta asociada se creara una
+         *
+         * @author  Sebastián Silva C
+         *
+         * @param   array $param nombre de usuario
+         * @return  
+         */
+        public function setNewClient($param) {
+
+            $this->db->begin();
+
+            $cliente = new Clientes();
+
+            $cliente->nombre            = $param['nombre'];
+            $cliente->tipo_cliente_id   = 2;
+
+
+            if($cliente->save() == false) {
+
+                foreach ($cliente->getMessages() as $message) {
+                    $this->error[] = $message->getMessage();
+                }
+
+                $this->db->rollback();
+                return false;
+            }
+            
+            # em¡n caso de que no exista una cuenta la creamos para el cliente
+
+            $access = new AccessBSN();
+
+            $cuenta = $access->initCuenta($cliente);
+
+            if(!$cuenta) {
+
+                $this->error[] = $this->errors->WS_CONNECTION_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+            $cuenta_id = $cuenta->id;
+
+            
+            # seteamos la mesa a la cuenta
+            $cuenta             = Cuentas::findFirstById($cuenta_id);
+            $cuenta->mesa_id    = $param['table_id'];
+
+            if( $cuenta->save() == false ) {
+
+                $this->error[] = $this->errors->WS_CONNECTION_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+            # cambiamos el estado de la mesa
+
+            $mesa = Mesas::findFirstById($param['table_id']);
+
+            $mesa->estado_mesa_id = $this->ESTADO_MESA_OCUPADA;
+
+            if( $mesa->save() == false ) {
+
+                $this->error[] = $this->errors->WS_CONNECTION_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+
+            
+
+            $this->db->commit();
+
+            return true;
+        }
+
+
+        public function getTableByCuenta($param){
+
+            if(!isset($param['cuenta_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $cuenta = Cuentas::findFirst(array(
+                " estado = 1 AND id = {$param{'cuenta_id'}}"
+            ));
+
+            if(!$cuenta){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $cuenta->Mesas;
+
+        }
+
+        public function getClientByCuenta($param){
+
+            if(!isset($param['cuenta_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $cuenta = Cuentas::findFirst(array(
+                " estado = 1 AND id = {$param{'cuenta_id'}}"
+            ));
+
+            if(!$cuenta){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $cuenta->Clientes;
+
+        }
 
 
     }

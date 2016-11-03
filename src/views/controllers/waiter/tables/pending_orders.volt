@@ -1,10 +1,10 @@
-<div id="bill-details" class="menu-products-list-modal modal fade" role="dialog">
+<div id="pending_orders" class="menu-products-list-modal modal fade" role="dialog">
 	    <div class="modal-dialog">
 	    <!-- Modal content-->
 		    <div class="modal-content">
 			    <div class="modal-header card">
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
-			        <h4 class="modal-title"><i class="fa fa-list-alt"></i>PEDIDOS CLIENTE</h4>
+			        <h4 class="modal-title"><i class="fa fa-list-alt"></i>PEDIDOS PENDIENTES</h4>
 			    </div>
 			     <div class="row user-details card">
 			    	<div class="col-xs-2 col-md-2">
@@ -17,26 +17,27 @@
 			    		<p>Mesa: {{ cuenta.Mesas.numero }}</p>
 			    	</div>
 			    </div>
-			    <div class="modal-body">
+			    
 
 			    {% if pedidosCuenta == false %}
 
+                <div class="modal-body">
 
 		            <div class="card text-center">
-		               <h3>No hay Pedidos por Validar.</h3>
+		               <h3>No hay Pedidos Pendientes.</h3>
 		            </div>
-		            </div>
-				    </div>
-
-					<div class="menu-footer">
-						<div class="row menu-footer-buttons card">
-							<button  class="btn btn-main" class="close modal-close" data-dismiss="modal">CERRAR</button>
-						</div>
-					</div>	
+		        </div>
+				   
+				<div class="menu-footer">
+					<div class="row menu-footer-buttons card">
+						<button  class="btn btn-main" class="close modal-close" data-dismiss="modal">CERRAR</button>
+					</div>
+				</div>	
 
 
 			    {% else %}
 
+			    <div class="modal-body">
 			    	<form id="form-validar">
 						<div class="lista_pedidos">
 
@@ -78,13 +79,11 @@
 
 			<div class="menu-footer">
 				<div class="row menu-footer-buttons card">
-					<button id="btn-validar-pedidos" class="btn btn-main btnAjax" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos" data-table="{{ cuenta.mesa_id }}">VALIDAR PEDIDOS</button>
+					<button id="btn-validar-pedidos" class="btn btn-main btnAjax" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos" data-table="{{ cuenta.mesa_id }}">CONCRETAR PEDIDOS</button>
 				</div>
 			</div>	
 		    {% endif %}
 	    </div>
-
-
 	</div>
 
 

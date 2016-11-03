@@ -8,12 +8,9 @@
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> Caja - Detalles de Pedido</h4>
 			    </div>
 			     <div class="row user-details card">
-			    	<div class="col-xs-6 col-md-6">
+			    	<div class="col-xs-12 col-md-12">
 			    		<p>Cliente: {{ cliente.nombre  }} {% if cliente.apellido != null %}{{ cliente.apellido }}{% endif %}</p>
 			    	</div>
-					 <div class="col-xs-6 col-md-6">
-						 <p>Mesa: </p>
-					 </div>
 			    </div>
 			    <div class="modal-body">
 			      <!-- Products -->

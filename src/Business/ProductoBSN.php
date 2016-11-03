@@ -236,6 +236,10 @@
                 }
             }
 
+            if(!count($list)){
+                return array();
+            }
+
             $list = implode(',', $list);
 
             $find = "id IN (".$list.")";

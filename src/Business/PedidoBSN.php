@@ -41,6 +41,7 @@
 
         private $ESTADO_PEDIDO_VALIDADO = 2;
         private $ESTADO_PEDIDO_CANCELADO = 6;
+        private $ESTADO_PEDIDO_CONCRETADO = 3;
 
         private $promocionBsn;
         private $productoBsn;
@@ -496,7 +497,7 @@
          * getOrdersByCategoryStatus
          *
          *
-         * Retorna una lista de pedidos dada una catetoria y un estado en particular
+         * Retorna una lista de pedidos dada una categoria y un estado en particular
          * en caso de error retorna false
          *
          * @author Jorge Silva
@@ -518,19 +519,48 @@
 
 
 
-            $pedidos = Pedidos::query()
+            $pedidosProd = Pedidos::query()
                 ->leftJoin('App\Models\Productos', 'prd.id   = App\Models\Pedidos.producto_id',    'prd')
+
                 ->leftJoin('App\Models\SubcategoriaProductos', 'scp.id   = prd.subcategoria_id',    'scp')
                 ->leftJoin('App\Models\CategoriaProductos', 'cat.id   = scp.categoria_producto_id',    'cat')
                 ->where("cat.id = '{$param["category_id"]}' ")
                 ->andWhere("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->andWhere("App\Models\Pedidos.promocion_id is NULL")
+                ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
+            $pedidosPromo = Pedidos::query()
+                ->leftJoin('App\Models\Promociones','prm.id  =
+                App\Models\Pedidos.promocion_id',   'prm')            
+                ->where("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
+                ->andWhere("App\Models\Pedidos.producto_id is NULL")
+                ->orderBy("App\Models\Pedidos.created_at ASC")
+                ->execute();
 
+            if($pedidosProd->count() OR 
+               $pedidosPromo->count()){
 
-            if($pedidos->count()>0){
+                foreach ($pedidosProd as $val) {
 
-                return $pedidos;
+                    $val->nombre = $val->Productos->nombre;
+                    $val->descripcion = $val->Productos->descripcion;
+                    $val->avatar = $val->Productos->avatar;
+                    $arr[$val->id] = $val;
+
+                }
+
+                foreach ($pedidosPromo as $key => $val) {
+
+                    $val->nombre = $val->Promociones->nombre;
+                    $val->descripcion = $val->Promociones->descripcion;
+                    $val->avatar = $val->Promociones->avatar;
+                    $arr[$val->id] = $val;
+
+                }
+
+                return $arr;
+
 
             }else{
 
@@ -556,12 +586,29 @@
                 return false;
             }
 
-            $pedidos = Pedidos::find(
-                array(
-                    " cuenta_id = {$param['cuenta_id']} ",
-                    "order" => "id DESC"
-                )
-            );
+            if(isset($param['estado_id'])){
+
+                $pedidos = Pedidos::find(
+                    array(
+                        " cuenta_id = {$param['cuenta_id']} AND 
+                        estado_id = {$param['estado_id']} ",
+                        "order" => "id DESC"
+                    )
+                );
+
+            } else {
+
+                $pedidos = Pedidos::find(
+                    array(
+                        " cuenta_id = {$param['cuenta_id']}" ,
+
+                        "order" => "id DESC"
+                    )
+                );
+
+            }
+
+
 
 
             if( $pedidos->count() == 0) {
@@ -670,7 +717,6 @@
         public function cancelOrders($param){
 
             $this->db->begin();
-
 
             if(!count($param)){
 
@@ -782,6 +828,98 @@
 
             return $status;
         }
+
+
+        /**
+        *
+        * Concreta el pedido de parte del Barman
+        *
+        * Actualiza el estado de un pedido a concretado
+        *
+        * @author osanmartin
+        *
+        * @param $param['pedido_id'] : ID de pedido
+        *
+        * @return boolean
+        *
+        */
+
+        public function concretarPedido($param){
+
+            if(!isset($param['pedido_id'])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+
+            $paramPedido['pedido_id'] = $param['pedido_id'];
+            $paramPedido['estado_id']    = $this->ESTADO_PEDIDO_CONCRETADO;
+
+            $result  = $this->updatePedido($paramPedido);
+
+            if(!$result)
+                return false;
+
+            return true;
+
+        }
+
+        /**
+        *
+        * getPedido
+        *
+        * Obtiene un pedido
+        *
+        * @author osanmartin
+        *
+        * @param $param['pedido_id'] : ID de pedido
+        *
+        * @return boolean
+        *
+        */        
+
+        public function getPedido($param) {
+
+
+            if(!isset($param['pedido_id'])){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            $result = Pedidos::findFirstById($param['pedido_id']);
+
+
+            if(!$result){
+
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+
+            }
+
+            if(isset($result->Productos->id)){
+
+                $result->nombre = $result->Productos->nombre;
+                $result->descripcion = $result->Productos->descripcion;
+                $result->avatar = $result->Productos->avatar;
+
+            } else if(isset($result->Promociones->id)) {
+
+                $result->nombre = $result->Promociones->nombre;
+                $result->descripcion = $result->Promociones->descripcion;
+                $result->avatar = $result->Promociones->avatar;
+
+            }
+
+            return $result;
+
+        }
+
+
+
     }
 
 

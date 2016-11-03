@@ -5,13 +5,25 @@ namespace App\Controllers;
 
 use App\Business\CajaBSN;
 use App\Business\ClienteBSN;
-use App\Models\Clientes;
-use App\Models\Mesas;
+use App\Business\MeseroBSN;
+use App\library\Constants\Constant;
+
 
 class CashBoxController extends ControllerBase
 {
     private $cajaBsn;
+
     private $clienteBsn;
+
+    private $constant;
+
+    /**
+     * initialize
+     *
+     * @author Jorge Silva
+     *
+     * inicializa la clase
+     */
 
     public function initialize()
     {
@@ -19,29 +31,60 @@ class CashBoxController extends ControllerBase
         parent::initialize();
         $this->cajaBsn = new CajaBSN();
         $this->clienteBsn = new ClienteBSN();
+        $this->constant = new Constant();
     }
 
+
+    /**
+     * indexAction
+     *
+     * @author Jorge Silva
+     *
+     * Muestra la lista mesas que estan con cuentas activas
+     * metodo de tipo get
+     *
+     */
     public function indexAction() {
 
-        $mesas = Mesas::find();
+        #js custom
+        $this->assets->addJs('js/pages/cashbox.js');
+
+
+        $meseroBsn = new MeseroBSN();
+
+        #traemos el estado de mesa ocupada
+        $paramStatus = [
+            "name" => $this->constant->ESTADO_MESA_OCUPADA
+        ];
+
+        $status = $meseroBsn->getEstadosMesaPorNombre($paramStatus);
+
+
+        #traemos las mesas por estado ocupado (las que tienen cuentas)
+        $param = [
+            "estado_mesa_id" => $status->id
+        ];
+
+        $mesas = $meseroBsn->getMesasPorEstado($param);
+
+
         $this->view->setVar('mesas', $mesas);
-        $this->view->pick('controllers/cashbox/_index');
+        $this->view->pick('controllers/cashbox/_index_tables');
 
     }
+
 
     public function tableAction($mesa_id = null){
         #js custom
         $this->assets->addJs('js/pages/cashbox.js');
 
-
         if($mesa_id == null or !is_numeric($mesa_id)) {
             $this->contextRedirect('cashbox');
         }
-        //$errors = array();
 
         $cuentas = $this->cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
-        if($cuentas) {
 
+        if ($cuentas) {
             foreach ($cuentas as $var) {
                 $param = array('cuenta_id' => $var->id);
                 $subtotales[$var->id] = number_format($this->cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
@@ -57,18 +100,27 @@ class CashBoxController extends ControllerBase
 
         } else {
             $this->view->setVar('cuentas', false);
+
         }
-        /*foreach ($this->cajaBsn->error as $err) {
-            $errors[] = $err;
-        }
-        foreach ($this->clienteBsn->error as $err) {
-            $errors[] = $err;
-        }
-        $this->view->setVar('errores', $errors);*/
+
+        $mesaObj = new MeseroBSN();
+
         $this->view->setVar('subtotales', $subtotales);
         $this->view->setVar('cantidadPedidos', $cantidadPedidos);
         $this->view->setVar('clientes', $clientes);
         $this->view->pick('controllers/cashbox/_index');
+        $param = [
+            "id" => $mesa_id
+        ];
+
+        $mesa = $mesaObj->getMesaPorId($param);
+
+        $this->view->setVar('subtotales', $subtotales);
+        $this->view->setVar('cantidadPedidos', $cantidadPedidos);
+        $this->view->setVar('clientes', $clientes);
+        $this->view->setVar('mesa', $mesa);
+        $this->view->pick('controllers/cashbox/_index');
+
     }
 
     public function detallepedidosAction() {
