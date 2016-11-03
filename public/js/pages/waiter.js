@@ -1,6 +1,6 @@
+var delete_state;
+
 $(document).on('ready', function() {
-
-
 
 
 	$('.table-details-button').on('click',function(e){
@@ -212,6 +212,7 @@ $(document).on('ready', function() {
         $.callAjax(dataIn, url, $(this)); 
     });
 
+
     $(document).on('click','#btn-entregar-pedidos',function(e){
 
         var url = $(this).data('url');
@@ -234,9 +235,28 @@ $(document).on('ready', function() {
         e.preventDefault();
 
     });
+    
+    $(document).on('click', '#delete-cuenta', function(e){
+
+        e.preventDefault();
+
+        var cuenta_id   = $(this).attr('data-cuenta');
+        var url         = $(this).attr('data-url');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta_id',   cuenta_id);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this)); 
+
+
+    });
+
+});
 
 	
-});
+
 
   /* Procedimientos Post Ajax Call */
 $(document).ajaxComplete(function(event,xhr,options){
@@ -265,19 +285,29 @@ $(document).ajaxComplete(function(event,xhr,options){
             closeCreateUserModal();
         }  
 
-         if (options.callName == 'pedidos-pendientes'){
-
+        if (options.callName == 'pedidos-pendientes'){
             openPendingOrdersModal();
+
         }  
 
         if(options.callName == "btn-entregar-pedidos"){
             closePendingOrdersModal();
 
          }
+
+
+        if(options.callName == 'delete-cuenta-button'){
+            deleteCuenta();
+        }
          
     }
 
 }); 
+
+function deleteCuenta() {
+    
+    console.log(delete_state);
+}
 
 function openTableDetailsModal(){
 

@@ -1,7 +1,7 @@
 
    
     <div class="card">
-        <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ Mesa.numero }}</h4>
+        <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ numeroMesa }}</h4>
     </div>
 
     <div class="card text-center">
@@ -29,7 +29,9 @@
     	        </div>
     	        <div class="col-xs-8 col-sm-8">
     	            <div class="table-item-details">
-    	                <button type="button" class="btn btn-main btn-delete btn-sm table-details-button" data-callName="table-details-button" data-url="{{ url('waiter/tableDetails') }}">Eliminar</button>
+
+    	                <button type="button" id='delete-cuenta' class="btn btn-main btn-delete btn-sm table-details-button" data-callName="delete-cuenta-button" data-url="{{ url('waiter/deleteCuenta') }}">Eliminar</button>
+
 
     	                <p class="description"><b>Cliente: </b>{{ detalle['cuenta'].Clientes.nombre ~ " " ~ detalle['cuenta'].Clientes.apellido }}</p>
     	                <p class="description"><b>N° Pedidos: </b>{{ detalle['cantidad'] }}</p>
@@ -40,10 +42,10 @@
     	    <div class="table-item-footer">
 
 
-{#
-				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Detalles</button>
-                <button type="button" class="btn btn-main btn-width" id='crear-pedido' data-callName="crear-pedido-button" data-url="{{ url('waiter/createOrder') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Crear pedido</button>
- #}
+                {#
+				    <button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Detalles</button>
+                    <button type="button" class="btn btn-main btn-width" id='crear-pedido' data-callName="crear-pedido-button" data-url="{{ url('waiter/createOrder') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Crear pedido</button>
+                #}
 
                 <a href="{{ url('waiter/createOrder') }}/{{ detalle['cuenta'].id }}" class='btn btn-main btn-width'>Crear pedido</a>
 

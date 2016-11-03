@@ -91,7 +91,6 @@ class WaiterController extends ControllerBase
     * Renderiza Detalles Mesa via mifaces
     *
     */
-
     public function tableDetailsAction($table_id) {
 
             /**
@@ -556,6 +555,7 @@ class WaiterController extends ControllerBase
             }
             
             $this->mifaces->run();
+
         } else{
 
             $this->view->disable();
@@ -563,6 +563,52 @@ class WaiterController extends ControllerBase
         }
     }
 
+    /**
+     * deleteCuentaAction
+     *
+     * @author Sebastián Silva
+     */
+    public function deleteCuentaAction(){
+
+        if($this->request->isAjax()){
+
+            $cuenta_id = $this->request->getPost("cuenta_id", "int");
+
+            
+            $this->mifaces->newFaces();
+
+            if( !empty($cuenta_id) ){
+
+
+
+                if( $this->meseroBsn->deleteCuenta($cuenta_id) ) {
+
+                    $this->mifaces->addToJsonView('delete_state', 1 );
+                } else {
+
+                    $this->mifaces->addToJsonView('delete_state', 0 );
+                }
+
+                
+
+
+                $this->mifaces->addToMsg('success','Cuenta eliminada correctamente.');
+
+            }else{
+
+                $this->mifaces->addToJsonView('delete_state', 0 );
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+        
+        } else{
+
+            $this->view->disable();
+
+        }
+    }
 
 }
 
