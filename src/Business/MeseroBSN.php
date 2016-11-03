@@ -184,13 +184,9 @@
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
                     ->andWhere("App\Models\Pedidos.estado_id = {$this->ESTADO_PEDIDO_PENDIENTE}")
+                    ->groupBy(" m.id ")
                     ->execute();
 
-
-            if(!$result->count()){
-                $this->error[] = $this->errors->NO_RECORDS_FOUND;
-                return false;
-            }
 
             $mesas = $this->getMesas($param);
             $pedidosPendientes = $result;
@@ -203,9 +199,11 @@
 
             foreach ($pedidosPendientes as $key => $val) {
 
-                if(isset($arr[$val->mesa_id]))
-                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+                if(isset($arr[$val->mesa_id]) AND 
+                $val->cantidad_pedidos != 0){
 
+                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+                }
             }
 
             return $arr;
@@ -239,6 +237,7 @@
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
                     ->andWhere("App\Models\Pedidos.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
+                    ->groupBy(" m.id ")
                     ->execute();
 
 

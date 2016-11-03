@@ -15,6 +15,7 @@
 
     use App\Models\Clientes;
     use App\Models\Cuentas;
+    use App\Models\Mesas;
 
 	use Phalcon\Mvc\User\Plugin;
 
@@ -113,9 +114,12 @@
          */
         public function initCuenta(\App\Models\Clientes $cliente) {
 
+
+
             $cuenta = new Cuentas();
 
             $cuenta->cliente_id = $cliente->id;
+            $cuenta->mesa_id = $this->session->get('table_id_tmp');
             $cuenta->estado = $this->SIN_PAGAR;
 
 
@@ -140,10 +144,10 @@
          */
         private function initSession(\App\Models\Clientes $cliente, \App\Models\Cuentas $cuenta) {
 
-            if($this->session->get('table_id_tmp') !== null)
-                $mesa = $this->session->get('table_id_tmp');
-            else
-                $mesa = 1; // NUMERO PRUEBA
+            
+            $mesa_id = $this->session->get('table_id_tmp');
+            $mesa = Mesas::findFirstById($mesa_id);
+           
 
             $this->session->set('auth-identity', array(
 
@@ -151,7 +155,8 @@
                 'rol'       => $this->ROL_CLIENTE,
                 'cuenta'    => $cuenta->id,
                 'nombre'    => ucwords( strtolower( $cliente->nombre." ".$cliente->apellido ) ),
-                'mesa'      =>  $mesa
+                'mesa'      =>  $mesa->numero,
+                'mesa_id'   =>  $mesa_id
 
             ));
 
