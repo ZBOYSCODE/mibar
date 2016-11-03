@@ -192,6 +192,29 @@ $(document).on('ready', function() {
         $.callAjax(dataIn, url, $(this)); 
     });
 
+    $(document).on('click','#btn-entregar-pedidos',function(e){
+
+        var url = $(this).data('url');
+        var table_id = $(this).data('table');
+        
+        var dataIn = new FormData();
+
+        $('.checkPedido').each(function(){
+
+            if($(this).is(':checked')){
+                dataIn.append('pedidosValidados[]', $(this).val());   
+            } 
+        });  
+
+        dataIn.append('table_id',table_id);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));
+        
+        e.preventDefault();
+
+    });
+
 	
 });
 
@@ -226,6 +249,11 @@ $(document).ajaxComplete(function(event,xhr,options){
 
             openPendingOrdersModal();
         }  
+
+        if(options.callName == "btn-entregar-pedidos"){
+            closePendingOrdersModal();
+
+         }
          
     }
 
@@ -250,6 +278,7 @@ function openPendingOrdersModal(){
 
     $('#pending_orders').modal('show');
 } 
+
 
 function closeBillDetailsModal(){
     $('#bill-details').modal('hide');

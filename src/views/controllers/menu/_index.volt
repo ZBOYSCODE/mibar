@@ -6,10 +6,16 @@
    <input type="hidden" id='frm' value="<?php echo $this->url->get('menu'); ?>" >
 
 	<section class="section-content-top">
+         <div class="row card">
+             <div class="pull-left nav-user-details">
+                 {{ image("img/avatars/waiter.png", "alt":"Avatar", "class":"nav-avatar avatar-sm-card img-responsive") }}
+                 <h2> Chuncoco</h2>
+             </div>
+             
+             <h2 class="pull-right"> Mesa: en4</h2>
+         </div>
    		<div class="row menu-types">
    			<div class="col-xs-4 col-sm-4 no-col-padding">
-
-
    				<div class="menu-type-item card menu-promo" data-url="menu/changeMenuPromocion" data-categoria="0" data-callName="changeMenu">
 	   				<button type="button" id="opcion0" class="button-active">
 	   					{{ image("img/icons/promos.png", "alt":"Promos", "class":"img-responsive") }}

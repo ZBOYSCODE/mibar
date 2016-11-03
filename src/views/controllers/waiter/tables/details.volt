@@ -1,7 +1,7 @@
 
    
     <div class="card">
-        <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ numeroMesa }}</h4>
+        <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ Mesa.numero }}</h4>
     </div>
 
     <div class="card text-center">
@@ -10,6 +10,13 @@
         </a>
     </div>
 
+    {% if detalles == false %}
+
+    	<div class="card text-center">
+    	   <h3>Esta mesa no tiene pedidos asociados.</h3>
+    	</div>
+
+    {% else %}
   <!-- Details -->
     {% for detalle in detalles %}
        
@@ -22,7 +29,7 @@
     	        </div>
     	        <div class="col-xs-8 col-sm-8">
     	            <div class="table-item-details">
-    	                <button type="button" class="btn btn-main btn-delete btn-sm table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
+    	                <button type="button" class="btn btn-main btn-delete btn-sm table-details-button" data-callName="table-details-button" data-url="{{ url('waiter/tableDetails') }}">Eliminar</button>
 
     	                <p class="description"><b>Cliente: </b>{{ detalle['cuenta'].Clientes.nombre ~ " " ~ detalle['cuenta'].Clientes.apellido }}</p>
     	                <p class="description"><b>N° Pedidos: </b>{{ detalle['cantidad'] }}</p>
@@ -54,3 +61,4 @@
     <div id="table_modal_orders_render"></div>
     <div id="table_modal_pending_orders_render"></div>
 	
+    {% endif %}
