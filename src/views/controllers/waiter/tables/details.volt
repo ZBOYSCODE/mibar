@@ -1,15 +1,13 @@
 
    
     <div class="card">
-
         <h4 class="card-title"><i class="fa fa-list-alt"></i> DETALLES MESA {{ numeroMesa }}</h4>
     </div>
 
     <div class="card text-center">
         <a href="#" id='create-user' data-url="{{ url('waiter/createUser') }}" data-callName="create-user-modal" data-table='{{ table_id }}' class="btn btn-main btn-width">
-            <i class="fa fa-list-alt"></i> Crear cliente
+            <i class="fa fa-user-plus"></i>
         </a>
-
     </div>
 
   <!-- Details -->
@@ -25,6 +23,7 @@
     	        <div class="col-xs-8 col-sm-8">
     	            <div class="table-item-details">
     	                <button type="button" class="btn btn-main btn-delete btn-sm table-details-button" data-callName="table-details-button" data-url="waiter/tableDetails">Eliminar</button>
+
     	                <p class="description"><b>Cliente: </b>{{ detalle['cuenta'].Clientes.nombre ~ " " ~ detalle['cuenta'].Clientes.apellido }}</p>
     	                <p class="description"><b>N° Pedidos: </b>{{ detalle['cantidad'] }}</p>
     	                <p class="description"><b>Subtotal: </b>$ {{ utility._number_format(detalle['subtotal']) }}</p>
@@ -32,10 +31,23 @@
     	        </div>
     	    </div>
     	    <div class="table-item-footer">
+
+
+{#
+				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Detalles</button>
+    
+
+                <button type="button" class="btn btn-main btn-width" id='crear-pedido' data-callName="crear-pedido-button" data-url="{{ url('waiter/createOrder') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Crear pedido</button>
+ #}
+
+                <a href="{{ url('waiter/createOrder') }}/{{ detalle['cuenta'].id }}" class='btn btn-main btn-width'>Crear pedido</a>
+
 				<button type="button" class="btn btn-main btn-width detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Validar</button>
 				<button type="button" class="btn btn-main btn-width pedidos-pendientes" data-callName="pedidos-pendientes" data-url="{{ url('waiter/getPendingOrders') }}" data-cuenta="{{ detalle['cuenta'].id }}" >Pendientes</button>
+
     	    </div>
     	</div>
+
     {% endfor %}
 			   
     

@@ -177,6 +177,20 @@ $(document).on('ready', function() {
     });   
 
     
+    $(document).on('click', '#crear-pedido', function(e){
+
+        e.preventDefault();
+        
+        var cuenta_id   = $(this).attr('data-cuenta');
+        var url         = $(this).attr('data-url');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta_id',   cuenta_id);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this)); 
+    });
 
 	
 });

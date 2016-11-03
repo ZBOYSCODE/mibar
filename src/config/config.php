@@ -1,5 +1,6 @@
 <?php
 return new \Phalcon\Config([
+    
     'database' => [
         'adapter'  => 'Mysql',
        'host'      => '64.79.70.108',
@@ -32,8 +33,8 @@ return new \Phalcon\Config([
         'prueba'    => array('*'    =>  true),
         'test'      => array('*'    =>  true),
         'waiter'    => array('*'    =>  true),
-        'cashbox'   => array('*'    =>  true),
-        'bartender' => array('*'    =>  true)
+        'bartender' => array('*'    =>  true),
+        'cashbox'   => array('*'    =>  true)
     ],
     'appTitle'      =>'MiBar',
     'appName'       =>"MiBar",

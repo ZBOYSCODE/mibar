@@ -734,5 +734,46 @@
         }
 
 
+        public function getTableByCuenta($param){
+
+            if(!isset($param['cuenta_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $cuenta = Cuentas::findFirst(array(
+                " estado = 1 AND id = {$param{'cuenta_id'}}"
+            ));
+
+            if(!$cuenta){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $cuenta->Mesas;
+
+        }
+
+        public function getClientByCuenta($param){
+
+            if(!isset($param['cuenta_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $cuenta = Cuentas::findFirst(array(
+                " estado = 1 AND id = {$param{'cuenta_id'}}"
+            ));
+
+            if(!$cuenta){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $cuenta->Clientes;
+
+        }
+
+
     }
 
