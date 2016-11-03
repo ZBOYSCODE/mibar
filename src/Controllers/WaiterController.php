@@ -7,6 +7,10 @@ use App\Business\MeseroBSN;
 use App\Business\PedidoBSN;
 use App\Business\CajaBSN;
 
+
+use App\Business\ProductoBSN;
+use App\Business\PromocionBSN;
+
 class WaiterController extends ControllerBase
 {
 
@@ -16,12 +20,18 @@ class WaiterController extends ControllerBase
     private $pedidoBsn;
     private $cajaBsn;
 
+    private $ID_CATEGORY_BEBIDAS = 1;
+    private $ID_CATEGORY_COMIDAS = 2;
+
     public function initialize(){
 
         parent::initialize();
         $this->meseroBsn = new MeseroBSN();
         $this->pedidoBsn = new PedidoBSN();
         $this->cajaBsn   = new CajaBSN();
+
+        $this->productoBsn = new ProductoBSN();
+        $this->promocionBsn = new PromocionBSN();
 
     }    
 
@@ -306,6 +316,8 @@ class WaiterController extends ControllerBase
      * storeClient
      * 
      * persiste el cliente desde la vista mesero
+     *
+     * @author Sebastián Silva
      */
     public function storeClientAction() {
 
@@ -355,11 +367,11 @@ class WaiterController extends ControllerBase
 
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-                //print_r($tablesDetails);exit();
-                $dataView['detalles'] =  $tablesDetails;
+                
+                $dataView['detalles']   =  $tablesDetails;
 
                 $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
-                $dataView['table_id']    = $this->request->getPost("table_id", "int");
+                $dataView['table_id']   = $this->request->getPost("table_id", "int");
 
                 $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
 
@@ -385,6 +397,61 @@ class WaiterController extends ControllerBase
             $this->mifaces->run();
         }
 
+    }
+
+    /**
+     * createOrder
+     * 
+     * setea las variables y redirige al menú
+     *
+     * @author Sebastián Silva
+     */
+    public function createOrderAction($cuenta_id){
+
+        
+
+
+
+        #js custom
+        $this->assets->addJs('js/pages/menu.js');
+
+        // Al cambiar este parámetro, se debe cambiar también la vista.
+        $paramCategoria = ["categoria_id" => $this->ID_CATEGORY_BEBIDAS];
+
+        
+        $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
+        $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
+
+        $this->view->setVar("productos",        $productos );
+        $this->view->setVar("subcategorias",    $subcategorias );
+        $this->view->setVar("cuenta_id",        $cuenta_id );
+
+
+        $param = array(
+            'cuenta_id' => $cuenta_id
+        );
+
+        $meserobsn = new MeseroBSN();
+
+        $table  = $meserobsn->getTableByCuenta($param);
+        $client = $meserobsn->getClientByCuenta($param);
+
+
+        $this->view->setVar("table",    $table );
+        $this->view->setVar("client",   $client );
+
+        # seteamos las variables de sesion
+        # el id de la cuenta y el id de la mesa    
+        $this->session->set('auth-identity', array(
+            'id'        =>  $this->session->get("auth-identity")['id'],
+            'rol'       =>  $this->session->get("auth-identity")['rol'],
+            'cuenta'    =>  $cuenta_id,
+            'nombre'    =>  $this->session->get("auth-identity")['nombre'],
+            'mesa'      =>  $table->id
+        ));
+        
+        #vista
+        $this->view->pick("controllers/menu/_index_waiter");
     }
 
 }
