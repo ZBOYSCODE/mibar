@@ -178,6 +178,7 @@ class CashBoxController extends ControllerBase
                 $dataView['subtotal'] = $this->cajaBsn->getSubTotalByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
                 $dataView['cliente'] = $this->cajaBsn->getClienteByCuenta(array('cuenta_id' => $_POST["cuenta_id"]));
                 $dataView['cuenta'] = $this->formatearNumeroCuenta($_POST["cuenta_id"]);
+                $dataView['cuenta_id'] = $_POST["cuenta_id"];
                 if ($dataView['productos'] == false
                     or $dataView['subtotal'] == false
                     or $dataView['cliente'] == false) {
@@ -205,5 +206,20 @@ class CashBoxController extends ControllerBase
             $cuenta_id = '0' . $cuenta_id;
         }
         return $cuenta_id;
+    }
+
+    public function completarPagoAction(){
+        if ($this->request->isAjax()) {
+            $this->mifaces->newFaces();
+            if (isset($_POST["cuenta_id"]) and isset($_POST["descuento"])) {
+
+            }
+            else {
+                $this->mifaces->addToMsg('warning', 'Faltan parámetros.');
+            }
+        }
+        else {
+            $this->view->disable();
+        }
     }
 }

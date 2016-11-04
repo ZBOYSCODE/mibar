@@ -62,10 +62,11 @@
                         <span class="precio-total">Total: <i class="fa fa-usd"></i> <span id="total">{{ subtotal }}</span></span>
                     </div>
                     <div class='col-xs-7'>
-                        <span class="btn btn-small btn-main pull-right table-details-button"
-                              data-callName="pagarCuenta"
-                              data-url="{{ url("cashbox/pagarcuenta") }}"
-                              data-cuenta="{{ cuenta.id }}">
+                        <input id="descuentoinput" type="hidden" value="0">
+                        <span id="btn-pagar" class="btn btn-small btn-main pull-right table-details-button"
+                              data-callName="completarPago"
+                              data-url="{{ url("cashbox/completarpago") }}"
+                              data-cuenta="{{ cuenta_id }}">
                             Pagar
                         </span>
                     </div>

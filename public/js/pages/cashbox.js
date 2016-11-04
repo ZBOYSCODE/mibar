@@ -17,13 +17,29 @@ $(document).on('ready', function() {
         if(isNaN(descuento)){
             descuento = 0;
         }
-        var total = subtotal - descuento;
-        if(total < 0) {
-            total = 0;
+        if (descuento > subtotal) {
+            descuento = subtotal;
         }
+        var total = subtotal - descuento;
+
+        document.getElementById("descuentoinput").value = descuento;
         document.getElementById("total").innerHTML = total;
     });
 
+    $(document).on('click', "#btn-pagar", function(){
+        var action = $(this).data("url");
+        var cuenta = $(this).data("cuenta");
+        var descuento = document.getElementById("descuento").value;
+
+        var dataIn = new FormData();
+
+        dataIn.append("cuenta_id", cuenta);
+        dataIn.append("descuento", descuento);
+        $("#pagar-modal").modal('toggle');
+
+        //mifaces
+        $.callAjax(dataIn, action, $(this));
+    });
 });
 
 
@@ -37,6 +53,10 @@ $(document).ajaxComplete(function(event,xhr,options){
         }
         if(options.callName == "pagarCuenta"){
             openmodal("pagar-modal");
+        }
+
+        if(options.callName == "completarPago"){
+            openmodal("boleta-modal");
         }
     }
 
