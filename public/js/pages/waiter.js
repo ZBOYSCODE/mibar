@@ -1,4 +1,5 @@
 var delete_state;
+var cuenta_eliminada;
 
 $(document).on('ready', function() {
 
@@ -240,6 +241,9 @@ $(document).on('ready', function() {
 
         e.preventDefault();
 
+        delete_state        = 'false';
+        cuenta_eliminada    = null;
+
         var cuenta_id   = $(this).attr('data-cuenta');
         var url         = $(this).attr('data-url');
 
@@ -305,8 +309,18 @@ $(document).ajaxComplete(function(event,xhr,options){
 }); 
 
 function deleteCuenta() {
-    
-    console.log(delete_state);
+
+    if( delete_state === 'true' ){
+
+
+        $("#cuenta-"+cuenta_eliminada).remove();
+
+        cuenta_eliminada    = null;
+        delete_state        = null;
+
+    } else {
+        console.log('no se ha eliminado');
+    }
 }
 
 function openTableDetailsModal(){

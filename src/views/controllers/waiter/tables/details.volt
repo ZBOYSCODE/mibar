@@ -23,7 +23,7 @@
   <!-- Details -->
     {% for detalle in detalles %}
        
-    	<div class="table-item card" data-cuenta="{{ detalle['cuenta'].id }}" data-estado-mesa="{{ detalle['cuenta'].estado }}">
+    	<div class="table-item card" id='cuenta-{{ detalle['cuenta'].id }}' data-cuenta="{{ detalle['cuenta'].id }}" data-estado-mesa="{{ detalle['cuenta'].estado }}">
     	    <div class="row">
     	        <div class="col-xs-4 col-sm-4">
     	            <div class="table-item-img">
@@ -33,7 +33,7 @@
     	        <div class="col-xs-8 col-sm-8">
     	            <div class="table-item-details">
 
-    	                <button type="button" id='delete-cuenta' class="btn btn-main btn-delete btn-sm table-details-button" data-callName="delete-cuenta-button" data-url="{{ url('waiter/deleteCuenta') }}">Eliminar</button>
+    	                <button type="button" id='delete-cuenta' class="btn btn-main btn-delete btn-sm delete-cuenta-button" data-cuenta="{{ detalle['cuenta'].id }}" data-callName="delete-cuenta-button" data-url="{{ url('waiter/deleteCuenta') }}">Eliminar</button>
 
 
     	                <p class="description"><b>Cliente: </b>{{ detalle['cuenta'].Clientes.nombre ~ " " ~ detalle['cuenta'].Clientes.apellido }}</p>

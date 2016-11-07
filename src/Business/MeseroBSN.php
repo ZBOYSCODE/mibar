@@ -43,11 +43,16 @@
          */
         public  $error;
 
-        private $ESTADO_CUENTA_PENDIENTE = 1;
-        private $ESTADO_MESA_ACTIVA = 1;
-        private $ESTADO_PEDIDO_PENDIENTE = 1;
-        private $ESTADO_PEDIDO_CANCELADO = 6;
-        PRIVATE $ESTADO_MESA_OCUPADA = 2;
+        private $ESTADO_CUENTA_PENDIENTE    = 1;
+        private $ESTADO_MESA_ACTIVA         = 1; # funcionario activo
+        private $ESTADO_PEDIDO_PENDIENTE    = 1;
+        private $ESTADO_PEDIDO_CANCELADO    = 6;
+        
+        # ESTADO_MESA
+        PRIVATE $ESTADO_MESA_DISPONIBLE     = 1;
+        PRIVATE $ESTADO_MESA_OCUPADA        = 2;
+        PRIVATE $ESTADO_MESA_RESERVADA      = 3;
+        
 
         public $estado_cancelado = 6;
 
@@ -821,6 +826,129 @@
             return $cuentas;
         }
 
+        /**
+         * deleteCuenta
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        public function deleteCuenta($cuenta_id) {
+
+            # Verificar que la cuenta no tengas pedidos impagos
+            if( $this->existenPedidosImpagos($cuenta_id) ) {
+
+                $this->error[] = "Existen pedidos impagos asociados a este cliente.";
+                return false;
+            }
+
+
+            $this->db->begin();
+
+
+            # Verificar si hay más cuentas activas en la mesa, para actualizar estado de mesa
+            if( ! $this->existenCuentasActivas($cuenta_id) ) {
+
+                # actualizar estado mesa, dejar como disponible
+                $this->updateEstadoMesa($cuenta_id, $this->ESTADO_MESA_DISPONIBLE);
+            }
+            
+
+
+            # Eliminar la cuenta
+            $cuenta = Cuentas::findFirstById($cuenta_id);
+            $cuenta->estado = 0;
+
+            if( $cuenta->save() == false ) {
+
+                $this->error[] = $this->errors->WS_CONNECTION_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+
+
+
+            $this->db->commit();
+            
+            
+            return true;
+        }
+
+
+        /**
+         * existenPedidosImpagos
+         *
+         * verifca si existen pedidos impagos, devuelve true si existe alguno
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function existenPedidosImpagos($cuenta_id) {
+
+            $pedidos = Pedidos::find(" cuenta_id = {$cuenta_id} AND pago_id is null");
+
+            if(!$pedidos->count()) {
+
+                return false;
+            } else {
+
+                return true;
+            }
+        }
+
+        /**
+         * existenCuentasActivas
+         *
+         * verifica si existen cuentas activas asociadas a la mesa correspondiente
+         * devuelve true si existen y false en caso contrario
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function existenCuentasActivas($cuenta_id) {
+
+            $cuenta = Cuentas::findFirstById($cuenta_id);
+
+            if(!$cuenta) {
+                return false;
+            }
+
+            $cuentas = Cuentas::findByMesaId( $cuenta->mesa_id );
+
+            if(!$cuentas->count()){
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        /**
+         * updateEstadoMesa
+         *
+         * actualiza el estado de la mesa
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function updateEstadoMesa($cuenta_id, $estado) {
+
+            $cuenta = Cuentas::findFirstByCuentaId($cuenta_id);
+
+            if(!$cuenta) {
+                return false;
+            }
+
+            $mesa = Mesas::findFirstById($cuenta->mesa_id);
+
+            $mesa->estado = $estado;
+
+            if( $mesa->save() == false ) {
+
+                return false;
+            }
+
+            return true;
+        }
 
     }
 

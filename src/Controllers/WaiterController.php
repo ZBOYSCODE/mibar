@@ -574,39 +574,30 @@ class WaiterController extends ControllerBase
 
             $cuenta_id = $this->request->getPost("cuenta_id", "int");
 
-            
             $this->mifaces->newFaces();
 
             if( !empty($cuenta_id) ){
 
-
-
                 if( $this->meseroBsn->deleteCuenta($cuenta_id) ) {
 
-                    $this->mifaces->addToJsonView('delete_state', 1 );
+                    $this->mifaces->addToMsg('success','Cuenta eliminada correctamente.');
+                    $this->mifaces->addToJsonView('delete_state', "true" );
+                    $this->mifaces->addToJsonView('cuenta_eliminada', $cuenta_id );
                 } else {
 
-                    $this->mifaces->addToJsonView('delete_state', 0 );
+                    $this->mifaces->addToMsg('danger', $this->meseroBsn->error );
+                    $this->mifaces->addToJsonView('delete_state', "false" );
                 }
-
-                
-
-
-                $this->mifaces->addToMsg('success','Cuenta eliminada correctamente.');
-
             }else{
 
-                $this->mifaces->addToJsonView('delete_state', 0 );
-
+                $this->mifaces->addToJsonView('delete_state', "false" );
                 $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
             }
            
             $this->mifaces->run();
-        
         } else{
 
             $this->view->disable();
-
         }
     }
 
