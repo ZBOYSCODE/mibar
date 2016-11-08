@@ -1,4 +1,4 @@
-
+<div id="waiter_tables_details_render">
    
     <div class="card">
 	    <div class="row">
@@ -65,3 +65,5 @@
     <div id="table_modal_pending_orders_render"></div>
 	
     {% endif %}
+
+</div>

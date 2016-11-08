@@ -106,10 +106,22 @@ class WaiterController extends ControllerBase
             $tabObj = new MeseroBSN();
             $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
+            /*
+            echo "<pre>";
+            echo json_encode($tablesDetails);
+            return false;
+            */
+
             #$estados_cuenta = $tabObj->getListEstadosCuenta();
             #$this->view->setVar("estados_cuenta",   $estados_cuenta);
 
             $cuentas = $tabObj->getCuentasByTableId($table_id);
+
+            /*
+            echo "<pre>";
+            echo json_encode($cuentas);
+            return false;
+            */
 
 
             $this->assets->addJs('js/pages/waiter.js');
@@ -334,23 +346,24 @@ class WaiterController extends ControllerBase
             );
             
 
-            if( $mesero->setNewClient( $param ) ) {
+            $cuenta = $mesero->setNewClient( $param );
 
-
-                
-                $this->mifaces->newFaces();
-
-                $view = "controllers/waiter/tables/details";
+            if( $cuenta !== false ) {
 
                 
-                $param['mesa_id'] = $table_id;
+                
 
+                $arr = array();
+                $arr['mesa_id'] = $table_id;
 
 
                 $tabObj = new MeseroBSN();
-                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+                $tablesDetails = $tabObj->getDataCuentasByMesa($arr);
                 
                 $dataView['detalles']   =  $tablesDetails;
+
+                $dataView['numeroMesa'] = $cuenta->Mesas->numero;
+
 
                 $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
                 $dataView['table_id']   = $this->request->getPost("table_id", "int");
@@ -360,10 +373,19 @@ class WaiterController extends ControllerBase
                 $dataView['Mesa'] = $tableParams;
 
 
+
+
+                $this->mifaces->newFaces();
+
+                $view = "controllers/waiter/tables/details";
+
                 $toRend = $this->view->getPartial($view, $dataView);
 
                 $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
                 $this->mifaces->run();
+
+
+
 
                 
             } else{
@@ -601,5 +623,73 @@ class WaiterController extends ControllerBase
         }
     }
 
+    /**
+     * freetable
+     *
+     * @author Sebastián Silva 
+     */
+    public function freetableAction() {
+
+        if($this->request->isAjax()){
+
+            $table_id = $this->request->getPost("table_id", "int");
+
+            $this->mifaces->newFaces();
+
+            if( !empty($table_id) ){
+
+
+
+                if( $this->meseroBsn->freeTable($table_id) ) {
+
+                    $this->mifaces->addToMsg('success','Mesa liberada correctamente.');
+                    $this->mifaces->addToJsonView('mesa_liberada', $table_id );
+
+                } else {
+
+                    $this->mifaces->addToMsg('danger', $this->meseroBsn->error );
+                    $this->mifaces->addToJsonView('mesa_liberada', "false" );
+                }
+
+
+
+            }else{
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+        } else{
+
+            $this->view->disable();
+        }
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

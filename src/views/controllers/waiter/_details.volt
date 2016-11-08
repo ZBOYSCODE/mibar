@@ -32,5 +32,8 @@
 	{{ partial("controllers/waiter/tables/details") }}
 </div>
 
+ <div id="table_modal_orders_render"></div>
+ <div id="table_modal_pending_orders_render"></div>
+
 
 {% endblock %}

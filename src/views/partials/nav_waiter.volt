@@ -11,10 +11,8 @@
             </div>
             <div class="collapse navbar-collapse" id="menu">
                 <ul class="nav navbar-nav navbar-left nav-ul">
-                    <li><a href=""><i class="fa fa-cutlery"></i>Mis Mesas</a></li>
+                    <li><a href="{{ url('waiter') }}"><i class="fa fa-cutlery"></i>Mis Mesas</a></li>
                     <li><a href=""><i class="fa fa-list-alt"></i> Menú</a></li>
-                    <li><a href=""><i class="fa fa-calculator"></i>Cuenta Cliente</a></li>
-                    <li><a href=""><i class="fa fa-shopping-cart"></i>Pedidos Cliente</a></li>
                     <li><a href=""><i class="fa fa-home"></i> Inicio</a></li>
                 </ul>
             </div>                   

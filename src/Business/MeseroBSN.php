@@ -570,7 +570,7 @@
         *
         * Obtiene cuentas para una mesa
         *
-        * @author osanmartin
+        * @author osanmartin 
         *
         * @param $param['mesa_id'] = ID de mesa 
         *
@@ -586,7 +586,24 @@
                 return false;
             }
 
-            $result = Cuentas::query()
+            $cuentas = Cuentas::find(" mesa_id = {$param['mesa_id']} AND estado = 1");
+
+            if(!$cuentas->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+
+            foreach ($cuentas as $cuenta) {
+
+                $arr[$cuenta->id] = array(
+                    'subtotal'  => 0,
+                    'cantidad'  => 0,
+                    'cuenta'    => $cuenta
+                );
+
+
+                $result = Cuentas::query()
                         ->columns(['cuenta_id' => 'App\Models\Cuentas.id',
                                    'subtotal'  => 'SUM(p.precio)',
                                    'cantidad'  => 'COUNT(p.id)'] )
@@ -598,34 +615,19 @@
                         ->execute();
 
 
-            if(!$result->count()) {
-                return array();
-            }
+                foreach ($result as $key => $val) {
 
-            $cuentas = $this->getDetalleMesa($param);
+                    if(isset($arr[$val->cuenta_id]) AND 
+                        $val->cantidad){
 
-            if(!$cuentas) {
-                return array();
-            }
+                        $arr[$cuenta->id]['subtotal'] = $val->subtotal;
+                        $arr[$cuenta->id]['cantidad'] = $val->cantidad;
+                    }
 
-            foreach ($cuentas as $val) {
-                
-                $arr[$val->id] = ['subtotal'=>0,
-                                  'cantidad'=>0,
-                                  'cuenta'=>$val];
-
-            }
-
-            foreach ($result as $key => $val) {
-
-                if(isset($arr[$val->cuenta_id]) AND 
-                   $val->cantidad){
-
-                    $arr[$val->cuenta_id]['subtotal'] = $val->subtotal;
-                    $arr[$val->cuenta_id]['cantidad'] = $val->cantidad;
                 }
 
             }
+
 
             return $arr;
 
@@ -737,7 +739,7 @@
 
             $this->db->commit();
 
-            return true;
+            return $cuenta;
         }
 
         /**
@@ -950,5 +952,93 @@
             return true;
         }
 
+        /**
+         * updateEstadoMesaById
+         *
+         * actualiza el estado de la mesa
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function updateEstadoMesaById($table_id, $estado) {
+
+
+            $mesa = Mesas::findFirstById($table_id);
+
+            $mesa->estado_mesa_id = $estado;
+
+            if( $mesa->save() == false ) {
+
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         * freeTable
+         *
+         * verifica si está todo bien para liberar la mesa
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        public function freeTable($table_id) {
+
+            $cuentas = $this->getCuentasByTableId($table_id);
+
+            if( count($cuentas) > 0 ) {
+
+                # entra solo si existe algna cuenta activa asociada
+                foreach ($cuentas as $cuenta) {
+                
+                    if ( $this->existenPedidosImpagos( $cuenta->id ) ) {
+
+                        $this->error[] = "Existen pedidos impagos";
+                        return false;
+                    }
+                }
+            }
+
+            
+
+            if ( $this->updateEstadoMesaById($table_id, $this->ESTADO_MESA_DISPONIBLE) ){
+                return true;
+            } else {
+                # error al liberar mesa
+                $this->error[] = "Error al liberar mesa, Intente nuevamente.";
+                return false;
+            }
+        }
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

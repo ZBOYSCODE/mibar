@@ -22,13 +22,14 @@
                         <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
 
                         <a href="{{ url('waiter/tableDetails') }}/{{ mesa.id }}" class='btn btn-main btn-small dpull-right pull-right-top'>Detalle</a>
+
+                        <a id='btn-liberar-mesa' data-mesaid="{{ mesa.id }}" class='pull-right btn btn-main btn-small' data-url="waiter/freetable">Liberar</a>
                     </div>  
                     
                 </div>
 
-                {#
-                    <button type="button" data-href="{{mesa.numero}}" data-mesaid="{{ mesa.id }}" data-cuenta="{{ mesa.cuenta_id }}" class="btn btn-small btn-main pull-right table-order-button" data-url="waiter/tableDetails">Crear Pedido</button>
-                #}
+                
+                
             </div>
         </div>
 

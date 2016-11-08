@@ -1,5 +1,6 @@
 var delete_state;
 var cuenta_eliminada;
+var mesa_liberada;
 
 $(document).on('ready', function() {
 
@@ -254,6 +255,20 @@ $(document).on('ready', function() {
         //mifaces
         $.callAjax(dataIn, url, $(this)); 
 
+
+    });
+
+    $(document).on('click', '#btn-liberar-mesa', function(){
+        
+        var url         = $(this).attr('data-url');
+        var table_id     = $(this).attr('data-mesaid');
+
+        var dataIn = new FormData();
+
+        dataIn.append('table_id',    table_id);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this)); 
 
     });
 
