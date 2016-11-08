@@ -31,18 +31,45 @@
 						      		<h3>{{ lista['fecha'] }}  Total $<?php echo number_format($lista['total'], '0', ',', '.') ?></h3>
 
 						      		<div>
-										{% for pedido in lista['pedidos'] %}
-											
-							      			<div class="row" id='producto-{{ pedido['producto'].producto_id }}'>
-							      				<div class="col-xs-12">
-								      					{{ pedido['cantidad'] }} {{ pedido['producto'].Productos.nombre }} $<span><?php echo number_format($pedido['producto']->precio, '0', ',', '.') ?> </span>
+										
+										<table class='table'>
 
-								      					<div class="led-{{pedido['color']}} led pull-right" id='estado-{{pedido['producto'].estado_id}}' ></div>
-														<span class='pull-right'>{{pedido['color_nombre'] }}</span>
-								      			</div>
-								      		</div>
+											<thead>
+												<th>Cnt</th>
+												<th>Nombre</th>
+												{#<th>Precio c/u</th>#}
+												<th>Precio Total</th>
+												<th>Estado</th>
+											</thead>
 
-								      	{% endfor %}
+											<tbody>
+							
+												{% for pedido in lista['pedidos'] %}
+
+													<tr>
+														<td>{{ pedido['cantidad'] }} </td>
+														<td>{{ pedido['producto_nombre'] }}</td>
+														{#<td class='text-right'>$<?php echo number_format($pedido['producto']->precio, '0', ',', '.') ?></td>#}
+
+														<td class='text-right'>$<?php echo number_format( ($pedido['producto']->precio * $pedido['cantidad']), '0', ',', '.') ?></td>
+														<td>
+															<div class="led-{{pedido['color']}} led pull-right" id='estado-{{pedido['producto'].estado_id}}' ></div>
+															<span class='pull-right'>{{pedido['color_nombre'] }}</span>
+														</td>
+													</tr>
+
+										      	{% endfor %}
+									      	</tbody>
+
+									      	<tfooter>
+									      		<th></th>
+									      		<th></th>
+									      		<th class='text-right'>Total</th>
+									      		<th class='text-right'>$<?php echo number_format($lista['total'], '0', ',', '.') ?></th>
+									      		<th> </th>
+									      	</tfooter>
+
+									     </table>
 						      		</div>
 						      	</div>
 					        </div>

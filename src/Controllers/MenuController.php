@@ -504,7 +504,8 @@ class MenuController extends ControllerBase
 				$id 	= $pedido->producto_id;
 
 				$lista_pedidos[$fecha]['fecha'] 						= $fecha;
-				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 		= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 			= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto_nombre'] 	= $pedido->Productos->nombre;
 				$lista_pedidos[$fecha]['pedidos'][$id]['es_promocion'] 	= 0;
 				$lista_pedidos[$fecha]['pedidos'][$id]['color'] 		= $this->getColorState($pedido->estado_id);
 				$lista_pedidos[$fecha]['pedidos'][$id]['color_nombre'] 	= $pedido->Estados->nombre;
@@ -529,7 +530,8 @@ class MenuController extends ControllerBase
 				$id 	= $pedido->promocion_id;
 
 				$lista_pedidos[$fecha]['fecha'] 						= $fecha;
-				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 		= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 			= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto_nombre'] 	= $pedido->Promociones->nombre;
 				$lista_pedidos[$fecha]['pedidos'][$id]['es_promocion'] 	= 1;
 				$lista_pedidos[$fecha]['pedidos'][$id]['color'] 		= $this->getColorState($pedido->estado_id);
 				$lista_pedidos[$fecha]['pedidos'][$id]['color_nombre'] 	= $pedido->Estados->nombre;
