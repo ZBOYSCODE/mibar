@@ -474,7 +474,7 @@
                 $where_estado = " AND estado_id = ".$param['estado_id'];
             } else {
 
-                $where_estado = '';
+                $where_estado = ' AND estado_id != 6';# estado anulado
             }
 
             $pedidos = Pedidos::find(

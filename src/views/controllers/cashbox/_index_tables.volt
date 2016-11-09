@@ -7,16 +7,19 @@
     <section class="section-content-top2">
         <div class="nav-filters card tables-filter">
             <div class="row">
-                <div class="col-xs-12 col-sm-12">
+
+                <div class="col-xs-6">
                     <div class="nav-filter-item">
                         <select name="prod-categories" id="prod-categories" class="form-control">
                             <option value="0">N° Mesa</option>
-                            <option value="0">Mesa 1</option>
-                            <option value="1">Mesa 2</option>
-                            <option value="2">Mesa 3</option>
+
+                            {% for mesa in mesas %}
+                                <option value="{{ mesa.id }}">{{ mesa.numero }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
+                
             </div>
         </div>
     </section>

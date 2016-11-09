@@ -5,6 +5,7 @@ use App\Models\Clientes;
 use Phalcon\Mvc\User\Plugin;
 use App\Models\Cuentas;
 use App\Models\Pedidos;
+use App\Models\Pagos;
 /**
  * Modelo de negocio
  *
@@ -35,6 +36,7 @@ class CajaBSN extends Plugin
      * @return lista Cuentas
      */
     public function getListaCuentasPorPagar($param) {
+
         if (!isset($param['mesa_id'])) {
             $error[] = $this->errors->MISSING_PARAMETERS;
             return false;
@@ -211,4 +213,170 @@ class CajaBSN extends Plugin
         return $productos;
     }
 
+
+    /**
+     * realizarPago
+     *
+     * persiste el pago y actualiza los pedidos
+     *
+     * @author Sebastián Silva
+     *
+     * @param array $param
+     */
+    public function realizarPago($param) {
+
+        if (!isset($param['cuenta_id'])) {
+            # verificamos cuenta
+            $error[] = $this->errors->MISSING_PARAMETERS;
+            return false;
+        }
+
+
+        if (!isset($param['descuento'])) {
+            # verificamos descuento
+            $error[] = $this->errors->MISSING_PARAMETERS;
+            return false;
+        }
+
+
+        $subtotal = $this->getSubTotalByCuenta(array('cuenta_id'=> $param['cuenta_id']));
+        $subtotal_wdesc = ( $subtotal - (int)$param['descuento'] );
+
+        
+        $this->db->begin();
+
+
+        $pago = new Pagos();
+
+        $pago->fecha            = date('Y-m-d H:i:s');
+        $pago->medio_pago       = "Efectivo";
+        $pago->funcionario_id   = 1;//$this->session->get("auth-identity")['id'];
+        $pago->subtotal         = $subtotal;
+        $pago->total            = $subtotal_wdesc;
+
+
+
+
+        # Guardamos los datos del pago
+        if( $pago->save() == false ) {
+
+            $this->db->rollback();
+            
+            $messages = $pago->getMessages();
+
+            foreach ($messages as $message) {
+                $this->error[] = $message;
+            }
+
+            return false;
+        }
+
+        $pedidosBsn = new PedidoBSN();
+
+        $arr = array(
+            'cuenta_id' => $param['cuenta_id'],
+
+        );
+
+
+        if ( $this->session->has('pedidos_to_pay') ) {
+
+            //$pedidos = $pedidosBsn->getOrdersWithoutPayment($param);
+
+            $list = $this->session->get('pedidos_to_pay');
+
+            $pedidos = Pedidos::find(" id in ({$list}) ");
+
+        } else {
+
+            $this->db->rollback();
+            $this->error[] = $this->errors->UNKNOW;
+            return false;
+        }
+
+        
+
+        if( $pedidos == false ) {
+
+            $this->db->rollback();
+            $this->error[] = $this->errors->UNKNOW;
+            return false;
+        }
+
+
+        foreach ($pedidos as $pedido) {
+            
+            $pedido->pago_id = $pago->id;
+
+            // al pagar cambia automaticamente a en proceso, 
+            // es decir que no hace falta la validación por parte del mesero
+            if( $pedido->estado_id == 1 ) {
+                $pedido->estado_id = 2;
+            }
+
+            if( $pedido->save() == false ) {
+
+                $this->db->rollback();
+
+                $messages = $pedido->getMessages();
+
+                foreach ($messages as $message) {
+                    $this->error[] = $message;
+                }
+
+                return false;
+            }
+
+        }
+
+        $this->session->remove('pedidos_to_pay');
+
+        $this->db->commit();
+        return true;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

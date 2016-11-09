@@ -17,27 +17,26 @@
 			    		<p>Mesa: <?= $cuenta->Mesas->numero ?></p>
 			    	</div>
 			    </div>
-			    
+			    <div class="modal-body">
 
 			    <?php if ($pedidosCuenta == false) { ?>
 
-                <div class="modal-body">
 
 		            <div class="card text-center">
 		               <h3>No hay Pedidos Pendientes.</h3>
 		            </div>
-		        </div>
-				   
-				<div class="menu-footer">
-					<div class="row menu-footer-buttons card">
-						<button  class="btn btn-main" class="close modal-close" data-dismiss="modal">CERRAR</button>
-					</div>
-				</div>	
+		            </div>
+				    </div>
+
+					<div class="menu-footer">
+						<div class="row menu-footer-buttons card">
+							<button  class="btn btn-main" class="close modal-close" data-dismiss="modal">CERRAR</button>
+						</div>
+					</div>	
 
 
 			    <?php } else { ?>
 
-			    <div class="modal-body">
 			    	<form id="form-validar">
 						<div class="lista_pedidos">
 
@@ -52,7 +51,7 @@
 								<div class="card" id='pedido-<?= $pedido->id ?>'>
 							      	<div class="product-item-modal">
 										<div class="wine-switch">
-						                   <input id="<?= $pedido->id ?>" class="checkPedido" name="approve_order[]" type="checkbox" checked="checked" value="<?= $pedido->id ?>"/>
+						                   <input id="<?= $pedido->id ?>" class="checkPedido" name="approve_order[]" type="checkbox" value="<?= $pedido->id ?>"/>
 						                   <label for="<?= $pedido->id ?>" class="label-success"></label>
 						               </div>
 							      		<p class="title"><?= $title ?></p>
@@ -79,11 +78,13 @@
 
 			<div class="menu-footer">
 				<div class="row menu-footer-buttons card">
-					<button id="btn-validar-pedidos" class="btn btn-main btnAjax" data-url="<?= $this->url->get('waiter/validateOrders') ?>" data-callname="btn-validar-pedidos" data-table="<?= $cuenta->mesa_id ?>">CONCRETAR PEDIDOS</button>
+					<button id="btn-entregar-pedidos" class="btn btn-main btnAjax" data-url="<?= $this->url->get('waiter/deliverOrders') ?>" data-callname="btn-entregar-pedidos" data-table="<?= $cuenta->mesa_id ?>">ENTREGAR PEDIDOS</button>
 				</div>
 			</div>	
 		    <?php } ?>
 	    </div>
+
+
 	</div>
 
 
