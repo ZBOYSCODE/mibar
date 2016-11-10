@@ -1,19 +1,10 @@
 <?php
 return new \Phalcon\Config([
-    /*
     'database' => [
         'adapter'  => 'Mysql',
        'host'      => '64.79.70.108',
        'username'  => 'testing',
        'password'  => 'Z3nt1#.',
-       'dbname'    => 'mibar'
-    ],
-    */
-    'database' => [
-        'adapter'  => 'Mysql',
-       'host'      => 'localhost',
-       'username'  => 'root',
-       'password'  => '',
        'dbname'    => 'mibar'
     ],
     'application' => [
