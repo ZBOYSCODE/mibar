@@ -23,27 +23,27 @@
 				      	<div class="product-item-modal">
 				      		<p class="title"></p>
 				      		<div class="row">
-				      			<div class="col-xs-6 col-md-6">
+				      			<div class="col-xs-12 col-md-6">
 				      				<p><b><i class="fa fa-money"></i> Precio: </b> ${{ utility._number_format(pedido.precio) }}</p>
 				      			</div>
-				      			<div class="col-xs-6 col-md-6">
+				      			<div class="col-xs-12 col-md-6">
 				      				<p><b><i class="fa fa-users"></i> Mesero: </b> {{ mesero.nombre }} {{ mesero.apellido }}</p>
 				      			</div>
 			      			</div>
 			      			<div class="row">
 
 
-				      			<div class="col-xs-6 col-md-6">
+				      			<div class="col-xs-12 col-md-6">
 				      				<p><b><i class="fa fa-calendar"></i> Fecha: </b> {{ fecha }}</p>
 				      			</div>
-				      			<div class="col-xs-6 col-md-6">
+				      			<div class="col-xs-12 col-md-6">
 				      			
 				      				<b><i class="fa fa-clock-o"></i> Hora:</b> {{ hora }}
 				      			</div>
 			      			</div>
 
 			      			<div class="row">
-				      			<div class="col-xs-6 col-md-6">
+				      			<div class="col-xs-12 col-md-6">
 				      			
 				      				<b><i class="fa fa-user"></i> Cliente:</b> {{ pedido.Cuentas.Clientes.nombre }} {{ pedido.Cuentas.Clientes.apellido }}
 				      			</div>					      						      			
@@ -51,7 +51,7 @@
 
 				      		<div class="row">
 
-								<div class="col-xs-6 col-md-6">
+								<div class="col-xs-12 col-md-6">
 
 									<b><i class="fa fa-commenting"></i> Comentario:</b>
 

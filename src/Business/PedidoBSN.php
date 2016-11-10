@@ -547,6 +547,8 @@
                     $val->nombre = $val->Productos->nombre;
                     $val->descripcion = $val->Productos->descripcion;
                     $val->avatar = $val->Productos->avatar;
+                    $val->mesa_id = $val->Cuentas->mesa_id;
+
                     $arr[$val->id] = $val;
 
                 }
@@ -556,6 +558,8 @@
                     $val->nombre = $val->Promociones->nombre;
                     $val->descripcion = $val->Promociones->descripcion;
                     $val->avatar = $val->Promociones->avatar;
+                    $val->mesa_id = $val->Cuentas->mesa_id;
+
                     $arr[$val->id] = $val;
 
                 }

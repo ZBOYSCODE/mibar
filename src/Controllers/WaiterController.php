@@ -252,10 +252,13 @@ class WaiterController extends ControllerBase
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
-                $tableParams = $tabObj->getMesaPorId($param);
+
+                $tableParams = $tabObj->getMesaPorId(['id' => $post['table_id']]);
         
                 $dataView['detalles'] =  $tablesDetails;
                 $dataView['Mesa'] = $tableParams;
+
+                $dataView['numeroMesa'] = $tableParams->numero;
                
                 $view = "controllers/waiter/tables/details";
              
@@ -560,10 +563,13 @@ class WaiterController extends ControllerBase
 
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-                 $tableParams = $tabObj->getMesaPorId($param);
+
+                $tableParams = $tabObj->getMesaPorId(['id' => $post['table_id']]);
                
                 $dataView['detalles'] =  $tablesDetails;   
                 $dataView['Mesa'] = $tableParams;
+
+                $dataView['numeroMesa'] = $tableParams->numero;
 
                 $view = "controllers/waiter/tables/details";
              
