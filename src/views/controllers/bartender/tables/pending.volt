@@ -2,11 +2,9 @@
 
     {% if orders == false %}
 
-
         <div class="table-item card">
             <h3>No hay pedidos asociados </h3>
         </div>
-
 
     {% else %}
 
@@ -92,52 +90,6 @@
                 
 
         {% endfor %}
-
-                {#
-                    {% for pedido in orders %}
-
-
-                        <div class="table-item card" data-pedido="{{pedido.id}}" data-estado="1">
-
-
-                            <div class="row">
-
-
-                                <div class="col-xs-4 col-sm-4">
-
-                                    <div class="table-item-img">
-                                        {{ image(pedido.avatar, "alt":"", "class":"img-responsive") }}
-                                    </div>
-                                </div>
-
-                                <div class="col-xs-8 col-sm-6">
-
-                                    <div class="table-item-details">
-                                        <p class="title">{{ pedido.nombre }} </p>
-                                        <p id="estado" class="description">{{ pedido.descripcion }}</p>
-                                        <p id="estado" class="description">{{ pedido.comentario }}</p>
-                                    </div>
-
-                                </div>
-
-
-
-                                <div class="col-xs-12 col-sm-2">
-                                    <div class="row text-right">
-                                        <button type="button" class="btn btn-small btn-main table-details-button pedido-details" data-callName="pedido-details" data-pedido="{{ pedido.id }}" data-url="bartender/orderDetails">Detalles</button>
-                                        &nbsp;
-                                        <button type="button" data-pedido=" {{ pedido.id }}" class="btn btn-small btn-main table-order-button btn-concretar" data-url="bartender/completeOrder">Concretar Pedido</button>    
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-                    {% endfor %}
-                #}
-
 
     {% endif %}
 </div>

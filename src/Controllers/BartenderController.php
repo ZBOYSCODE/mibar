@@ -168,7 +168,23 @@ class BartenderController extends ControllerBase
 
         }
 
-        return $orders_drinks_pdte;
+        //return $orders_drinks_pdte;
+
+        $arr = array();
+
+        foreach ($orders_drinks_pdte as $key => $orden) {
+
+            $fecha = str_replace(' ', '', $orden->created_at);
+            $fecha = str_replace('-', '', $fecha);
+            $fecha = str_replace(':', '', $fecha);
+
+            $arr[ $orden->created_at ][$orden->cuenta_id]['fecha']      = $fecha;
+            $arr[ $orden->created_at ][$orden->cuenta_id]['fecha2']      = date('H:i' ,strtotime( $orden->created_at));
+            $arr[ $orden->created_at ][$orden->cuenta_id]['orden'][]    = $orden;
+            $arr[ $orden->created_at ][$orden->cuenta_id]['mesa_id']    = $orden->mesa_id;
+        }
+
+        return $arr;
     }
 
 
