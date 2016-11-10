@@ -696,6 +696,25 @@ div.menu-types > div:last-child{
 }
 
 
+a.mis-pedidos{
+
+  text-decoration: none;
+}
+
+.detalle_orden {
+
+   width: 100%;
+   margin: 3px auto;
+   border: none;
+   border-radius: 0;
+}
+
+.alert-delete {
+
+    background-color: rgba(204, 77, 77, .5);
+}
+
+
 /* ========== MEDIAQUERIES ===========*/
 
 @media (max-width:768px){
