@@ -63,6 +63,31 @@ $(document).on('ready', function() {
     });
 
 
+    $(document).on('change', "#select-mesas",function(){
+
+        $('.button-active').removeClass('active');
+
+        var mesa = $(this).val();
+
+
+        if(mesa == 0){
+
+            $(".table-item").show();      
+
+        } else{
+
+            $(".table-item").hide();
+
+            mesa = $(".table-item").filter("[data-mesa='"+mesa+"']");
+
+            mesa.show();
+
+        }
+
+    })
+
+
+
     /* Procedimientos Post Ajax Call */
     $(document).ajaxComplete(function(event,xhr,options){
 

@@ -10,11 +10,11 @@
 
                 <div class="col-xs-6">
                     <div class="nav-filter-item">
-                        <select name="prod-categories" id="prod-categories" class="form-control">
+                        <select name="select-mesas" id="select-mesas" class="form-control">
                             <option value="0">N° Mesa</option>
 
                             {% for mesa in mesas %}
-                                <option value="{{ mesa.id }}">{{ mesa.numero }}</option>
+                                <option value="{{ mesa.id }}">Mesa {{ mesa.numero }}</option>
                             {% endfor %}
                         </select>
                     </div>
