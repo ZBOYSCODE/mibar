@@ -73,17 +73,33 @@ $(document).on('ready', function() {
         if(mesa == 0){
 
             $(".table-item").show();      
+        } else {
+
+            $(".table-item").hide();
+            mesa = $(".table-item").filter("[data-mesa='"+mesa+"']");
+            mesa.show();
+        }
+    })
+
+    $(document).on('change', "#select-clientes",function(){
+
+        $('.button-active').removeClass('active');
+
+        var cliente_id = $(this).val();
+
+
+        if(cliente_id == 0){
+
+            $(".table-item").show();      
 
         } else{
 
             $(".table-item").hide();
 
-            mesa = $(".table-item").filter("[data-mesa='"+mesa+"']");
+            cliente_id = $(".table-item").filter("[data-client='"+cliente_id+"']");
 
-            mesa.show();
-
+            cliente_id.show();
         }
-
     })
 
 

@@ -12,22 +12,22 @@
 		</div>
 		<div class="col-xs-6 col-sm-6">
 			<div class="nav-filter-item">
-				<select name="promo-prices" id="promo-prices" class="form-control">
-				    <option value="Filtrar" class="filter">Filtrar Precio</option>
-					<option value="menos de 10 mil">menos de 10 mil</option>
-					<option value="entre 10 y 20 mil">entre 10 y 20 mil</option>
+				<select name="promo-prices" id="promo-prices" class="form-control" data-view='drink'>
+				    <option value="0" class="filter">Ordenar</option>
+                    <option value="1">Menor precio primero</option>
+                    <option value="2">Mayor precio primero</option>
 				</select>
 			</div>	
 		</div>
 	</div>
 </div>
 
-    <div class="menu-products">
+    <div class="menu-products" id='menu-products-drink'>
 
         {% for producto in productos %}
 
 
-        	<div class="product-item card" data-categoria="{{ producto.subcategoria_id }}">
+        	<div class="product-item card item-drink" data-precio='{{ producto.precio }}' data-categoria="{{ producto.subcategoria_id }}">
         		<div class="row">
         			<div class="col-xs-4 col-sm-4">
         				<div class="product-item-img">

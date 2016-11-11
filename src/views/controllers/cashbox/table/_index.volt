@@ -10,7 +10,7 @@
 
         {%  for cuenta in cuentas %}
 
-            <div class="table-item card">
+            <div class="table-item card" data-client='{{ clientes[cuenta.id].id }}'>
                 <div class="row">
                     <div class="col-xs-4 col-sm-4">
                         <div class="table-item-img">
