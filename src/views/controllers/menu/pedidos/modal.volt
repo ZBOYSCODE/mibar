@@ -5,7 +5,7 @@
 		    <div class="modal-content">
 			    <div class="modal-header card">
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
-			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MI PEDIDOS</h4>
+			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MIS PEDIDOS</h4>
 			    </div>
 			     <div class="row user-details card">
 			    	<div class="col-xs-2 col-md-2">
@@ -28,7 +28,8 @@
 							<div class="card" class='item-pedido'>
 						      	<div class="product-item-modal">
 						      	
-						      		<h3>{{ lista['fecha'] }}  Total $<?php echo number_format($lista['total'], '0', ',', '.') ?></h3>
+						      		<h3 class="pull-left">{{ lista['fecha'] }}</h3>
+						      		<h3 class="pull-right"> Total $ {{utility._number_format(lista['total'])}}</h3>
 
 						      		<div>
 										

@@ -40,7 +40,7 @@
         				    <p class="description">{{ producto.descripcion }}</p>
         				    <div class="row">
         				    	<div class="col-xs-4 col-sm-4">
-        				    		<div class="price">$ {{ producto.precio }}</div>
+        				    		<div class="price">$ {{ utility._number_format(producto.precio) }}</div>
         				    	</div>
         				    	<div class="col-xs-8 col-sm-8">
         				    		<div class="product-item-buttons pull-right">

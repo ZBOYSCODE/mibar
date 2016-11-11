@@ -38,7 +38,7 @@
 			    {% else %}
 
 			    	<form id="form-validar">
-						<div class="lista_pedidos">
+						<div class="lista_pedidos modal-bottom">
 
 							{% for pedido in pedidosCuenta %}
 

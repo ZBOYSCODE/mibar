@@ -24,6 +24,7 @@ class MenuController extends ControllerBase
 
 
 	public function initialize(){
+		parent::initialize();
 		$this->productoBsn = new ProductoBSN();
 		$this->promocionBsn = new PromocionBSN();
 	}
@@ -437,7 +438,7 @@ class MenuController extends ControllerBase
 
 
 		$data['total_pedidos'] 	= $this->getNumPedidos();
-		$data['precio_total']	= $this->getTotalPedido();
+		$data['precio_total']	= $this->utility->_number_format($this->getTotalPedido());
 
 
         echo json_encode($data);

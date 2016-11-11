@@ -148,6 +148,11 @@ body, html {
   background-color: #c12020;
 }
 
+.btn-delete:focus,
+.btn-delete:active{
+  outline: none !important;
+}
+
 .create-user-button{
   width: 40px;
   height: 35px;
@@ -223,6 +228,10 @@ body, html {
 .no-col-padding{
   padding-right: 0px;
   padding-left:  0px;
+}
+
+.modal-bottom{
+  padding-bottom: 75px;
 }
 
 /* SWAL overwriting */
@@ -418,6 +427,11 @@ div.menu-types > div:last-child{
   padding-top: 4px;
 }
 
+.product-item-buttons .plus:active,
+.product-item-buttons .plus:focus{
+  outline: none !important;
+}
+
 .product-item-buttons .minus{
   background-color: #c12020;
   color: white;
@@ -428,6 +442,11 @@ div.menu-types > div:last-child{
   height: 30px;
   margin-right: 5px;
   padding-top: 4px;
+}
+
+.product-item-buttons .minus:active,
+.product-item-buttons .minus:focus{
+  outline: none !important;
 }
 
 .product-item-buttons input{
@@ -508,7 +527,6 @@ div.menu-types > div:last-child{
 
 .menu-products-list-modal .modal-body{
   padding: 0;
-  padding-bottom: 70px;
 }
 
 .menu-products-list-modal .modal-content{
@@ -534,7 +552,7 @@ div.menu-types > div:last-child{
 
 .product-item-modal b{
   text-transform: uppercase;
-  font-size: 1.3em;
+  font-size: 1.1em;
 }
 
 .product-item-modal i{

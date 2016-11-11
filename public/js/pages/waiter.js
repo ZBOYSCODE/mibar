@@ -239,22 +239,32 @@ $(document).on('ready', function() {
     });
     
     $(document).on('click', '#delete-cuenta', function(e){
-
-        e.preventDefault();
-
+       
         delete_state        = 'false';
         cuenta_eliminada    = null;
+        
+        swal({
+            title: '¿Estás Seguro?',
+            text: "Esta acción es irreversible.",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#bd4141',
+            cancelButtonColor: '#d65cc0',
+            confirmButtonText: 'Aceptar'
+        }).then(function() {
 
-        var cuenta_id   = $(this).attr('data-cuenta');
-        var url         = $(this).attr('data-url');
+            var cuenta_id   = $(this).attr('data-cuenta');
+            var url         = $(this).attr('data-url');
 
-        var dataIn = new FormData();
+            var dataIn = new FormData();
 
-        dataIn.append('cuenta_id',   cuenta_id);
+            dataIn.append('cuenta_id',   cuenta_id);
 
-        //mifaces
-        $.callAjax(dataIn, url, $(this)); 
+            //mifaces
+            $.callAjax(dataIn, url, $(this)); 
+        }).done();
 
+        e.preventDefault();
 
     });
 

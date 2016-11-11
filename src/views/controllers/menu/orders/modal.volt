@@ -34,7 +34,7 @@
 						      				<p><b><i class="fa fa-bar-chart"></i> Cantidad: </b>{{ pedido.cantidad }}</p>
 						      			</div>
 						      			<div class="col-xs-6 col-md-6">
-						      				<p><b><i class="fa fa-calculator"></i> Total Pedido: </b>$<span>{{ pedido.precio }}</span></p>
+						      				<p><b><i class="fa fa-calculator"></i> Total Pedido: </b>$<span>{{ utility._number_format(pedido.precio) }}</span></p>
 						      			</div>
 						      		</div>
 						      		<div class="comment">
@@ -55,10 +55,10 @@
 			    </div>
 			    <div class="modal-footer card">
 			    	<div class="row">
-			    		<div class='col-xs-5'>
-							<span class="precio-total">$ {{ total_pedido }}</span>
+			    		<div class='col-xs-8'>
+							<span class="precio-total pull-left"><b>Total Pedido: </b>$ {{ utility._number_format(total_pedido) }}</span>
 						</div>
-						<div class='col-xs-7'>
+						<div class='col-xs-4'>
 							<button id="Send-Products" type="button" class="btn btn-main pull-right">ENVIAR PEDIDO</button>
 						</div>
 			    	</div>
