@@ -568,12 +568,17 @@ class MenuController extends ControllerBase
 				break;
 
 			case 3:
-				return 'azul';
+				return 'blue';
 				break;
 
 			case 5:
 				return 'green';
 				break;
+
+			default:
+				return 'black';
+				break;
+
 		}
 
 	}
