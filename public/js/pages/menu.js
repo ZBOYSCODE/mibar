@@ -254,7 +254,21 @@ $(document).on('ready', function() {
 
             products = $(".product-item").filter("[data-categoria='"+tipoPromo+"']");
 
-            products.show();
+
+            if(products.length == 0){
+
+            	div = $('<div/>', {
+				    text : 'No existen elementos',
+				    'class' : 'alert-elementos'
+				});
+
+            	$("#menu-products").append(div);
+
+            }else {
+
+            	products.show();
+            }
+            
 
         }
 
@@ -278,7 +292,19 @@ $(document).on('ready', function() {
 
             products = $(".product-item").filter("[data-categoria='"+subcategoria+"']");
 
-            products.show();
+            if(products.length == 0){
+
+            	div = $('<div/>', {
+				    text : 'No existen elementos',
+				    'class' : 'alert-elementos'
+				});
+
+            	$("#menu-products").append(div);
+
+            }else {
+
+            	products.show();
+            }
 
         }
 

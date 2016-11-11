@@ -22,7 +22,7 @@
 	</div>
 </div>
 
-    <div class="menu-products" id='menu-products-promos'>
+    <div class="menu-products" id='menu-products-promo'>
         {% for producto in promociones %}
 
         	<div class="product-item card item-promo" data-precio='{{ producto.precio }}' data-categoria="{{ producto.tipo_promo_id }}">

@@ -78,8 +78,19 @@ $(document).on('ready', function() {
 
             tables = $(".table-item").filter("[data-estado-mesa='"+filtroEstadoMesa+"']");
 
-            tables.show();
 
+            if(tables.length == 0) {
+
+                div = $('<div/>', {
+                    html : '<div class="table-item card text-center"><p class="title-alert">No existen elementos.</p></div>',
+                    'class' : 'alert-elementos'
+                });
+
+                $("#waiter_tables_details_render").append(div);
+            }else {
+
+                tables.show();
+            }
         } 
     
     });     

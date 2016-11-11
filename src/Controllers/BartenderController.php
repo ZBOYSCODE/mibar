@@ -119,18 +119,24 @@ class BartenderController extends ControllerBase
 
         $arr = array();
 
-        foreach ($orders_drinks_pdte as $key => $orden) {
+        if( $orders_drinks_pdte !== false ) {
 
-            $fecha = str_replace(' ', '', $orden->created_at);
-            $fecha = str_replace('-', '', $fecha);
-            $fecha = str_replace(':', '', $fecha);
+            if( count($orders_drinks_pdte) > 0 ){
 
-            $arr[ $orden->created_at ][$orden->cuenta_id]['fecha']      = $fecha;
-            $arr[ $orden->created_at ][$orden->cuenta_id]['fecha2']      = date('H:i' ,strtotime( $orden->created_at));
-            $arr[ $orden->created_at ][$orden->cuenta_id]['orden'][]    = $orden;
-            $arr[ $orden->created_at ][$orden->cuenta_id]['mesa_id']    = $orden->mesa_id;
+                foreach ($orders_drinks_pdte as $key => $orden) {
+
+                    $fecha = str_replace(' ', '', $orden->created_at);
+                    $fecha = str_replace('-', '', $fecha);
+                    $fecha = str_replace(':', '', $fecha);
+
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['fecha']      = $fecha;
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['fecha2']      = date('H:i' ,strtotime( $orden->created_at));
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['orden'][]    = $orden;
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['mesa_id']    = $orden->mesa_id;
+                }
+            }
         }
-
+        
         return $arr;
     }
 
@@ -172,16 +178,22 @@ class BartenderController extends ControllerBase
 
         $arr = array();
 
-        foreach ($orders_drinks_pdte as $key => $orden) {
+        if( $orders_drinks_pdte !== false ) {
 
-            $fecha = str_replace(' ', '', $orden->created_at);
-            $fecha = str_replace('-', '', $fecha);
-            $fecha = str_replace(':', '', $fecha);
+            if( count($orders_drinks_pdte) > 0 ){
 
-            $arr[ $orden->created_at ][$orden->cuenta_id]['fecha']      = $fecha;
-            $arr[ $orden->created_at ][$orden->cuenta_id]['fecha2']      = date('H:i' ,strtotime( $orden->created_at));
-            $arr[ $orden->created_at ][$orden->cuenta_id]['orden'][]    = $orden;
-            $arr[ $orden->created_at ][$orden->cuenta_id]['mesa_id']    = $orden->mesa_id;
+                foreach ($orders_drinks_pdte as $key => $orden) {
+
+                    $fecha = str_replace(' ', '', $orden->created_at);
+                    $fecha = str_replace('-', '', $fecha);
+                    $fecha = str_replace(':', '', $fecha);
+
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['fecha']      = $fecha;
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['fecha2']      = date('H:i' ,strtotime( $orden->created_at));
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['orden'][]    = $orden;
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['mesa_id']    = $orden->mesa_id;
+                }
+            }
         }
 
         return $arr;
