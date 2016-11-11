@@ -8,7 +8,7 @@
         <div class="nav-filters card tables-filter">
             <div class="row">
 
-                <div class="col-xs-6">
+                <div class="col-md-6 col-md-offset-3">
                     <div class="nav-filter-item">
                         <select name="select-mesas" id="select-mesas" class="form-control">
                             <option value="0">N° Mesa</option>

@@ -21,7 +21,8 @@
 
                 <div class="col-xs-12 col-md-6 col-md-offset-3">
                     <div class="nav-filter-item">
-                        <select name="prod-categories" id="prod-categories" class="form-control">
+                    
+                        <select name="select-clientes" id="select-clientes" class="form-control">
                             <option value="0">Cliente</option>
 
                             {% for cuenta in cuentas %}
