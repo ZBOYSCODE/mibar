@@ -239,9 +239,12 @@ $(document).on('ready', function() {
     });
     
     $(document).on('click', '#delete-cuenta', function(e){
-       
+        
         delete_state        = 'false';
         cuenta_eliminada    = null;
+
+        var cuenta_id   = $(this).attr('data-cuenta');
+        var url         = $(this).attr('data-url');
         
         swal({
             title: '¿Estás Seguro?',
@@ -252,19 +255,16 @@ $(document).on('ready', function() {
             cancelButtonColor: '#d65cc0',
             confirmButtonText: 'Aceptar'
         }).then(function() {
-
-            var cuenta_id   = $(this).attr('data-cuenta');
-            var url         = $(this).attr('data-url');
-
-            var dataIn = new FormData();
-
-            dataIn.append('cuenta_id',   cuenta_id);
-
             //mifaces
-            $.callAjax(dataIn, url, $(this)); 
-        }).done();
+            var dataIn = new FormData();
+  
+            dataIn.append('cuenta_id',   cuenta_id);
+            $.callAjax(dataIn, url, $('#delete-cuenta')); 
+
+        });
 
         e.preventDefault();
+
 
     });
 
@@ -273,18 +273,27 @@ $(document).on('ready', function() {
         var url         = $(this).attr('data-url');
         var table_id     = $(this).attr('data-mesaid');
 
-        var dataIn = new FormData();
+        swal({
+            title: '¿Estás Seguro?',
+            text: "Esta acción es irreversible.",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#eb902e',
+            cancelButtonColor: '#d65cc0',
+            confirmButtonText: 'Aceptar'
+        }).then(function() {
+            //mifaces
+            var dataIn = new FormData();
 
-        dataIn.append('table_id',    table_id);
+            dataIn.append('table_id',    table_id);
 
-        //mifaces
-        $.callAjax(dataIn, url, $(this)); 
+            $.callAjax(dataIn, url, $('#btn-liberar-mesa')); 
+            
+        });
 
     });
 
-});
-
-	
+});	
 
 
   /* Procedimientos Post Ajax Call */
@@ -332,6 +341,7 @@ $(document).ajaxComplete(function(event,xhr,options){
     }
 
 }); 
+
 
 function deleteCuenta() {
 

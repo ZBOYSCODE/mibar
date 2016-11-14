@@ -7,16 +7,13 @@
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MIS PEDIDOS</h4>
 			    </div>
-			     <div class="row user-details card">
-			    	<div class="col-xs-2 col-md-2">
-			    		{{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
-			    	</div>
-			    	<div class="col-xs-7 col-md-7">
-			    		<p>{{ session.get('auth-identity')['nombre'] }}</p>
-			    	</div>
-			    	<div class="col-xs-3 col-md-3">
-			    		<p>Mesa {{ session.get('auth-identity')['mesa'] }}</p>
-			    	</div>
+			    <div class="row card">
+			        <div class="pull-left nav-user-details-modal">
+			            {{ image("img/avatars/waiter.png", "alt":"Avatar", "class":"nav-avatar avatar-sm-card img-responsive") }}
+			            <h2 class="nav-subtitle">{{ session.get('auth-identity')['nombre'] }}</h2>
+			        </div>
+			        
+			        <h2 class="pull-right nav-subtitle"> Mesa: {{ session.get('auth-identity')['mesa'] }}</h2>
 			    </div>
 			    <div class="modal-body">
 			      <!-- Pedidos -->
@@ -27,9 +24,9 @@
 
 							<div class="card" class='item-pedido'>
 						      	<div class="product-item-modal">
-						      	
-						      		<h3 class="pull-left">{{ lista['fecha'] }}</h3>
-						      		<h3 class="pull-right"> Total $ {{utility._number_format(lista['total'])}}</h3>
+						      	    <h3><i class="fa fa-clock-o"></i> {{ date('H:i', utility._strtotime(lista['fecha'])) }}</h3>
+						      		<h3><i class="fa fa-calendar"></i> {{ date('d-m-Y', utility._strtotime(lista['fecha'])) }}</h3>
+						      		<h3><i class="fa fa-money"></i> Total $ {{utility._number_format(lista['total'])}}</h3>
 
 						      		<div>
 										
@@ -39,7 +36,7 @@
 												<th>Cnt</th>
 												<th>Nombre</th>
 												{#<th>Precio c/u</th>#}
-												<th>Precio Total</th>
+												<th>Precio</th>
 												<th>Estado</th>
 											</thead>
 
@@ -65,7 +62,7 @@
 									      	<tfooter>
 									      		<th></th>
 									      		<th></th>
-									      		<th class='text-right'>Total</th>
+									      		<th class='text-right'>TOTAL</th>
 									      		<th class='text-right'>$<?php echo number_format($lista['total'], '0', ',', '.') ?></th>
 									      		<th> </th>
 									      	</tfooter>
@@ -85,7 +82,7 @@
 			    <div class="modal-footer card">
 			    	<div class="row">
 			    		<div class='col-xs-12'>
-							<span class="precio-total">Total a pagar $ {{ total_pedido }}</span>
+							<span class="precio-total">TOTAL A PAGAR $ {{ total_pedido }}</span>
 						</div>
 						
 						{#

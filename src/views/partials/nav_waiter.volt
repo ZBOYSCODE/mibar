@@ -6,7 +6,7 @@
                     <i class="menu-bars fa fa-bars" aria-hidden="true"></i>                   
                 </button>
                 <a href="" class="pull-right">
-                    {{ image("img/avatars/waiter.png", "alt":"Avatar", "class":"nav-avatar img-responsive") }}
+                    {{ image("img/avatars/waiter.png", "alt":"Avatar", "class":"nav-avatar-waiter img-responsive") }}
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="menu">

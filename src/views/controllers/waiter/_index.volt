@@ -7,10 +7,10 @@
 <section class="section-content-top2">
 	<div class="nav-filters card tables-filter">
 		<div class="row">
-		<div class="col-xs-6 col-sm-6">
+		<div class="col-xs-6 col-sm-6 select-padding-right-col">
 			<div class="nav-filter-item">
 				 <select name="filtro-mesa" id="filtro-mesa" class="form-control">
-				 	<option value="0">Todas las mesas</option>
+				 	<option value="0">Todas</option>
 
 				 	{% for mesa in mesas %}
 				    	<option value="{{ mesa.id }}">Mesa {{ mesa.numero }}</option>	
@@ -19,10 +19,10 @@
 				</select>
 			</div>	
 		</div>
-		<div class="col-xs-6 col-sm-6">
+		<div class="col-xs-6 col-sm-6 .select-padding-left-col">
 			<div class="nav-filter-item">
 				<select name="filtro-estado-mesa" id="filtro-estado-mesa" class="form-control">
-				    <option value="0" class="filter">Todos los estados</option>
+				    <option value="0" class="filter">Estados</option>
 				 	{% for estadoMesa in estadosMesa %}
 				    	<option value="{{ estadoMesa.id }}">{{estadoMesa.name}}</option>
 					{% endfor %}

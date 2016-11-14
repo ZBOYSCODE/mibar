@@ -20,16 +20,16 @@
                         <p class="description">Total Pedidos: {{ pedidosTotales[mesa.id] }}</p>
                         <p class="description">Pedidos Pendientes: {{ pedidosPendientes[mesa.id] }}</p>
                         <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
-
-                        <a href="{{ url('waiter/tableDetails') }}/{{ mesa.id }}" class='btn btn-main btn-small dpull-right pull-right-top'>Detalle</a>
-
-                        <a id='btn-liberar-mesa' data-mesaid="{{ mesa.id }}" class='pull-right btn btn-main btn-small' data-url="waiter/freetable">Liberar</a>
                     </div>  
-                    
+                </div> 
+            </div>
+            <div class="row table-item-buttons">
+                <div class="col-xs-6 col-sm-6">
+                    <a id='btn-liberar-mesa' data-mesaid="{{ mesa.id }}" class='pull-left btn btn-main btn-small btn-release' data-url="waiter/freetable">Liberar</a>
                 </div>
-
-                
-                
+                <div class="col-xs-6 col-sm-6">
+                    <a href="{{ url('waiter/tableDetails') }}/{{ mesa.id }}" class='btn btn-main btn-small pull-right pull-right-top'>Detalle</a> 
+                </div>
             </div>
         </div>
 
