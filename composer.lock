@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "27dce72c54e3746d71cf1d26ca0f16aa",
-    "content-hash": "ffa6ba685da4ed383e83435fb82f0707",
+    "hash": "f471e533019512c161611403cec4bdc6",
+    "content-hash": "ecc1442e3ad693fbfa251ce8d835b252",
     "packages": [
         {
             "name": "cilex/cilex",
@@ -813,6 +813,48 @@
             "description": "A parsing and comparison library for semantic versioning.",
             "homepage": "http://github.com/kherge/Version",
             "time": "2012-08-16 17:13:03"
+        },
+        {
+            "name": "libern/qr-code-reader",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/libern/qr-code-reader.git",
+                "reference": "44abdd03039070f2f82ec2ad6c1827604dc8f9d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/libern/qr-code-reader/zipball/44abdd03039070f2f82ec2ad6c1827604dc8f9d1",
+                "reference": "44abdd03039070f2f82ec2ad6c1827604dc8f9d1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Libern\\QRCodeReader\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Libern Lin",
+                    "email": "libernlin@gmail.com"
+                }
+            ],
+            "description": "Simple PHP QR Code Reader / Decoder",
+            "homepage": "https://github.com/libern/qr-code-reader",
+            "keywords": [
+                "laravel",
+                "qr code decoder",
+                "qr code reader"
+            ],
+            "time": "2016-07-17 05:58:46"
         },
         {
             "name": "monolog/monolog",
