@@ -6,6 +6,7 @@
 	},
 	"require": {
 		"dompdf/dompdf": "^0.7.0",
-		"phpdocumentor/phpdocumentor": "2.*"
+		"phpdocumentor/phpdocumentor": "2.*",
+		"libern/qr-code-reader": "^1.0"
 	}
 }
