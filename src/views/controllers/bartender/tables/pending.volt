@@ -14,8 +14,8 @@
 
             {% for orden in ncuenta %}
     
-            <div class="card">
-                <button class='detalle_orden detalle_orden_bartender table_item_bartender_button' id='btn-detalle-{{ orden['mesa_id'] }}_{{ orden['fecha'] }}' data-mesa='{{ orden['mesa_id'] }}' data-fecha='{{ orden['fecha'] }}'>
+            <div class="card" id='btn-detalle-{{ orden['mesa_id'] }}_{{ orden['fecha'] }}'>
+                <button class='detalle_orden detalle_orden_bartender table_item_bartender_button'  data-mesa='{{ orden['mesa_id'] }}' data-fecha='{{ orden['fecha'] }}'>
                     
                     
                     <div class='text-left'>
@@ -28,7 +28,7 @@
                 
 
 
-                <div class='{{ orden['mesa_id'] }}_{{ orden['fecha'] }} card' style='display:none; border: 2px solid #d65cc0'>
+                <div class='{{ orden['mesa_id'] }}_{{ orden['fecha'] }} card' id='list-{{ orden['mesa_id'] }}_{{ orden['fecha'] }}' style='display:none; border: 2px solid #d65cc0'>
                             
                     {% for pedido in orden['orden'] %}
                         

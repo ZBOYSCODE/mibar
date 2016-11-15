@@ -118,7 +118,10 @@ $(document).on('ready', function() {
                     $("#btn-detalle-"+mesa+"_"+fech).addClass('alert-delete');
 
                     $("#btn-detalle-"+mesa+"_"+fech).hide('slow', function() {
+                        $(this).remove();
+                    });
 
+                    $("#list-"+mesa+"_"+fech).hide('slow', function(){
                         $(this).remove();
                     });
                 }
