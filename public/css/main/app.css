@@ -764,10 +764,30 @@ a.mis-pedidos{
     font-size: 18px; 
   }
 
+  .card-small-font-size{
+    font-size: 1.4em !important;
+  }
+
  
 
 
-  /* margin & paddings*/
+  /* margin & paddings */
+
+  .margin-top-10{
+    margin-top: 10px !important;
+  }
+
+  .btn-main-margin-bottom-sm{
+    margin-bottom: 10px !important;
+  }
+
+  .btn-main-margin-top-sm{
+    margin-top: 10px !important;
+  }
+
+  .btn-font-size-sm{
+    font-size: 0.7em !important;
+  }
 
   .select-padding-right-col{
     padding-right: 5px !important;
@@ -950,7 +970,7 @@ a.mis-pedidos{
 
   .table-item-buttons .btn-main{
     font-size: 1em !important;
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
     margin-top: 10px;
   }
 
@@ -981,6 +1001,18 @@ a.mis-pedidos{
   #delete-cuenta{
     margin-bottom: 10px;
   }
+
+  /* Bartender */
+  .detalle_orden_bartender{
+    background: none !important;
+  }
+  .table_item_bartender_button:hover,
+  .table_item_bartender_button:active,
+  .table_item_bartender_button:focus{
+    color: #d65cc0 !important;
+    outline: none !important;
+  }
+  
 
   /* buttons */
 

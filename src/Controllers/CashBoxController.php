@@ -224,11 +224,7 @@ class CashBoxController extends ControllerBase
                     } else {
 
                         $this->mifaces->addToMsg('warning', 'Error inesperado, reintente más tarde.');
-                    }
-
-
-
-                
+                    }               
                     
                 }
             }
@@ -268,7 +264,7 @@ class CashBoxController extends ControllerBase
         );
 
         $pedidos = $this->pedidosBsn->getOrdersWithoutPayment($param);
-
+       
         if ($this->session->has('pedidos_to_pay')) {
 
             $this->session->remove('pedidos_to_pay');

@@ -20,7 +20,8 @@
                     <div class="col-xs-8 col-sm-8">
                         <div class="table-item-details">
 
-                            <p class="title">Cliente: {{ clientes[cuenta.id].nombre }}
+                            <p class="title">Cliente:</p>
+                            <p class="title">{{ clientes[cuenta.id].nombre }}
 
                                 {% if clientes[cuenta.id].apellido != null %}
                                     {{ clientes[cuenta.id].apellido }}
@@ -33,7 +34,7 @@
                              {% if subtotales[cuenta.id] > 0 %}
                             <div class="row">
 
-                                <span class="btn btn-small btn-main pull-right table-details-button"
+                                <span class="btn btn-small btn-main pull-right table-details-button btn-main-margin-bottom-sm btn-font-size-sm btn-main-margin-top-sm"
                                       data-callName="pagarCuenta"
                                       data-url="{{ url("cashbox/pagarCuenta") }}"
                                       data-cuenta="{{ cuenta.id }}">

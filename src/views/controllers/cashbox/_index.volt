@@ -9,7 +9,7 @@
 	<section class="section-content-top2">
 		<div class="card">
 
-			<h4>Cuentas pendientes de pago: Mesa <i class="fa fa-slack"></i>{{ mesa.numero }}</h4>
+			<h4>Cuentas por pagar: Mesa {{ mesa.numero }}</h4>
 
 		</div>
 	</section>

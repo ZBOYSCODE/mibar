@@ -44,8 +44,10 @@
                             <div class="table-item-details">
                                 <p class="title">MESA {{mesa.numero}} </p>
                                 <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
-                                <div class="row">
-                                    <a href="{{ url("cashbox/table/")~mesa.id }}" class="btn btn-small btn-main pull-right" data-table="{{ mesa.id }}" data-url="waiter/tableDetails">Ver Cuentas</a>
+                                <div class="row table-item-buttons">
+                                    <div class="col-xs-12 col-sm-12">
+                                       <a href="{{ url("cashbox/table/")~mesa.id }}" class="btn btn-small btn-main btn-main-margin-bottom-sm btn-font-size-sm pull-right" data-table="{{ mesa.id }}" data-url="waiter/tableDetails">Ver Cuentas</a>
+                                    </div>
                                 </div>
                             </div>
 

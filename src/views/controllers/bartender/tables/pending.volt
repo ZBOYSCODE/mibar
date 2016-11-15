@@ -14,8 +14,8 @@
 
             {% for orden in ncuenta %}
     
-
-                <button class='table-item card detalle_orden' id='btn-detalle-{{ orden['mesa_id'] }}_{{ orden['fecha'] }}' data-mesa='{{ orden['mesa_id'] }}' data-fecha='{{ orden['fecha'] }}'>
+            <div class="card">
+                <button class='detalle_orden detalle_orden_bartender table_item_bartender_button' id='btn-detalle-{{ orden['mesa_id'] }}_{{ orden['fecha'] }}' data-mesa='{{ orden['mesa_id'] }}' data-fecha='{{ orden['fecha'] }}'>
                     
                     
                     <div class='text-left'>
@@ -24,9 +24,11 @@
                     </div>
 
                 </button>
+            </div>
+                
 
 
-                <div class='{{ orden['mesa_id'] }}_{{ orden['fecha'] }}' style='display:none'>
+                <div class='{{ orden['mesa_id'] }}_{{ orden['fecha'] }} card' style='display:none; border: 2px solid #d65cc0'>
                             
                     {% for pedido in orden['orden'] %}
                         
@@ -68,9 +70,9 @@
                                                 data-fecha  = "{{ orden['fecha'] }}"
                                                 data-mesa   = "{{ orden['mesa_id'] }}"
 
-                                                class="btn btn-small btn-main table-order-button btn-concretar" 
+                                                class="btn btn-small btn-main table-order-button btn-concretar btn-main-margin-bottom-sm" 
                                                 data-callName="delete-pedido" 
-                                                data-url="{{ url('bartender/completeOrder') }}">√</button>    
+                                                data-url="{{ url('bartender/completeOrder') }}"><i class="fa fa-check"></i></button>    
                                     
                                 </div>
 
