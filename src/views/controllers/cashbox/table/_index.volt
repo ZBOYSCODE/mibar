@@ -1,6 +1,6 @@
 <div id="tables-content">
 
-    {% if cuentas == false %}
+    {% if cuentasGroup == false %}
 
         <div class="table-item card">
             <h3>No hay Cuentas </h3>
@@ -8,9 +8,9 @@
 
     {% else %}
 
-        {%  for cuenta in cuentas %}
+        {%  for cuenta in cuentasGroup %}
 
-            <div class="table-item card" data-client='{{ clientes[cuenta.id].id }}'>
+            <div class="table-item card" data-client='{{ cuenta['cliente'].id }}'>
                 <div class="row">
                     <div class="col-xs-4 col-sm-4">
                         <div class="table-item-img">
@@ -21,23 +21,23 @@
                         <div class="table-item-details">
 
                             <p class="title">Cliente:</p>
-                            <p class="title">{{ clientes[cuenta.id].nombre }}
+                            <p class="title">{{ cuenta['cliente'].nombre }}
 
-                                {% if clientes[cuenta.id].apellido != null %}
-                                    {{ clientes[cuenta.id].apellido }}
+                                {% if cuenta['cliente'].apellido != null %}
+                                    {{ cuenta['cliente'].apellido }}
                                 {% endif %}
 
                             </p>
 
-                            <p class="description">Total Pedidos: {{ cantidadPedidos[cuenta.id] }}</p>
-                            <p class="description">Subtotal: ${{ subtotales[cuenta.id] }}</p>
-                             {% if subtotales[cuenta.id] > 0 %}
+                            <p class="description">Total Pedidos: {{ cuenta['cantidadPedidos'] }}</p>
+                            <p class="description">Subtotal: $ {{ cuenta['subtotal'] }}</p>
+                             {% if cuenta['subtotal'] > 0 %}
                             <div class="row">
 
                                 <span class="btn btn-small btn-main pull-right table-details-button btn-main-margin-bottom-sm btn-font-size-sm btn-main-margin-top-sm"
                                       data-callName="pagarCuenta"
                                       data-url="{{ url("cashbox/pagarCuenta") }}"
-                                      data-cuenta="{{ cuenta.id }}">
+                                      data-cuenta="{{ cuenta['cuenta'].id }}">
                                     Detalles
                                 </span>
 

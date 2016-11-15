@@ -9,7 +9,7 @@
 			    <div class="row card">
 			        <div class="pull-left nav-user-details-modal">
 			            {{ image("img/avatars/default.png", "alt":"Avatar", "class":"nav-avatar avatar-sm-card img-responsive") }}
-			            <h2 class="nav-subtitle">{{cuenta.Clientes.nombre ~ " " ~ cuenta.Clientes.apellido}}</h2>
+			            <h2 class="nav-subtitle nav-margin-left">{{cuenta.Clientes.nombre ~ " " ~ cuenta.Clientes.apellido}}</h2>
 			        </div>
 			        
 			        <h2 class="pull-right nav-subtitle"> Mesa: {{ cuenta.Mesas.numero }}</h2>

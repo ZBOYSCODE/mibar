@@ -25,8 +25,8 @@
                         <select name="select-clientes" id="select-clientes" class="form-control">
                             <option value="0">Cliente</option>
 
-                            {% for cuenta in cuentas %}
-                                <option value="{{ cuenta.Clientes.id }}">{{ cuenta.Clientes.nombre }}</option>
+                            {% for cuenta in cuentasGroup %}
+                                <option value="{{ cuenta['cliente'].id }}">{{ cuenta['cliente'].nombre }}</option>
                             {% endfor %}
                         </select>
                     </div>

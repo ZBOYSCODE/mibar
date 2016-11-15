@@ -82,6 +82,10 @@ body, html {
   left: 90px;
 }
 
+.nav-margin-left{
+  margin-left: 70px;
+}
+
 /* Card Layouts */
 
 .card {
@@ -887,6 +891,7 @@ a.mis-pedidos{
 
   .product-item-img img {
     height: 80px;
+    width: 80px;
   }
 
   .product-item-details .title {
@@ -971,6 +976,7 @@ a.mis-pedidos{
 
   .table-item-img img {
     height: 80px;
+    width: 80px;
     margin-top: 5px;
   }
 

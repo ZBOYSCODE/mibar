@@ -25,7 +25,7 @@
                             {% for producto in productos %}
                                 <div class="row">
                                     <div class="col-xs-8 col-md-8">{{ producto.nombre }}</div>
-                                    <div class="col-xs-4 col-md-4">${{ utility._number_format(producto.precio) }}</div>
+                                    <div class="col-xs-4 col-md-4">$ {{ utility._number_format(producto.precio) }}</div>
                                 </div>
                             {% endfor %}
                         </div>
@@ -39,7 +39,7 @@
                             <p><i class="fa fa-plus"></i> Subtotal:</p>
                         </div>
                         <div id="subtotal" class="col-md-4 col-xs-4">
-                            ${{ utility._number_format(subtotal) }}
+                            $ {{ utility._number_format(subtotal) }}
                         </div>
                     </div>   
                     <div class="row">

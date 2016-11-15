@@ -50,6 +50,7 @@ class CajaBSN extends Plugin
             "estado = '" . ACTIVA . "' and mesa_id = " . $param['mesa_id']
         );
 
+
         if(!$result->count()) {
             $this->error[] = $this->errors->NO_RECORDS_FOUND;
             return false;

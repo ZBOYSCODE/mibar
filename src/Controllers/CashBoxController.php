@@ -106,12 +106,15 @@ class CashBoxController extends ControllerBase
                     if (!$cantidadPedidos[$var->id]) {
                         $cantidadPedidos[$var->id] = 0;
                     }
+
+                    $bills[$var->id] = $var;
                 }
 
-                $this->view->setVar('cuentas', $cuentas);
+                $hasCuentas = true;
 
             } else {
-                $this->view->setVar('cuentas', false);
+
+                $hasCuentas = false;
 
             }
 
@@ -124,9 +127,24 @@ class CashBoxController extends ControllerBase
             $mesa = $mesaObj->getMesaPorId($param);
 
 
-            $this->view->setVar('subtotales', $subtotales);
-            $this->view->setVar('cantidadPedidos', $cantidadPedidos);
-            $this->view->setVar('clientes', $clientes);
+            // Ordenar subtotales de mayor a menor.
+            arsort($subtotales);
+
+            // Se ordenan y agrupan los demás campos, en base a los subtotales.
+            foreach ($subtotales as $key => $val) {
+
+                $cuentasGroup[$key] = [  'subtotal' => $val, 
+                                    'cliente'  => $clientes[$key],
+                                    'cantidadPedidos' => $cantidadPedidos[$key],
+                                    'cuenta' => $bills[$key]];
+
+            }
+
+            if($hasCuentas)
+                $this->view->setVar('cuentasGroup',$cuentasGroup);
+            else 
+                $this->view->setVar('cuentasGroup',false);
+
             $this->view->setVar('mesa', $mesa);
             $this->view->pick('controllers/cashbox/_index');
         } else {
