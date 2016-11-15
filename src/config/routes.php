@@ -36,4 +36,9 @@
         'params'        =>  1
     ));
 
+    $router->add('scanner', array(
+        'controller'    => "scanner",
+        'action'        => "show"
+    ));
+
 	return $router;
