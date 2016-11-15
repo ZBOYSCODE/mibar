@@ -778,6 +778,7 @@ a.mis-pedidos{
 
   .card-full{
     min-height: 100%;
+    padding-bottom: 50px;
   }
 
   .btn-capture{
