@@ -25,7 +25,7 @@
 		        	<div class="col-xs-12 col-sm-6">
 		        	<h1 class="title"><b>Paso 2</b></h1>
 		        	    <h1 class="subtitle">Presiona para Acceder a nuestra Aplicación</h1>
-		        		<button id='captura_qr' class="btn btn-capture"><i class="fa fa-paper-plane"></i></button>
+		        		<button type="submit" class="btn btn-capture"><i class="fa fa-paper-plane"></i></button>
 		        	</div>
 		        </div>
 		    </fieldset>	   

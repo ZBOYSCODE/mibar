@@ -100,7 +100,7 @@
 
             
 
-            return $this->response->redirect('login');
+            return $this->response->redirect('/');
         }
 
 	}
