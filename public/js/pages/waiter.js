@@ -177,6 +177,10 @@ $(document).on('ready', function() {
         
         var dataIn = new FormData();
 
+
+        console.log(url)
+        console.log(table_id)
+
         $('.checkPedido').each(function(){
 
             if($(this).is(':checked')){

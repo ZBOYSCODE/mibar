@@ -75,7 +75,7 @@
 
 			<div class="menu-footer">
 				<div class="row menu-footer-buttons card">
-					<button id="btn-entregar-pedidos" class="btn btn-main btnAjax" data-url="{{url('waiter/deliverOrders')}}" data-callname="btn-entregar-pedidos" data-table="{{ cuenta.mesa_id }}">ENTREGAR PEDIDOS</button>
+					<button id="btn-entregar-pedidos" class="btn btn-main btnSave" data-url="{{url('waiter/deliverOrders')}}" data-callname="btn-entregar-pedidos" data-table="{{ cuenta.mesa_id }}">ENTREGAR PEDIDOS</button>
 				</div>
 			</div>	
 		    {% endif %}

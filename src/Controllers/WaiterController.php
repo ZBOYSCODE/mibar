@@ -198,7 +198,6 @@ class WaiterController extends ControllerBase
     * cambia estado a una serie de pedidos 
     *
     */
-
     public function validateOrdersAction(){   
 
         if($this->request->isAjax()){
@@ -234,7 +233,6 @@ class WaiterController extends ControllerBase
                         $this->mifaces->addToMsg('warning','Los pedidos no han sido cancelados correctamente!');
 
                     }
-
                 }
 
                 if($resultValidacion || $resultCancelacion){

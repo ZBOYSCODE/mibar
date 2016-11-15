@@ -128,7 +128,6 @@ $(document).on('ready', function() {
                 
             });
         }
-
     }
 
     function renderPage() {
