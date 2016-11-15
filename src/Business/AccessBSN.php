@@ -48,6 +48,11 @@
          */
         private $SIN_PAGAR = 1;
 
+        /**
+         * @var integer estado mesa
+         */
+        private $MESA_OCUPADA = 2;
+
 
         /**
          * Creación usuario temporal
@@ -122,6 +127,7 @@
             $cuenta->mesa_id = $this->session->get('table_id_tmp');
             $cuenta->estado = $this->SIN_PAGAR;
 
+            $this->updateEstadoMesa($cuenta->mesa_id, $this->MESA_OCUPADA);
 
             if( $cuenta->save() == false ) {
 
@@ -133,6 +139,30 @@
             }
 
             return $cuenta;
+        }
+
+        /**
+         * updateEstadoMesa
+         *
+         * actualiza el estado de la mesa seleccionada
+         *
+         * @author Sebastián Silva
+         */
+        private function updateEstadoMesa($mesa_id, $estado) {
+
+            $mesa = Mesas::findFirstById($mesa_id);
+
+            if($mesa == false){
+                return false;
+            }
+
+            $mesa->estado_mesa_id = $estado;
+
+            if($mesa->save()  == false ){
+                return false;
+            } 
+
+            return true;
         }
 
         /**
