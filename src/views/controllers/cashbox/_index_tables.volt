@@ -11,7 +11,7 @@
                 <div class="col-md-6 col-md-offset-3">
                     <div class="nav-filter-item">
                         <select name="select-mesas" id="select-mesas" class="form-control">
-                            <option value="0">N° Mesa</option>
+                            <option value="0">Todas</option>
 
                             {% for mesa in mesas %}
                                 <option value="{{ mesa.id }}">Mesa {{ mesa.numero }}</option>

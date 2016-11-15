@@ -40,8 +40,10 @@ class ScannerController extends ControllerBase
      *
      */
     public function indexAction()
-    {
+    {   
+
         $this->contextRedirect("scanner/show");
+
     }
 
     public function showAction(){
@@ -51,7 +53,7 @@ class ScannerController extends ControllerBase
 
             #$this->assets->addJs('js/pages/scanner/webcodecamjquery.js');
             #$this->assets->addJs('js/pages/scanner/mainjquery.js');
-
+            $this->assets->addCss("css/plugins/file-input.css");
             $this->assets->addJs('js/pages/scanner.js');
 
             $this->view->pick("controllers/scanner/_index");

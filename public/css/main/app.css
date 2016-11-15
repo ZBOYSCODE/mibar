@@ -208,7 +208,7 @@ body, html {
     margin-top: -8px;
     position:absolute;
     opacity: 0.3;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.1s ease-in-out;
     width: 40px;
 }
 .wine-switch > label::after {
@@ -220,7 +220,7 @@ body, html {
     margin-top: -8px;
     position: absolute;
     top: -4px;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.1s ease-in-out;
     width: 24px;
 }
 .wine-switch > input[type="checkbox"]:checked + label::before {
@@ -774,6 +774,49 @@ a.mis-pedidos{
     background: none !important;
   }
 
+  /* Scanner Qr*/
+
+  .card-full{
+    min-height: 100%;
+  }
+
+  .btn-capture{
+    font-size: 3.5em !important;
+    width: 103px;
+    height: 134px;
+    background-color: #d3394c;
+    border: none !important;
+    border-radius: 0px !important;
+    margin-top: 10px;
+  }
+
+  .btn-capture:active,
+  .btn-capture:focus,
+  .btn-capture:hover{
+    outline: none !important;
+    background-color: #d65cc0 !important;
+    color: #fff;
+  }
+  .scanner-form .wel-logo{
+    margin: 30px 0;
+  }
+
+  .scanner-form .title{
+    font-size: 30px;
+    margin: 30px;
+    color: #d65cc0;
+  }
+
+  .scanner-form .subtitle{
+    font-size: 25px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    width: 80%;
+  }
+
+   
+
+
 
 /* ========== MEDIAQUERIES ===========*/
 
@@ -1047,6 +1090,12 @@ a.mis-pedidos{
   .table_item_bartender_button:focus{
     color: #d65cc0 !important;
     outline: none !important;
+  }
+
+  /* Scanner */
+
+  .btn-capture{
+    font-size: 3.5em !important;
   }
   
 
