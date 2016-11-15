@@ -6,6 +6,11 @@ use Phalcon\Mvc\User\Plugin;
 use App\Models\Cuentas;
 use App\Models\Pedidos;
 use App\Models\Pagos;
+
+
+DEFINE('ACTIVA', '1');
+DEFINE('PEDIDO_CANCELADO', 6);
+
 /**
  * Modelo de negocio
  *
@@ -14,7 +19,6 @@ use App\Models\Pagos;
  *
  * @author Zenta Group Viña del Mar
  */
-DEFINE('POR_PAGAR', '1');
 class CajaBSN extends Plugin
 {
     /**
@@ -43,7 +47,7 @@ class CajaBSN extends Plugin
         }
 
         $result = Cuentas::find(
-            "estado = '" . POR_PAGAR . "' and mesa_id = " . $param['mesa_id']
+            "estado = '" . ACTIVA . "' and mesa_id = " . $param['mesa_id']
         );
 
         if(!$result->count()) {
@@ -67,8 +71,11 @@ class CajaBSN extends Plugin
             return false;
         }
         $result = 0;
-        $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
-        if($pedidos->count() != 0) {
+        $pedidos = Pedidos::find("  pago_id is null 
+                                AND estado_id != ".PEDIDO_CANCELADO."
+                                AND cuenta_id = " . $param['cuenta_id']);
+
+        if($pedidos->count()) {
             foreach ($pedidos as $var) {
                 $result = $result + $var->precio;
             }
@@ -90,7 +97,9 @@ class CajaBSN extends Plugin
             return false;
         }
 
-        $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
+        $pedidos = Pedidos::find("  pago_id is null 
+                                AND estado_id != ".PEDIDO_CANCELADO."
+                                AND cuenta_id = " . $param['cuenta_id']);
 
         return $pedidos->count();
     }
@@ -284,6 +293,8 @@ class CajaBSN extends Plugin
             //$pedidos = $pedidosBsn->getOrdersWithoutPayment($param);
 
             $list = $this->session->get('pedidos_to_pay');
+
+
 
             $pedidos = Pedidos::find(" id in ({$list}) ");
 

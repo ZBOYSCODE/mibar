@@ -690,6 +690,10 @@ div.menu-types > div:last-child{
     background-image: -webkit-linear-gradient(top, #0033FF 0%, #4454E4 50%, #9AA5EE 100%);
 }
 
+.led-black {
+    background-image: -webkit-linear-gradient(top, #060c16 0%, #151a49 50%, #616896 100%);
+}
+
 
 .led {
     border-radius: 5px;
@@ -744,6 +748,13 @@ a.mis-pedidos{
     background-color: rgba(204, 77, 77, .5);
 }
 
+.title-alert {
+    font-size: 2em;
+}
+
+.listado-pendientes{
+  color: white;
+}
 
 /* ========== MEDIAQUERIES ===========*/
 
@@ -768,7 +779,10 @@ a.mis-pedidos{
     font-size: 1.4em !important;
   }
 
- 
+
+  .menu-products {
+    padding-bottom: 5px;
+  }
 
 
   /* margin & paddings */

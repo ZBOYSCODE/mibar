@@ -33,7 +33,10 @@
     	        <div class="col-xs-8 col-sm-8">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
-                            <button type="button" id='delete-cuenta' class="btn btn-main btn-delete btn-sm delete-cuenta-button pull-right" data-cuenta="{{ detalle['cuenta'].id }}" data-callName="delete-cuenta-button" data-url="{{ url('waiter/deleteCuenta') }}"><i class="fa fa-trash"></i></button>
+                            <button type="button" id='delete-cuenta' class="btn btn-main btn-delete btn-sm delete-cuenta-button pull-right" data-cuenta="{{ detalle['cuenta'].id }}" data-callName="delete-cuenta-button" data-url="{{ url('waiter/deleteCuenta') }}">
+                                <i class="fa fa-trash"></i>
+                                <span class='hidden-xs'>Eliminar</span>
+                            </button>
                         </div>
                     </div> 
     	            <div class="table-item-details">
@@ -45,14 +48,24 @@
     	    </div>
     	    <div class="table-item-footer">
                 <div class="row table-item-buttons">
-                    <div class="col-xs-4 col-sm-4">
-                        <a href="{{ url('waiter/createOrder') }}/{{ detalle['cuenta'].id }}" class='btn btn-main'><i class="fa fa-plus"></i></a>
+                    <div class="col-xs-4 col-sm-4 col-md-2 col-md-offset-6">
+                        <a href="{{ url('waiter/createOrder') }}/{{ detalle['cuenta'].id }}" class='btn btn-main'>
+                            <i class="fa fa-plus"></i>
+                            <span class='hidden-xs'>Crear orden</span>
+                        </a>
+
                     </div>
-                    <div class="col-xs-4 col-sm-4">
-                        <button type="button" class="btn btn-main detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" ><i class="fa fa-check-square-o"></i></button>
+                    <div class="col-xs-4 col-sm-4 col-md-2">
+                        <button type="button" class="btn btn-main detalle-cuenta" data-callName="bill-details-button" data-url="{{ url('waiter/billDetails') }}" data-cuenta="{{ detalle['cuenta'].id }}" >
+                            <i class="fa fa-check-square-o"></i>
+                            <span class='hidden-xs'>Pendientes</span>
+                        </button>
                     </div>
-                    <div class="col-xs-4 col-sm-4">
-                        <button type="button" class="btn btn-main pedidos-pendientes" data-callName="pedidos-pendientes" data-url="{{ url('waiter/getPendingOrders') }}" data-cuenta="{{ detalle['cuenta'].id }}" ><i class="fa fa-clock-o"></i></button>
+                    <div class="col-xs-4 col-sm-4 col-md-2">
+                        <button type="button" class="btn btn-main pedidos-pendientes" data-callName="pedidos-pendientes" data-url="{{ url('waiter/getPendingOrders') }}" data-cuenta="{{ detalle['cuenta'].id }}" >
+                            <i class="fa fa-clock-o"></i>
+                            <span class='hidden-xs'>Por entregar</span>    
+                        </button>
                     </div>
                 </div>
     	    </div>

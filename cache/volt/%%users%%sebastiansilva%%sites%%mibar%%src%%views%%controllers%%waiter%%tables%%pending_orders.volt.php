@@ -6,24 +6,21 @@
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i>PEDIDOS PENDIENTES</h4>
 			    </div>
-			     <div class="row user-details card">
-			    	<div class="col-xs-2 col-md-2">
-			    		<?= $this->tag->image(['img/avatars/default.png', 'alt' => '', 'class' => 'img-responsive']) ?>
-			    	</div>
-			    	<div class="col-xs-7 col-md-7">
-			    		<p><?= $cuenta->Clientes->nombre ?> <?= $cuenta->Clientes->apellido ?></p>
-			    	</div>
-			    	<div class="col-xs-3 col-md-3">
-			    		<p>Mesa: <?= $cuenta->Mesas->numero ?></p>
-			    	</div>
+			    <div class="row card">
+			        <div class="pull-left nav-user-details-modal">
+			            <?= $this->tag->image(['img/avatars/default.png', 'alt' => 'Avatar', 'class' => 'nav-avatar avatar-sm-card img-responsive']) ?>
+			            <h2 class="nav-subtitle"><?= $cuenta->Clientes->nombre . ' ' . $cuenta->Clientes->apellido ?></h2>
+			        </div>
+			        
+			        <h2 class="pull-right nav-subtitle"> Mesa: <?= $cuenta->Mesas->numero ?></h2>
 			    </div>
 			    <div class="modal-body">
 
 			    <?php if ($pedidosCuenta == false) { ?>
 
 
-		            <div class="card text-center">
-		               <h3>No hay Pedidos Pendientes.</h3>
+		            <div class="card text-center margin-bottom-last-card">
+		               <h4>No hay Pedidos Pendientes.</h4>
 		            </div>
 		            </div>
 				    </div>
@@ -38,7 +35,7 @@
 			    <?php } else { ?>
 
 			    	<form id="form-validar">
-						<div class="lista_pedidos">
+						<div class="lista_pedidos modal-bottom">
 
 							<?php foreach ($pedidosCuenta as $pedido) { ?>
 

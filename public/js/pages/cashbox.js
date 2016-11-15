@@ -121,6 +121,7 @@ $(document).on('ready', function() {
                 //openmodal("boleta-modal");
 
                 $("#pagar-modal").modal('toggle');
+                $('body').removeClass('modal-open');
                 $(".modal-backdrop").hide();
             }
 

@@ -32,7 +32,7 @@
                             
                     {% for pedido in orden['orden'] %}
                         
-                        <div class="table-item" id='table-pedido-{{pedido.id}}' data-pedido="{{pedido.id}}" data-estado="1">
+                        <div class="table-item listado-pendientes" id='table-pedido-{{pedido.id}}' data-pedido="{{pedido.id}}" data-estado="1">
 
 
                             <div class="row">

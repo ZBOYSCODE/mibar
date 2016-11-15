@@ -69,13 +69,10 @@ class CashBoxController extends ControllerBase
             "estado_mesa_id" => $status->id
         ];
 
-
         $mesas = $meseroBsn->getMesasPorEstado($param);
-
 
         $this->view->setVar('mesas', $mesas);
         $this->view->pick('controllers/cashbox/_index_tables');
-
     }
 
 
@@ -92,6 +89,7 @@ class CashBoxController extends ControllerBase
 
             if ($cuentas) {
                 foreach ($cuentas as $var) {
+
                     $param = array('cuenta_id' => $var->id);
                     $subtotales[$var->id] = number_format($this->cajaBsn->getSubTotalByCuenta($param), 0, ',', '.');
                     $cantidadPedidos[$var->id] = $this->cajaBsn->getCantidadPedidoByCuenta($param);
@@ -101,6 +99,7 @@ class CashBoxController extends ControllerBase
                         $cuentas = false;
                         break;
                     }
+
                     if(!$subtotales[$var->id]){
                         $subtotales[$var->id] = 0;
                     }
@@ -213,8 +212,6 @@ class CashBoxController extends ControllerBase
 
                 } else {
 
-
-
                     if ( $this->savePedidosToPay( $_POST["cuenta_id"] ) ) {
 
                         $view = "controllers/cashbox/pagar/modal";
@@ -263,6 +260,7 @@ class CashBoxController extends ControllerBase
             'cuenta_id' => $cuenta_id
         );
 
+
         $pedidos = $this->pedidosBsn->getOrdersWithoutPayment($param);
        
         if ($this->session->has('pedidos_to_pay')) {
@@ -270,11 +268,16 @@ class CashBoxController extends ControllerBase
             $this->session->remove('pedidos_to_pay');
         }
 
+
         $arr = array();
 
-        foreach ($pedidos as $pedido) {
-            array_push($arr, $pedido->id);
+        if($pedidos != false) {
+
+            foreach ($pedidos as $pedido) {
+                array_push($arr, $pedido->id);
+            }
         }
+
 
         $arr = implode(',', $arr);
 
@@ -377,7 +380,7 @@ class CashBoxController extends ControllerBase
 
                     $toRend = $this->view->getPartial($view, $dataView);
 
-                    $this->mifaces->addToRend('tables-content',$toRend);
+                    $this->mifaces->addToRend('tables-content-parent',$toRend);
                     $this->mifaces->addToMsg('success', 'Pagado con exito.');
 
 

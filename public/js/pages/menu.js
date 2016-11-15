@@ -185,6 +185,7 @@ $(document).on('ready', function() {
 
 
 		$('.button-active').removeClass('active');
+		$(this).children().addClass('active');
 
         var action = $(this).data("url");
 
@@ -199,6 +200,7 @@ $(document).on('ready', function() {
    	$(document).on('click', '.menu-promo', function(){
 
    		$('.button-active').removeClass('active');
+   		$(this).children().addClass('active');
 
         var action = $(this).data("url");
 

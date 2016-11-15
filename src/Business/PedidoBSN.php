@@ -23,6 +23,8 @@
     use App\Models\SubcategoriaProductos;
     use App\Models\CategoriaProductos;
 
+    //DEFINE('PEDIDO_CANCELADO', 6);
+
     /**
      * Modelo de negocio
      *
@@ -485,7 +487,7 @@
             );
 
 
-            if( $pedidos->count() == 0) {
+            if( !$pedidos->count() ) {
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
                 return false;
             }
@@ -531,11 +533,14 @@
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
+
+
             $pedidosPromo = Pedidos::query()
                 ->leftJoin('App\Models\Promociones','prm.id  =
                 App\Models\Pedidos.promocion_id',   'prm')            
                 ->where("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
                 ->andWhere("App\Models\Pedidos.producto_id is NULL")
+                ->andWhere("prm.categoriaproducto_id = {$param["category_id"]}")
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
@@ -637,7 +642,9 @@
                 return false;
             }
 
-            $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
+            $pedidos = Pedidos::find("  pago_id is null 
+                                    AND estado_id != ".PEDIDO_CANCELADO."
+                                    AND cuenta_id = " . $param['cuenta_id']);
             if (!$pedidos->count()) {
                 $error[] = $this->errors->NO_RECORDS_FOUND;
                 return false;

@@ -36,7 +36,7 @@
         </div>
     </section>
 
-	<div id="tables-content">
+	<div id="tables-content-parent">
 		{{ partial("controllers/cashbox/table/_index") }}
 	</div>
 

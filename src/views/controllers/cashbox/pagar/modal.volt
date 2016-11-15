@@ -43,20 +43,23 @@
                         </div>
                     </div>   
                     <div class="row">
+
                         <div class="col-xs-5 col-sm-5 ">
                             <p><i class="fa fa-minus"></i> Descuento:</p>
                         </div>
-                        <div class="col-xs-5 col-sm-5 ">
+                        <div class="col-xs-4 col-sm-5 ">
                             <input class="form-control" id="descuento" name="decuento" type="number" placeholder="$ 0">
                         </div>
-                        <div class="col-xs-2 col-sm-2 ">
+                        <div class="col-xs-3 col-sm-2 ">
                             <button 
                                 class="btn btn-small btn-main pull-right btn-main-margin-bottom-sm" 
                                 id="btn-descuento"
                                 data-callName='updatePrecio'
                                 data-url="{{ url('cashbox/updescuento') }}"
-                                data-cuenta="{{ cuenta_id }}"
-                                ><i class="fa fa-check"></i></button>
+                                data-cuenta="{{ cuenta_id }}">
+                                <i class="fa fa-check"></i>    
+                            </button>
+
                         </div>
                     </div>
                 </div>
