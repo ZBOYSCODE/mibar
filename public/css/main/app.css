@@ -7,6 +7,16 @@ body, html {
   width: 100%;
 }
 
+.modal-close{
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.modal-close:focus,
+.modal-close:active{
+  outline: none !important;
+}
+
 /* Navs */
 
 .navbar-background{

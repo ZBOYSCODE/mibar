@@ -39,10 +39,10 @@
         				    <p class="title">{{producto.nombre}}</p>
         				    <p class="description">{{ producto.descripcion }}</p>
         				    <div class="row">
-        				    	<div class="col-xs-12 col-sm-4 select-padding-right-col">
+        				    	<div class="col-xs-12 col-sm-12 select-padding-right-col">
         				    		<div class="price">$ {{ utility._number_format(producto.precio) }}</div>
         				    	</div>
-        				    	<div class="col-xs-12 col-sm-8 select-padding-left-col">
+        				    	<div class="col-xs-12 col-sm-12 select-padding-left-col">
         				    		<div class="product-item-buttons pull-right">
         				    			<button class="minus" data-producto='{{producto.id}}'><i class="fa fa-minus"></i></button>
         				    			<button class="plus" data-producto='{{producto.id}}'><i class="fa fa-plus"></i></button>

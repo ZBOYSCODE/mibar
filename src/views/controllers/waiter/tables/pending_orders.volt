@@ -54,7 +54,7 @@
 							      		<p class="title">{{ title }}</p>
 							      		<div class="row">
 							      			<div class="col-xs-6 col-md-6">
-							      				<p><b><i class="fa fa-calculator"></i> Precio: </b>$<span>{{ pedido.precio }}</span></p>
+							      				<p><b><i class="fa fa-calculator"></i> Precio: </b>$ <span>{{ utility._number_format(pedido.precio) }}</span></p>
 							      			</div>
 							      			<div class="col-xs-6 col-md-6">
 							      			
