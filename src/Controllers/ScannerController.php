@@ -9,6 +9,7 @@ use App\Business\ProductoBSN;
 use App\library\Constants\Constant;
 
 
+ini_set('memory_limit', '-1');
 
 
 class ScannerController extends ControllerBase
@@ -71,14 +72,39 @@ class ScannerController extends ControllerBase
         
             foreach ($this->request->getUploadedFiles() as $file) {
                
-                $ruta = "files/qr/".$nombre;
+                $ruta = "files/qr/".$nombre.".jpg";
+
+
+                 
+
+
+
 
                 // Move the file into the application
                 if (  $result = $file->moveTo($ruta) ){
 
+                    $data['ruta'] = $ruta;
+
+
+                    //$ruta = $this->ImageResize($ruta, 200, 200);
+
+
+
                     $textqr = $this->readQr($ruta);
 
-                    $mesa = $this->getTableByQr($textqr);
+                    if ( $textqr == false ){
+
+                        $data['success'] = false;
+
+                        $this->contextRedirect("scanner/show");
+                    }
+
+
+                    $data['textqr'] = $textqr;
+
+                    $mesa = (int)$this->getTableByQr($textqr);
+
+                    $data['mesa'] = $mesa;
 
                     if( $this->session->has('table_id_tmp') ) {
                         
@@ -90,6 +116,8 @@ class ScannerController extends ControllerBase
                     $data['success'] = true;
 
                     $data['redirect'] = $this->config->get('application')['publicUrl'].'login';
+
+                    $this->contextRedirect('login');
                 
                 } else {
                     $data['success'] = false;
@@ -110,7 +138,7 @@ class ScannerController extends ControllerBase
 
     private function generaNameRandom() {
 
-        $fecha  = date('YmdHisu');
+        $fecha  = date('YmdHis');
         $rand   = rand(5, 10000);
 
         return  $rand."_".$fecha ;
@@ -124,6 +152,12 @@ class ScannerController extends ControllerBase
 
         return $arr[$num-1];
 
+    }
+
+    private  function ImageResize($ruta, $width, $height)
+    {
+
+        
     }
 
 }

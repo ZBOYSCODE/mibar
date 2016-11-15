@@ -176,6 +176,7 @@
 
             
             $mesa_id = $this->session->get('table_id_tmp');
+
             $mesa = Mesas::findFirstById($mesa_id);
            
 
@@ -202,7 +203,6 @@
          */
         public function deleteSession() {
 
-            if(is_array( $this->session->get("auth-identity") )) {
 
                 /*
                 $cliente_id =$this->session->get("auth-identity")['id'];
@@ -217,10 +217,14 @@
                 }
                 */
 
+                $this->session->remove('table_id_tmp');
+
                 $this->auth->remove();
                 $this->session->destroy();
 
                 return true;
-            }
+            
+
+            
         }
     }
