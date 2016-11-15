@@ -756,6 +756,11 @@ a.mis-pedidos{
   color: white;
 }
 
+ .detalle_orden_bartender{
+    background: none !important;
+  }
+
+
 /* ========== MEDIAQUERIES ===========*/
 
 @media (max-width:768px){
@@ -779,7 +784,7 @@ a.mis-pedidos{
     font-size: 1.4em !important;
   }
 
-
+ 
   .menu-products {
     padding-bottom: 5px;
   }
@@ -1020,6 +1025,7 @@ a.mis-pedidos{
   .detalle_orden_bartender{
     background: none !important;
   }
+
   .table_item_bartender_button:hover,
   .table_item_bartender_button:active,
   .table_item_bartender_button:focus{

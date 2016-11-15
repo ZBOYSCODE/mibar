@@ -56,9 +56,7 @@ $(document).on('ready', function() {
         dataIn.append('pedido',pedido);
 
         //mifaces
-        $.callAjax(dataIn, url, $(this));    	
-
-
+        $.callAjax(dataIn, url, $(this));
     });
 
 
