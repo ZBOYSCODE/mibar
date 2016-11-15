@@ -24,6 +24,9 @@
     use App\Models\Cuentas;
     use App\Models\Pedidos;
     use App\Models\EstadosMesa;
+    use App\Models\Estados;
+
+
     /**
      * Modelo de negocio
      *
@@ -40,11 +43,16 @@
          */
         public  $error;
 
-        private $ESTADO_CUENTA_PENDIENTE = 1;
-        private $ESTADO_MESA_ACTIVA = 1;
-        private $ESTADO_PEDIDO_PENDIENTE = 1;
-
-        PRIVATE $ESTADO_MESA_OCUPADA = 2;
+        private $ESTADO_CUENTA_PENDIENTE    = 1;
+        private $ESTADO_MESA_ACTIVA         = 1; # funcionario activo
+        private $ESTADO_PEDIDO_PENDIENTE    = 1;
+        private $ESTADO_PEDIDO_CANCELADO    = 6;
+        
+        # ESTADO_MESA
+        PRIVATE $ESTADO_MESA_DISPONIBLE     = 1;
+        PRIVATE $ESTADO_MESA_OCUPADA        = 2;
+        PRIVATE $ESTADO_MESA_RESERVADA      = 3;
+        
 
         public $estado_cancelado = 6;
 
@@ -181,13 +189,9 @@
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
                     ->andWhere("App\Models\Pedidos.estado_id = {$this->ESTADO_PEDIDO_PENDIENTE}")
+                    ->groupBy(" m.id ")
                     ->execute();
 
-
-            if(!$result->count()){
-                $this->error[] = $this->errors->NO_RECORDS_FOUND;
-                return false;
-            }
 
             $mesas = $this->getMesas($param);
             $pedidosPendientes = $result;
@@ -200,9 +204,11 @@
 
             foreach ($pedidosPendientes as $key => $val) {
 
-                if(isset($arr[$val->mesa_id]))
-                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+                if(isset($arr[$val->mesa_id]) AND 
+                $val->cantidad_pedidos != 0){
 
+                    $arr[$val->mesa_id] = $val->cantidad_pedidos;
+                }
             }
 
             return $arr;
@@ -235,6 +241,8 @@
                     ->leftJoin("App\Models\FuncionarioMesa","m.id = fm.mesa_id","fm")
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
+                    ->andWhere("App\Models\Pedidos.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
+                    ->groupBy(" m.id ")
                     ->execute();
 
 
@@ -562,7 +570,7 @@
         *
         * Obtiene cuentas para una mesa
         *
-        * @author osanmartin
+        * @author osanmartin 
         *
         * @param $param['mesa_id'] = ID de mesa 
         *
@@ -578,43 +586,48 @@
                 return false;
             }
 
-            $result = Cuentas::query()
+            $cuentas = Cuentas::find(" mesa_id = {$param['mesa_id']} AND estado = 1");
+
+            if(!$cuentas->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+
+            foreach ($cuentas as $cuenta) {
+
+                $arr[$cuenta->id] = array(
+                    'subtotal'  => 0,
+                    'cantidad'  => 0,
+                    'cuenta'    => $cuenta
+                );
+
+
+                $result = Cuentas::query()
                         ->columns(['cuenta_id' => 'App\Models\Cuentas.id',
                                    'subtotal'  => 'SUM(p.precio)',
                                    'cantidad'  => 'COUNT(p.id)'] )
                         ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")                        
                         ->leftJoin("App\Models\Pedidos","App\Models\Cuentas.id = p.cuenta_id","p")
                         ->where("m.id = {$param['mesa_id']}")
+                        ->andWhere("p.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
+                        ->groupBy(" App\Models\Cuentas.id ")
                         ->execute();
 
-            if(!$result->count()) {
-                return array();
-            }
 
-            $cuentas = $this->getDetalleMesa($param);
+                foreach ($result as $key => $val) {
 
-            if(!$cuentas) {
-                return array();
-            }
+                    if(isset($arr[$val->cuenta_id]) AND 
+                        $val->cantidad){
 
-            foreach ($cuentas as $val) {
-                
-                $arr[$val->id] = ['subtotal'=>0,
-                                  'cantidad'=>0,
-                                  'cuenta'=>$val];
+                        $arr[$cuenta->id]['subtotal'] = $val->subtotal;
+                        $arr[$cuenta->id]['cantidad'] = $val->cantidad;
+                    }
 
-            }
-
-            foreach ($result as $key => $val) {
-
-                if(isset($arr[$val->cuenta_id]) AND 
-                   $val->cantidad){
-
-                    $arr[$val->cuenta_id]['subtotal'] = $val->subtotal;
-                    $arr[$val->cuenta_id]['cantidad'] = $val->cantidad;
                 }
 
             }
+
 
             return $arr;
 
@@ -726,9 +739,306 @@
 
             $this->db->commit();
 
+            return $cuenta;
+        }
+
+        /**
+         * getTableByCuenta
+         *
+         * @author Sebastián Silva
+         */
+        public function getTableByCuenta($param){
+
+            if(!isset($param['cuenta_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $cuenta = Cuentas::findFirst(array(
+                " estado = 1 AND id = {$param{'cuenta_id'}}"
+            ));
+
+            if(!$cuenta){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $cuenta->Mesas;
+
+        }
+
+        /**
+         * getClientByCuenta
+         *
+         * @author Sebastián Silva
+         */
+        public function getClientByCuenta($param){
+
+            if(!isset($param['cuenta_id'])){
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+            }
+
+            $cuenta = Cuentas::findFirst(array(
+                " estado = 1 AND id = {$param{'cuenta_id'}}"
+            ));
+
+            if(!$cuenta){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
+            }
+
+            return $cuenta->Clientes;
+
+        }
+
+        /**
+         * getListEstadosCuenta
+         *
+         * @author Sebastián Silva
+         */
+        public function getListEstadosCuenta() {
+
+            $list = Estados::find();
+
+
+            if(!$list->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+            return $list;
+        }
+
+        /**
+         * getCuentasByTableId
+         *
+         * @author Sebastián Silva
+         */
+        public function getCuentasByTableId($table_id) {
+
+            $cuentas = Cuentas::find(" mesa_id = {$table_id} AND estado = 1");
+
+            if(!$cuentas->count()){
+                $this->error[] = $this->errors->NO_RECORDS_FOUND;
+                return array();
+            }
+
+
+            return $cuentas;
+        }
+
+        /**
+         * deleteCuenta
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        public function deleteCuenta($cuenta_id) {
+
+            # Verificar que la cuenta no tengas pedidos impagos
+            if( $this->existenPedidosImpagos($cuenta_id) ) {
+
+                $this->error[] = "Existen pedidos impagos asociados a este cliente.";
+                return false;
+            }
+
+
+            $this->db->begin();
+
+
+            # Verificar si hay más cuentas activas en la mesa, para actualizar estado de mesa
+            if( ! $this->existenCuentasActivas($cuenta_id) ) {
+
+                # actualizar estado mesa, dejar como disponible
+                $this->updateEstadoMesa($cuenta_id, $this->ESTADO_MESA_DISPONIBLE);
+            }
+            
+
+
+            # Eliminar la cuenta
+            $cuenta = Cuentas::findFirstById($cuenta_id);
+            $cuenta->estado = 0;
+
+            if( $cuenta->save() == false ) {
+
+                $this->error[] = $this->errors->WS_CONNECTION_FAIL;
+                $this->db->rollback();
+                return false;
+            }
+
+
+
+
+            $this->db->commit();
+            
+            
             return true;
         }
 
 
+        /**
+         * existenPedidosImpagos
+         *
+         * verifca si existen pedidos impagos, devuelve true si existe alguno
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function existenPedidosImpagos($cuenta_id) {
+
+            $pedidos = Pedidos::find(" cuenta_id = {$cuenta_id} AND pago_id is null");
+
+            if(!$pedidos->count()) {
+
+                return false;
+            } else {
+
+                return true;
+            }
+        }
+
+        /**
+         * existenCuentasActivas
+         *
+         * verifica si existen cuentas activas asociadas a la mesa correspondiente
+         * devuelve true si existen y false en caso contrario
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function existenCuentasActivas($cuenta_id) {
+
+            $cuenta = Cuentas::findFirstById($cuenta_id);
+
+            if(!$cuenta) {
+                return false;
+            }
+
+            $cuentas = Cuentas::findByMesaId( $cuenta->mesa_id );
+
+            if(!$cuentas->count()){
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        /**
+         * updateEstadoMesa
+         *
+         * actualiza el estado de la mesa
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function updateEstadoMesa($cuenta_id, $estado) {
+
+            $cuenta = Cuentas::findFirstByCuentaId($cuenta_id);
+
+            if(!$cuenta) {
+                return false;
+            }
+
+            $mesa = Mesas::findFirstById($cuenta->mesa_id);
+
+            $mesa->estado = $estado;
+
+            if( $mesa->save() == false ) {
+
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         * updateEstadoMesaById
+         *
+         * actualiza el estado de la mesa
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        private function updateEstadoMesaById($table_id, $estado) {
+
+
+            $mesa = Mesas::findFirstById($table_id);
+
+            $mesa->estado_mesa_id = $estado;
+
+            if( $mesa->save() == false ) {
+
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         * freeTable
+         *
+         * verifica si está todo bien para liberar la mesa
+         *
+         * @author Sebastián Silva
+         * @return boolean
+         */
+        public function freeTable($table_id) {
+
+            $cuentas = $this->getCuentasByTableId($table_id);
+
+            if( count($cuentas) > 0 ) {
+
+                # entra solo si existe algna cuenta activa asociada
+                foreach ($cuentas as $cuenta) {
+                
+                    if ( $this->existenPedidosImpagos( $cuenta->id ) ) {
+
+                        $this->error[] = "Existen pedidos impagos";
+                        return false;
+                    }
+                }
+            }
+
+            
+
+            if ( $this->updateEstadoMesaById($table_id, $this->ESTADO_MESA_DISPONIBLE) ){
+                return true;
+            } else {
+                # error al liberar mesa
+                $this->error[] = "Error al liberar mesa, Intente nuevamente.";
+                return false;
+            }
+        }
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

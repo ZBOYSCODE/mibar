@@ -4,7 +4,6 @@
     {% for mesa in mesas %}
 
 
-
         <div class="table-item card" data-mesa="{{mesa.id}}" data-estado-mesa="{{mesa.estado_mesa_id}}">
             <div class="row">
 
@@ -21,16 +20,16 @@
                         <p class="description">Total Pedidos: {{ pedidosTotales[mesa.id] }}</p>
                         <p class="description">Pedidos Pendientes: {{ pedidosPendientes[mesa.id] }}</p>
                         <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
-                        <div class="row">
-                           <button type="button" class="btnAjax btn btn-small btn-main pull-right table-details-button" data-cuenta="{{ mesa.cuenta_id }}" data-callName="table-details-button" data-table="{{ mesa.id }}" data-numero="{{ mesa.numero }}" data-url="waiter/tableDetails">Detalles</button>
-                        </div>
                     </div>  
-                    
+                </div> 
+            </div>
+            <div class="row table-item-buttons">
+                <div class="col-xs-6 col-sm-6">
+                    <a id='btn-liberar-mesa' data-mesaid="{{ mesa.id }}" class='pull-left btn btn-main btn-small btn-release' data-url="waiter/freetable">Liberar</a>
                 </div>
-
-
-
-                <button type="button" data-href="{{mesa.numero}}" data-mesaid="{{ mesa.id }}" data-cuenta="{{ mesa.cuenta_id }}" class="btn btn-small btn-main pull-right table-order-button" data-url="waiter/tableDetails">Crear Pedido</button>
+                <div class="col-xs-6 col-sm-6">
+                    <a href="{{ url('waiter/tableDetails') }}/{{ mesa.id }}" class='btn btn-main btn-small pull-right pull-right-top'>Detalle</a> 
+                </div>
             </div>
         </div>
 

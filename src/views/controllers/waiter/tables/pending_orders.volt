@@ -1,10 +1,10 @@
-<div id="bill-details" class="menu-products-list-modal modal fade" role="dialog">
+<div id="pending_orders" class="menu-products-list-modal modal fade" role="dialog">
 	    <div class="modal-dialog">
 	    <!-- Modal content-->
 		    <div class="modal-content">
 			    <div class="modal-header card">
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
-			        <h4 class="modal-title"><i class="fa fa-list-alt"></i>PEDIDOS CLIENTE</h4>
+			        <h4 class="modal-title"><i class="fa fa-list-alt"></i>PEDIDOS PENDIENTES</h4>
 			    </div>
 			    <div class="row card">
 			        <div class="pull-left nav-user-details-modal">
@@ -19,8 +19,8 @@
 			    {% if pedidosCuenta == false %}
 
 
-		            <div class="card text-center">
-		               <h4>No hay Pedidos por Validar.</h4>
+		            <div class="card text-center margin-bottom-last-card">
+		               <h4>No hay Pedidos Pendientes.</h4>
 		            </div>
 		            </div>
 				    </div>
@@ -35,7 +35,7 @@
 			    {% else %}
 
 			    	<form id="form-validar">
-						<div class="lista_pedidos">
+						<div class="lista_pedidos modal-bottom">
 
 							{% for pedido in pedidosCuenta %}
 
@@ -48,13 +48,13 @@
 								<div class="card" id='pedido-{{pedido.id}}'>
 							      	<div class="product-item-modal">
 										<div class="wine-switch">
-						                   <input id="{{pedido.id}}" class="checkPedido" name="approve_order[]" type="checkbox" checked="checked" value="{{pedido.id}}"/>
+						                   <input id="{{pedido.id}}" class="checkPedido" name="approve_order[]" type="checkbox" value="{{pedido.id}}"/>
 						                   <label for="{{pedido.id}}" class="label-success"></label>
 						               </div>
 							      		<p class="title">{{ title }}</p>
 							      		<div class="row">
 							      			<div class="col-xs-6 col-md-6">
-							      				<p><b><i class="fa fa-calculator"></i> Precio: </b>$<span>{{ utility._number_format(pedido.precio) }}</span></p>
+							      				<p><b><i class="fa fa-calculator"></i> Precio: </b>$<span>{{ pedido.precio }}</span></p>
 							      			</div>
 							      			<div class="col-xs-6 col-md-6">
 							      			
@@ -75,7 +75,7 @@
 
 			<div class="menu-footer">
 				<div class="row menu-footer-buttons card">
-					<button id="btn-validar-pedidos" class="btn btn-main btnSave" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos" data-table="{{ cuenta.mesa_id }}">VALIDAR PEDIDOS</button>
+					<button id="btn-entregar-pedidos" class="btn btn-main btnSave" data-url="{{url('waiter/deliverOrders')}}" data-callname="btn-entregar-pedidos" data-table="{{ cuenta.mesa_id }}">ENTREGAR PEDIDOS</button>
 				</div>
 			</div>	
 		    {% endif %}

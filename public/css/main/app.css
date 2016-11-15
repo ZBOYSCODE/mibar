@@ -77,6 +77,11 @@ body, html {
   margin-bottom: 0 !important;
 }
 
+.nav-user-details h2{
+  position: absolute;
+  left: 90px;
+}
+
 /* Card Layouts */
 
 .card {
@@ -128,8 +133,16 @@ body, html {
   color: #fff;
 }
 
+.btn-release{
+  background-color: #eb902e !important;
+}
+
 .btn-width {
   min-width: 120px;
+}
+
+.btn-round{
+  border-radius: 50%;
 }
 
 .btn-delete{
@@ -137,6 +150,19 @@ body, html {
   border-radius: 30px;
   font-size: 12px;
   background-color: #c12020;
+}
+
+.btn-delete:focus,
+.btn-delete:active{
+  outline: none !important;
+}
+
+.create-user-button{
+  width: 40px;
+  height: 35px;
+}
+#store-cliente{
+  margin-left: 10px;
 }
 
 /* switches */
@@ -168,7 +194,7 @@ body, html {
     margin-top: -8px;
     position:absolute;
     opacity: 0.3;
-    transition: all 0.4s ease-in-out;
+    transition: all 0.2s ease-in-out;
     width: 40px;
 }
 .wine-switch > label::after {
@@ -196,7 +222,7 @@ body, html {
 /* Paddings & Margins */
 
 .section-content-top{
-  margin-top: 70px;
+  margin-top: 73px;
 }
 
 .section-content-top2{
@@ -206,6 +232,10 @@ body, html {
 .no-col-padding{
   padding-right: 0px;
   padding-left:  0px;
+}
+
+.modal-bottom{
+  padding-bottom: 75px;
 }
 
 /* SWAL overwriting */
@@ -288,7 +318,7 @@ body, html {
 /* ========== MENU =========== */
 
 .menu-types{
-  margin: 30px 5px 0px 5px !important;
+  margin: 5px 5px 0px 5px !important;
 }
 
 
@@ -302,7 +332,7 @@ div.menu-types > div:last-child{
 
 .menu-type-item{
   padding: 0;
-  margin: 10px 5px 0 5px;
+  margin: 0px 5px 0 5px;
   height: 130px;
   text-align: center;
 }
@@ -401,6 +431,11 @@ div.menu-types > div:last-child{
   padding-top: 4px;
 }
 
+.product-item-buttons .plus:active,
+.product-item-buttons .plus:focus{
+  outline: none !important;
+}
+
 .product-item-buttons .minus{
   background-color: #c12020;
   color: white;
@@ -411,6 +446,11 @@ div.menu-types > div:last-child{
   height: 30px;
   margin-right: 5px;
   padding-top: 4px;
+}
+
+.product-item-buttons .minus:active,
+.product-item-buttons .minus:focus{
+  outline: none !important;
 }
 
 .product-item-buttons input{
@@ -516,7 +556,7 @@ div.menu-types > div:last-child{
 
 .product-item-modal b{
   text-transform: uppercase;
-  font-size: 1.3em;
+  font-size: 1.1em;
 }
 
 .product-item-modal i{
@@ -567,6 +607,20 @@ div.menu-types > div:last-child{
   position: absolute;
   right: 30px;
 }
+
+ .nav-avatar-waiter{
+    border-radius: 50%;
+    border: 4px solid white;
+    width: 50px;
+    position: absolute;
+    right: 30px;
+ }
+
+.avatar-sm-card{
+  top: 90px !important;
+  left: 30px !important;
+}
+
 
 .table-item{
   padding: 30px;
@@ -636,6 +690,10 @@ div.menu-types > div:last-child{
     background-image: -webkit-linear-gradient(top, #0033FF 0%, #4454E4 50%, #9AA5EE 100%);
 }
 
+.led-black {
+    background-image: -webkit-linear-gradient(top, #060c16 0%, #151a49 50%, #616896 100%);
+}
+
 
 .led {
     border-radius: 5px;
@@ -665,12 +723,115 @@ div.menu-types > div:last-child{
 }
 
 
+.pull-right-top{
+    position: absolute;
+    top: 0;
+    right: 10px;
+}
+
+
+a.mis-pedidos{
+
+  text-decoration: none;
+}
+
+.detalle_orden {
+
+   width: 100%;
+   margin: 3px auto;
+   border: none;
+   border-radius: 0;
+}
+
+.alert-delete {
+
+    background-color: rgba(204, 77, 77, .5);
+}
+
+.title-alert {
+    font-size: 2em;
+}
+
+.listado-pendientes{
+  color: white;
+}
+
+ .detalle_orden_bartender{
+    background: none !important;
+  }
+
+
 /* ========== MEDIAQUERIES ===========*/
 
 @media (max-width:768px){
-  .wel-title{
-    font-size: 3em;
+  
+  /* Globals */
+  h2{
+    font-size: 18px !important;
   }
+
+  .navbar-toggle{
+    padding: 9px 0px;
+  }
+
+  .nav-user-details h2 {
+    position: absolute;
+    left: 90px;
+    font-size: 18px; 
+  }
+
+  .card-small-font-size{
+    font-size: 1.4em !important;
+  }
+
+ 
+  .menu-products {
+    padding-bottom: 5px;
+  }
+
+
+  /* margin & paddings */
+
+  .margin-top-10{
+    margin-top: 10px !important;
+  }
+
+  .btn-main-margin-bottom-sm{
+    margin-bottom: 10px !important;
+  }
+
+  .btn-main-margin-top-sm{
+    margin-top: 10px !important;
+  }
+
+  .btn-font-size-sm{
+    font-size: 0.7em !important;
+  }
+
+  .select-padding-right-col{
+    padding-right: 5px !important;
+  }
+
+  .select-padding-left-col{
+    padding-left: 5px !important;
+  }
+
+  .margin-bottom-last-card{
+    margin-bottom: 90px;
+  }
+
+  /* Welcome */
+
+  .wel-title{
+    font-size: 2.4em;
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+
+  .wel-subtitle{
+    font-size: 18px;
+  }
+
   .section-content-top{
     margin-top: 80px;
   }
@@ -678,6 +839,217 @@ div.menu-types > div:last-child{
   .section-content-top2{
     margin-top: 90px;
   }
+
+  .wel-logo img{
+    height: 100px;
+  }
+
+  .wel-top-buttons{
+    margin: 10px;
+    margin-bottom: 50px;
+  }
+ 
+  .wel-username{
+    margin: 20px auto;
+  }
+
+  /* Menu */
+  .nav-avatar{
+    border: 2px solid white;
+    width: 38px;
+  }
+
+  .avatar-sm-card {
+    top: 95px !important;
+  }
+
+  .nav-user-details-modal .nav-subtitle{
+    margin-left: 50px;
+    margin-top: 10px !important;
+  }
+
+  .nav-subtitle{
+    margin-left: 50px;
+    margin-top: 10px !important;
+  }
+
+  .nav-user-details-modal .avatar-sm-card{
+    top: 86px !important;
+  }
+
+  .nav-filter-item {
+    padding: 8px 0px;
+  }
+
+  .nav-filter-item select {
+    width: 100%;
+  }
+
+  .product-item-img img {
+    height: 80px;
+  }
+
+  .product-item-details .title {
+    font-size: 1.4em;
+    margin-bottom: 5px;
+  }
+
+  .product-item-details .description {
+    margin-bottom: 5px !important;
+  }
+
+  .product-item-details .price {
+    font-size: 1.4em;
+  }
+
+  .product-item-buttons{
+    margin-top: 10px;
+    float: left !important;
+  }
+  .product-item-buttons .minus {
+    font-size: 1.3em;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    padding-top: 4px;
+  }
+
+   .product-item-buttons .plus {
+    font-size: 1.3em;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    padding-top: 4px;
+  }
+  .product-item-modal{
+    padding: 10px 0px;
+  }
+
+  .product-item-modal .title {
+    font-size: 1.2em !important;
+  }
+
+  .product-item-modal b {
+    font-size: 1em;
+  }
+
+  .product-item-modal .comment {
+    margin-top: 0px !important;
+  }
+
+  .product-item-modal .comment p {
+    margin-top: 10px;
+  }
+
+  .product-item-modal .btn { 
+    font-size: 10px !important;
+   }
+
+  .product-item-modal i{
+    font-size: 1em;
+    margin-right: 0px;
+  }
+
+  .precio-total{
+    margin-right: 0 !important;
+  }
+
+  .nav-menu-cart {
+    right: 120px;
+  }
+
+  /* Waiter */
+
+  .nav-avatar-waiter{
+    border: 2px solid white;
+    width: 38px;
+    border-radius: 50%;
+    position: absolute;
+    right: 30px;
+    top: 25px;
+  }
+
+  .table-item-img img {
+    height: 80px;
+    margin-top: 5px;
+  }
+
+  .table-item-details-img img{
+    margin-top: 27px;
+  }
+
+  .table-item-details .title {
+    font-size: 1.4em;
+  }
+
+  .table-item-details .description {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+  .table-item-buttons .btn-main{
+    font-size: 1em !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px;
+  }
+
+  .create-user-button {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0 !important;
+  }
+
+  .create-user-button i{
+    position: relative;
+    right: 3px;
+  }
+
+  #create-client-modal .modal-footer button{
+    font-size: 0.8em !important;
+    margin-bottom: 0!important;
+  }
+
+  #create-client-modal .modal-body input:focus{
+    outline: none;
+    border: none !important;
+    -webkit-box-shadow: 0px 2px 15px 0px rgba(214, 92, 192, 1);
+    -moz-box-shadow:    0px 2px 15px 0px rgba(214, 92, 192, 1);
+    box-shadow:         0px 2px 15px 0px rgba(214, 92, 192, 1);
+  }
+  
+  #delete-cuenta{
+    margin-bottom: 10px;
+  }
+
+  /* Bartender */
+  .detalle_orden_bartender{
+    background: none !important;
+  }
+
+  .table_item_bartender_button:hover,
+  .table_item_bartender_button:active,
+  .table_item_bartender_button:focus{
+    color: #d65cc0 !important;
+    outline: none !important;
+  }
+  
+
+  /* buttons */
+
+  .btn-secondary{
+    font-size: 10px;
+  }
+
+  .btn-main{
+    font-size: 1em !important;
+    margin-bottom: 80px;
+  }
+
+  .table-item-buttons .btn-main{
+    margin-bottom: 0px;
+    margin-top: 10px;
+  }
+
 }
 
 @media (min-width:769px) and (max-width:1024px){

@@ -6,6 +6,11 @@ use App\Business\AccessBSN;
 use App\Business\MeseroBSN;
 use App\Business\PedidoBSN;
 use App\Business\CajaBSN;
+use App\library\Constants\Constant;
+
+
+use App\Business\ProductoBSN;
+use App\Business\PromocionBSN;
 
 class WaiterController extends ControllerBase
 {
@@ -15,6 +20,10 @@ class WaiterController extends ControllerBase
     private $meseroBsn;
     private $pedidoBsn;
     private $cajaBsn;
+    private $constant;
+
+    private $ID_CATEGORY_BEBIDAS = 1;
+    private $ID_CATEGORY_COMIDAS = 2;
 
     public function initialize(){
 
@@ -22,6 +31,10 @@ class WaiterController extends ControllerBase
         $this->meseroBsn = new MeseroBSN();
         $this->pedidoBsn = new PedidoBSN();
         $this->cajaBsn   = new CajaBSN();
+        $this->constant = new Constant();
+
+        $this->productoBsn = new ProductoBSN();
+        $this->promocionBsn = new PromocionBSN();
 
     }    
 
@@ -55,6 +68,8 @@ class WaiterController extends ControllerBase
         $pedidosPendientes  = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
         $pedidosTotales     = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
 
+        
+
         if(!$mesas)
             $mesas = array();
 
@@ -76,61 +91,49 @@ class WaiterController extends ControllerBase
     * Renderiza Detalles Mesa via mifaces
     *
     */
+    public function tableDetailsAction($table_id) {
 
-    public function tableDetailsAction(){
-
-        if($this->request->isAjax()){
-
-            $this->mifaces->newFaces();
-
-            if (isset($_POST['table_id'])){
-           
-                $view = "controllers/waiter/tables/details";
-
-                
-                $param['mesa_id'] = $this->request->getPost("table_id", "int");
+            /**
+             * Al llegar acá se eliminarán los pedidos en el carro de compras
+             */
+            $this->session->remove("pedidos");
 
 
+            $param = array(
+                'mesa_id' => $table_id
+            );
 
-                $tabObj = new MeseroBSN();
-                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-             
-                $dataView['detalles'] =  $tablesDetails;
-                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+            $tabObj = new MeseroBSN();
+            $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+
+            /*
+            echo "<pre>";
+            echo json_encode($tablesDetails);
+            return false;
+            */
+
+            #$estados_cuenta = $tabObj->getListEstadosCuenta();
+            #$this->view->setVar("estados_cuenta",   $estados_cuenta);
+
+            $cuentas = $tabObj->getCuentasByTableId($table_id);
+
+            /*
+            echo "<pre>";
+            echo json_encode($cuentas);
+            return false;
+            */
 
 
-                $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
-                $dataView['table_id']    = $this->request->getPost("table_id", "int");
-                $dataView['table_numero']    = $this->request->getPost("table_numero", "int");
+            $this->assets->addJs('js/pages/waiter.js');
 
-
-
-            
-                $toRend = $this->view->getPartial($view, $dataView);
-
-                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
-
-            }else{
-
-                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
-
-            }
-
-                
-
-    	        //$toRend = $this->view->getPartial($view, $dataView);
-
+            $this->view->setVar("numeroMesa",       reset($tablesDetails)['cuenta']->Mesas->numero);
+            $this->view->setVar("table_id",         $table_id);        
+            $this->view->setVar("detalles",         $tablesDetails);
+            $this->view->setVar("cuentas",         $cuentas);
 
             
-        	$this->mifaces->run();
-
-        } else{
-
-        	$this->view->disable();
-
-        }
-
-	}	
+            $this->view->pick("controllers/waiter/_details");
+        }   	
 
 
     /**
@@ -155,6 +158,7 @@ class WaiterController extends ControllerBase
                 
                 $cuenta_id = $post['cuenta'];
                 $param['cuenta_id'] = $cuenta_id;
+                $param['estado_id'] = 1; 
 
 
                 $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
@@ -194,7 +198,6 @@ class WaiterController extends ControllerBase
     * cambia estado a una serie de pedidos 
     *
     */
-
     public function validateOrdersAction(){   
 
         if($this->request->isAjax()){
@@ -219,47 +222,49 @@ class WaiterController extends ControllerBase
                     }
 
                 }
-                elseif(isset($post['pedidosNoValidados'])){
+
+                if(isset($post['pedidosNoValidados'])){
 
                      $pedidosNoValidados = $post['pedidosNoValidados'];
                      $resultCancelacion = $this->pedidoBsn->cancelOrders($pedidosNoValidados);
-
+                     
                      if(!$resultCancelacion){
 
                         $this->mifaces->addToMsg('warning','Los pedidos no han sido cancelados correctamente!');
 
                     }
-
-                }
-                else {
-                    $this->mifaces->addToMsg('error','Error interno!');
                 }
 
-                    if($resultValidacion || $resultCancelacion){
+                if($resultValidacion || $resultCancelacion){
 
-                         $this->mifaces->addToDataView('resultValidation', 1);
+                     $this->mifaces->addToDataView('resultValidation', 1);
 
-                    }else{
-                        $this->mifaces->addToDataView('resultValidation', 0);
-                    }
+                }else{
+                    $this->mifaces->addToDataView('resultValidation', 0);
+                }
 
-                    $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
-                    
-                    $param['mesa_id'] = $post['table_id'];
+                $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
+                
+                $param['mesa_id'] = $post['table_id'];
 
-                    $tabObj = new MeseroBSN();
-                    $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-
-                    $dataView['detalles'] =  $tablesDetails;
-                    $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+                $tabObj = new MeseroBSN();
+                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
 
-                    $view = "controllers/waiter/tables/details";
-                 
-                    $toRend = $this->view->getPartial($view, $dataView);
-                    $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+                $tableParams = $tabObj->getMesaPorId(['id' => $post['table_id']]);
+        
+                $dataView['detalles'] =  $tablesDetails;
+                $dataView['Mesa'] = $tableParams;
+
+                $dataView['numeroMesa'] = $tableParams->numero;
+               
+                $view = "controllers/waiter/tables/details";
+             
+                $toRend = $this->view->getPartial($view, $dataView);
+                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
 
             }
+
             else {
                 $this->mifaces->addToMsg('error','Error interno!');
             }
@@ -306,6 +311,8 @@ class WaiterController extends ControllerBase
      * storeClient
      * 
      * persiste el cliente desde la vista mesero
+     *
+     * @author Sebastián Silva
      */
     public function storeClientAction() {
 
@@ -340,34 +347,46 @@ class WaiterController extends ControllerBase
             );
             
 
-            if( $mesero->setNewClient( $param ) ) {
+            $cuenta = $mesero->setNewClient( $param );
 
-
-                
-                $this->mifaces->newFaces();
-
-                $view = "controllers/waiter/tables/details";
+            if( $cuenta !== false ) {
 
                 
-                $param['mesa_id'] = $table_id;
+                
 
+                $arr = array();
+                $arr['mesa_id'] = $table_id;
 
 
                 $tabObj = new MeseroBSN();
-                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-                //print_r($tablesDetails);exit();
-                $dataView['detalles'] =  $tablesDetails;
+                $tablesDetails = $tabObj->getDataCuentasByMesa($arr);
+                
+                $dataView['detalles']   =  $tablesDetails;
+
+                $dataView['numeroMesa'] = $cuenta->Mesas->numero;
+
 
                 $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
-                $dataView['table_id']    = $this->request->getPost("table_id", "int");
+                $dataView['table_id']   = $this->request->getPost("table_id", "int");
 
-                $dataView['numeroMesa'] = array_values($tablesDetails)[0]['cuenta']->Mesas->numero;
+                $tableParams = $tabObj->getMesaPorId($param);
+        
+                $dataView['Mesa'] = $tableParams;
 
+
+
+
+                $this->mifaces->newFaces();
+
+                $view = "controllers/waiter/tables/details";
 
                 $toRend = $this->view->getPartial($view, $dataView);
 
                 $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
                 $this->mifaces->run();
+
+
+
 
                 
             } else{
@@ -387,5 +406,294 @@ class WaiterController extends ControllerBase
 
     }
 
+    /**
+     * createOrder
+     * 
+     * setea las variables y redirige al menú
+     *
+     * @author Sebastián Silva
+     */
+    public function createOrderAction($cuenta_id){
+
+        #js custom
+        $this->assets->addJs('js/pages/menu.js');
+
+        // Al cambiar este parámetro, se debe cambiar también la vista.
+        $paramCategoria = ["categoria_id" => $this->ID_CATEGORY_BEBIDAS];
+
+        
+        $productos = $this->productoBsn->getProductsbyCategory($paramCategoria);
+        $subcategorias = $this->productoBsn->getListSubCategoriesByCategory($paramCategoria);
+
+        $this->view->setVar("productos",        $productos );
+        $this->view->setVar("subcategorias",    $subcategorias );
+        $this->view->setVar("cuenta_id",        $cuenta_id );
+
+
+        $param = array(
+            'cuenta_id' => $cuenta_id
+        );
+
+        $meserobsn = new MeseroBSN();
+
+        $table  = $meserobsn->getTableByCuenta($param);
+        $client = $meserobsn->getClientByCuenta($param);
+
+
+        $this->view->setVar("table",    $table );
+        $this->view->setVar("client",   $client );
+
+        # seteamos las variables de sesion
+        # el id de la cuenta y el id de la mesa    
+        $this->session->set('auth-identity', array(
+            'id'        =>  $this->session->get("auth-identity")['id'],
+            'rol'       =>  $this->session->get("auth-identity")['rol'],
+            'cuenta'    =>  $cuenta_id,
+            'nombre'    =>  $this->session->get("auth-identity")['nombre'],
+            'mesa'      =>  $table->id
+        ));
+        
+        #vista
+        $this->view->pick("controllers/menu/_index_waiter");
+    }
+
+    /*
+    * GetPendingOrders
+    *
+    *
+    * @author Hernán Felíu
+    *
+    * Renderiza modal detalles pedidos pendientes via mifaces
+    *
+    */    
+    public function getPendingOrdersAction(){
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            if(isset($post['cuenta'])){
+
+                $view = "controllers/waiter/tables/pending_orders";
+
+                $param = [
+                    "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
+                ];
+
+                $pedidobsnObj = new PedidoBSN();
+                $status = $pedidobsnObj->getStatus($param);
+
+                $cuenta_id = $post['cuenta'];
+                $param['cuenta_id'] = $cuenta_id;
+                $param['estado_id'] = $status->id; 
+
+                $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
+                $cuenta         = $this->cajaBsn->getCuentaById($param);
+                //print_r($pedidosCuenta);exit();
+                $dataView['pedidosCuenta']  =  $pedidosCuenta;
+                $dataView['cuenta']         =  $cuenta;
+
+                $toRend = $this->view->getPartial($view, $dataView);
+
+                $this->mifaces->addToRend('table_modal_pending_orders_render',$toRend);
+
+            }else{
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+
+    }
+
+     /**
+    * deliverOrders
+    *
+    *
+    * @author Hernán Feliú
+    *
+    * cambia estado a entregado a una serie de pedidos 
+    *
+    */
+
+    public function deliverOrdersAction(){   
+
+        if($this->request->isAjax()){
+
+            $post = $this->request->getPost();
+            $this->mifaces->newFaces();
+
+            $resultValidacion = false;
+            
+            if(isset($post['table_id'])) {
+
+                if(isset($post['pedidosValidados'])){
+
+                    $pedidosValidados = $post['pedidosValidados'];
+                    $resultValidacion = $this->pedidoBsn->deliverOrders($pedidosValidados);
+
+                    if(!$resultValidacion){
+
+                        $this->mifaces->addToMsg('warning','Los pedidos no han sido entregados correctamente!');
+
+                    }
+
+                }
+
+                if($resultValidacion){
+
+                     $this->mifaces->addToDataView('resultValidation', 1);
+
+                }else{
+                    $this->mifaces->addToDataView('resultValidation', 0);
+                }
+
+                $this->mifaces->addToMsg('success','Los pedidos han sido procesados correctamente!');
+                
+                $param['mesa_id'] = $post['table_id'];
+
+                $tabObj = new MeseroBSN();
+                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+
+                $tableParams = $tabObj->getMesaPorId(['id' => $post['table_id']]);
+               
+                $dataView['detalles'] =  $tablesDetails;   
+                $dataView['Mesa'] = $tableParams;
+
+                $dataView['numeroMesa'] = $tableParams->numero;
+
+                $view = "controllers/waiter/tables/details";
+             
+                $toRend = $this->view->getPartial($view, $dataView);
+                $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
+
+            }
+
+            else {
+                $this->mifaces->addToMsg('error','Error interno!');
+            }
+            
+            $this->mifaces->run();
+
+        } else{
+
+            $this->view->disable();
+
+        }
+    }
+
+    /**
+     * deleteCuentaAction
+     *
+     * @author Sebastián Silva
+     */
+    public function deleteCuentaAction(){
+
+        if($this->request->isAjax()){
+
+            $cuenta_id = $this->request->getPost("cuenta_id", "int");
+
+            $this->mifaces->newFaces();
+
+            if( !empty($cuenta_id) ){
+
+                if( $this->meseroBsn->deleteCuenta($cuenta_id) ) {
+
+                    $this->mifaces->addToMsg('success','Cuenta eliminada correctamente.');
+                    $this->mifaces->addToJsonView('delete_state', "true" );
+                    $this->mifaces->addToJsonView('cuenta_eliminada', $cuenta_id );
+                } else {
+
+                    $this->mifaces->addToMsg('danger', $this->meseroBsn->error );
+                    $this->mifaces->addToJsonView('delete_state', "false" );
+                }
+            }else{
+
+                $this->mifaces->addToJsonView('delete_state', "false" );
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+        } else{
+
+            $this->view->disable();
+        }
+    }
+
+    /**
+     * freetable
+     *
+     * @author Sebastián Silva 
+     */
+    public function freetableAction() {
+
+        if($this->request->isAjax()){
+
+            $table_id = $this->request->getPost("table_id", "int");
+
+            $this->mifaces->newFaces();
+
+            if( !empty($table_id) ){
+
+
+
+                if( $this->meseroBsn->freeTable($table_id) ) {
+
+                    $this->mifaces->addToMsg('success','Mesa liberada correctamente.');
+                    $this->mifaces->addToJsonView('mesa_liberada', $table_id );
+
+                } else {
+
+                    $this->mifaces->addToMsg('danger', $this->meseroBsn->error );
+                    $this->mifaces->addToJsonView('mesa_liberada', "false" );
+                }
+
+
+
+            }else{
+
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+        } else{
+
+            $this->view->disable();
+        }
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

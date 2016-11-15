@@ -1,33 +1,33 @@
 <div class="nav-filters card">
 	<div class="row">
-		<div class="col-xs-6 col-sm-6">
+		<div class="col-xs-6 col-sm-6 select-padding-right-col">
 			<div class="nav-filter-item">
 				 <select name="prod-categories" id="prod-categories" class="form-control">
-				    <option value="0">Todas las bebidas</option>
+				    <option value="0">Todas</option>
                     {% for subcategoria in subcategorias %}
 					   <option value="{{ subcategoria.id }}"> {{ subcategoria.nombre}} </option>
                     {% endfor %}
 				</select>
 			</div>	
 		</div>
-		<div class="col-xs-6 col-sm-6">
+		<div class="col-xs-6 col-sm-6 select-padding-left-col">
 			<div class="nav-filter-item">
-				<select name="promo-prices" id="promo-prices" class="form-control">
-				    <option value="Filtrar" class="filter">Filtrar Precio</option>
-					<option value="menos de 10 mil">menos de 10 mil</option>
-					<option value="entre 10 y 20 mil">entre 10 y 20 mil</option>
+				<select name="promo-prices" id="promo-prices" class="form-control" data-view='drink'>
+				    <option value="0" class="filter">Ninguno</option>
+                    <option value="1">Menor precio</option>
+                    <option value="2">Mayor precio</option>
 				</select>
 			</div>	
 		</div>
 	</div>
 </div>
 
-    <div class="menu-products">
+    <div class="menu-products" id='menu-products-drink'>
 
         {% for producto in productos %}
 
 
-        	<div class="product-item card" data-categoria="{{ producto.subcategoria_id }}">
+        	<div class="product-item card item-drink" data-precio='{{ producto.precio }}' data-categoria="{{ producto.subcategoria_id }}">
         		<div class="row">
         			<div class="col-xs-4 col-sm-4">
         				<div class="product-item-img">
@@ -39,10 +39,10 @@
         				    <p class="title">{{producto.nombre}}</p>
         				    <p class="description">{{ producto.descripcion }}</p>
         				    <div class="row">
-        				    	<div class="col-xs-4 col-sm-4">
-        				    		<div class="price">$ {{ producto.precio }}</div>
+        				    	<div class="col-xs-12 col-sm-4 select-padding-right-col">
+        				    		<div class="price">$ {{ utility._number_format(producto.precio) }}</div>
         				    	</div>
-        				    	<div class="col-xs-8 col-sm-8">
+        				    	<div class="col-xs-12 col-sm-8 select-padding-left-col">
         				    		<div class="product-item-buttons pull-right">
         				    			<button class="minus" data-producto='{{producto.id}}'><i class="fa fa-minus"></i></button>
         				    			<button class="plus" data-producto='{{producto.id}}'><i class="fa fa-plus"></i></button>

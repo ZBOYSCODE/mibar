@@ -23,6 +23,8 @@
     use App\Models\SubcategoriaProductos;
     use App\Models\CategoriaProductos;
 
+    //DEFINE('PEDIDO_CANCELADO', 6);
+
     /**
      * Modelo de negocio
      *
@@ -42,6 +44,7 @@
         private $ESTADO_PEDIDO_VALIDADO = 2;
         private $ESTADO_PEDIDO_CANCELADO = 6;
         private $ESTADO_PEDIDO_CONCRETADO = 3;
+        private $ESTADO_PEDIDO_ENTREGADO = 5;
 
         private $promocionBsn;
         private $productoBsn;
@@ -473,7 +476,7 @@
                 $where_estado = " AND estado_id = ".$param['estado_id'];
             } else {
 
-                $where_estado = '';
+                $where_estado = ' AND estado_id != 6';# estado anulado
             }
 
             $pedidos = Pedidos::find(
@@ -484,7 +487,7 @@
             );
 
 
-            if( $pedidos->count() == 0) {
+            if( !$pedidos->count() ) {
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
                 return false;
             }
@@ -530,11 +533,14 @@
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
+
+
             $pedidosPromo = Pedidos::query()
                 ->leftJoin('App\Models\Promociones','prm.id  =
                 App\Models\Pedidos.promocion_id',   'prm')            
                 ->where("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
                 ->andWhere("App\Models\Pedidos.producto_id is NULL")
+                ->andWhere("prm.categoriaproducto_id = {$param["category_id"]}")
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
@@ -546,6 +552,8 @@
                     $val->nombre = $val->Productos->nombre;
                     $val->descripcion = $val->Productos->descripcion;
                     $val->avatar = $val->Productos->avatar;
+                    $val->mesa_id = $val->Cuentas->mesa_id;
+
                     $arr[$val->id] = $val;
 
                 }
@@ -555,6 +563,8 @@
                     $val->nombre = $val->Promociones->nombre;
                     $val->descripcion = $val->Promociones->descripcion;
                     $val->avatar = $val->Promociones->avatar;
+                    $val->mesa_id = $val->Cuentas->mesa_id;
+
                     $arr[$val->id] = $val;
 
                 }
@@ -586,12 +596,29 @@
                 return false;
             }
 
-            $pedidos = Pedidos::find(
-                array(
-                    " cuenta_id = {$param['cuenta_id']} ",
-                    "order" => "id DESC"
-                )
-            );
+            if(isset($param['estado_id'])){
+
+                $pedidos = Pedidos::find(
+                    array(
+                        " cuenta_id = {$param['cuenta_id']} AND 
+                        estado_id = {$param['estado_id']} ",
+                        "order" => "id DESC"
+                    )
+                );
+
+            } else {
+
+                $pedidos = Pedidos::find(
+                    array(
+                        " cuenta_id = {$param['cuenta_id']}" ,
+
+                        "order" => "id DESC"
+                    )
+                );
+
+            }
+
+
 
 
             if( $pedidos->count() == 0) {
@@ -603,7 +630,11 @@
             return $pedidos;
         }
 
-
+        /**
+         * Trae la lista de productos y promociones que pertenecen a una cuenta
+         * @param $param array  'cuenta_id'
+         * @return array|bool
+         */
         public function getProductosByCuenta($param)
         {
             if (!isset($param['cuenta_id'])) {
@@ -611,9 +642,12 @@
                 return false;
             }
 
-            $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
+            $pedidos = Pedidos::find("  pago_id is null 
+                                    AND estado_id != ".PEDIDO_CANCELADO."
+                                    AND cuenta_id = " . $param['cuenta_id']);
             if (!$pedidos->count()) {
-                return array();
+                $error[] = $this->errors->NO_RECORDS_FOUND;
+                return false;
             }
             $result = array();
             foreach ($pedidos as $pedido) {
@@ -623,6 +657,7 @@
                         $this->error[] = $this->errors->NO_RECORDS_FOUND;
                         return false;
                     }
+                    $producto->precio = $pedido->precio;
                     $result[] = $producto;
                 } else {
                     $producto = $this->promocionBsn->getPromocion(array('promocion_id' => $pedido->promocion_id));
@@ -630,6 +665,7 @@
                         $this->error[] = $this->errors->NO_RECORDS_FOUND;
                         return false;
                     }
+                    $producto->precio = $pedido->precio;
                     $result[] = $producto;
                 }
             }
@@ -693,7 +729,6 @@
         public function cancelOrders($param){
 
             $this->db->begin();
-
 
             if(!count($param)){
 
@@ -892,6 +927,49 @@
             }
 
             return $result;
+
+        }
+
+          /**
+         * entregarPedidos
+         *
+         * cambia estado a validado a todos los pedidos entregados
+         *
+         * @author Hernán Feliú
+         *
+         * @param array $param listado de pedidos entregados
+         * @return boolean
+         */
+
+        public function deliverOrders($param){
+
+            $this->db->begin();
+
+
+            if(!count($param)){
+
+                $this->error[] = $this->errors->MISSING_PARAMETERS;
+                return false;
+
+            }
+
+            foreach ($param as $val) {
+
+                $paramPedido['pedido_id'] = $val;
+                $paramPedido['estado_id'] = $this->ESTADO_PEDIDO_ENTREGADO;
+
+                $result = $this->updatePedido($paramPedido);
+
+                if(!$result){
+                    $this->db->rollback();
+                    return false;
+                }
+
+            }
+
+            $this->db->commit();
+
+            return true;
 
         }
 

@@ -12,7 +12,7 @@ use App\Models\FuncionarioMesa;
 
 
 
-class BartenderController extends ControllerBase
+class KitchenController extends ControllerBase
 {
 
     private $constant;
@@ -49,7 +49,7 @@ class BartenderController extends ControllerBase
         $arr = $this->getData();
 
         $this->view->setVar("orders", $arr);
-        $this->view->pick("controllers/bartender/_index");
+        $this->view->pick("controllers/kitchen/_index");
     }
 
     public function renderPageAction(){
@@ -91,7 +91,7 @@ class BartenderController extends ControllerBase
         ];
 
         $paramCat = [
-            "nombre" => $this->constant->PEDIDO_BEBIDA
+            "nombre" => $this->constant->PEDIDO_COMIDA
         ];
 
         $pedidobsnObj = new PedidoBSN();
@@ -112,6 +112,7 @@ class BartenderController extends ControllerBase
                 "category_id"    => $category->id ,
                 "estado_id"      => $status->id
             ];
+
 
             $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
 
@@ -148,7 +149,7 @@ class BartenderController extends ControllerBase
         ];
 
         $paramCat = [
-            "nombre" => $this->constant->PEDIDO_BEBIDA
+            "nombre" => $this->constant->PEDIDO_COMIDA
         ];
 
         $pedidobsnObj = new PedidoBSN();
@@ -170,7 +171,10 @@ class BartenderController extends ControllerBase
                 "estado_id"      => $status->id
             ];
 
+
+
             $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
+
 
         }
 

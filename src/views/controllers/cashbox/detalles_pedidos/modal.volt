@@ -8,12 +8,9 @@
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> Caja - Detalles de Pedido</h4>
 			    </div>
 			     <div class="row user-details card">
-			    	<div class="col-xs-6 col-md-6">
+			    	<div class="col-xs-12 col-md-12">
 			    		<p>Cliente: {{ cliente.nombre  }} {% if cliente.apellido != null %}{{ cliente.apellido }}{% endif %}</p>
 			    	</div>
-					 <div class="col-xs-6 col-md-6">
-						 <p>Mesa: </p>
-					 </div>
 			    </div>
 			    <div class="modal-body">
 			      <!-- Products -->
@@ -32,10 +29,10 @@
 												<p><b><i class="fa fa-money"></i> Precio: </b>$<span>{{ producto.precio }}</span></p>
 											</div>
 											<div class="col-xs-6 col-md-6">
-												<p><b><i class="fa fa-money"></i> Cantidad: </b><span> - </span></p>
+												<p><b><i class="fa fa-hashtag"></i> Cantidad: </b><span> {{ cantProductos[producto.id] }} </span></p>
 											</div>
 											<div class="col-xs-12 col-md-12">
-												<p><b><i class="fa fa-calculator"></i> Total: </b>$<span>0 {# items.precio * items[producto.id] #}</span></p>
+												<p><b><i class="fa fa-calculator"></i> Total: </b>$<span> {{ totalProductos[producto.id] }}</span></p>
 											</div>
 											<div class="col-xs-12 col-md-12">
 												<p><b><i class="fa fa-comment-o"></i> Descripción: </b>$<span> {{ producto.descripcion }} </span></p>
@@ -47,6 +44,31 @@
 
 							{% endfor %}
 
+							{% for producto in promociones %}
+
+								<div class="card" id='pedido-{{ producto.id }}'>
+									<div class="product-item-modal">
+										<p class="title">{{ producto.nombre }}</p>
+										<div class="row">
+
+											<div class="col-xs-6 col-md-6">
+												<p><b><i class="fa fa-money"></i> Precio: </b>$<span>{{ producto.precio }}</span></p>
+											</div>
+											<div class="col-xs-6 col-md-6">
+												<p><b><i class="fa fa-hashtag"></i> Cantidad: </b><span> {{ cantPromociones[producto.id] }} </span></p>
+											</div>
+											<div class="col-xs-12 col-md-12">
+												<p><b><i class="fa fa-calculator"></i> Total: </b>$<span> {{ totalPromociones[producto.id] }}</span></p>
+											</div>
+											<div class="col-xs-12 col-md-12">
+												<p><b><i class="fa fa-comment-o"></i> Descripción: </b>$<span> {{ producto.descripcion }} </span></p>
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+							{% endfor %}
 
 					</div>
 
@@ -58,10 +80,14 @@
 			    <div class="modal-footer card">
 			    	<div class="row">
 			    		<div class='col-xs-5'>
-							<span class="precio-total">$ 0</span>
+							<span class="precio-total"><i class="fa fa-usd"></i> {{ total }}</span>
 						</div>
 						<div class='col-xs-7'>
-							<button id="Send-Products" type="button" class="btn btn-main pull-right">Ir a Pagar</button>
+							<!-- <button id="Send-Products" type="button" class="btn btn-main pull-right">Ir a Pagar</button> -->
+							<span id="btn-pagar" class="btn btn-small btn-main pull-right table-details-button"
+							data-callName="pagarCuenta"
+							data-url="{{ url("cashbox/pagarcuenta") }}"
+							data-cuenta="{{ cuenta.id }}"></span>
 						</div>
 			    	</div>
 				    	

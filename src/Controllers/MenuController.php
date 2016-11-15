@@ -24,6 +24,7 @@ class MenuController extends ControllerBase
 
 
 	public function initialize(){
+		parent::initialize();
 		$this->productoBsn = new ProductoBSN();
 		$this->promocionBsn = new PromocionBSN();
 	}
@@ -51,6 +52,10 @@ class MenuController extends ControllerBase
 
         $this->view->setVar("productos", $productos);
         $this->view->setVar("subcategorias", $subcategorias);
+
+
+        $this->view->setVar("nombre_cliente", $this->session->get("nombre") );
+        $this->view->setVar("numero_mesa", $this->session->get("mesa") );
 
 
         #vista
@@ -257,7 +262,7 @@ class MenuController extends ControllerBase
 	        	$this->deleteAllPedidos();
 	        } else {
 
-	        	print_r($pedidos->error);
+	        	#print_r($pedidos->error);
 
 	        	$data['success'] = false;
 	        	$data['msg'] = $pedidos->error;
@@ -433,7 +438,7 @@ class MenuController extends ControllerBase
 
 
 		$data['total_pedidos'] 	= $this->getNumPedidos();
-		$data['precio_total']	= $this->getTotalPedido();
+		$data['precio_total']	= $this->utility->_number_format($this->getTotalPedido());
 
 
         echo json_encode($data);
@@ -500,7 +505,8 @@ class MenuController extends ControllerBase
 				$id 	= $pedido->producto_id;
 
 				$lista_pedidos[$fecha]['fecha'] 						= $fecha;
-				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 		= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 			= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto_nombre'] 	= $pedido->Productos->nombre;
 				$lista_pedidos[$fecha]['pedidos'][$id]['es_promocion'] 	= 0;
 				$lista_pedidos[$fecha]['pedidos'][$id]['color'] 		= $this->getColorState($pedido->estado_id);
 				$lista_pedidos[$fecha]['pedidos'][$id]['color_nombre'] 	= $pedido->Estados->nombre;
@@ -525,7 +531,8 @@ class MenuController extends ControllerBase
 				$id 	= $pedido->promocion_id;
 
 				$lista_pedidos[$fecha]['fecha'] 						= $fecha;
-				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 		= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto'] 			= $pedido;
+				$lista_pedidos[$fecha]['pedidos'][$id]['producto_nombre'] 	= $pedido->Promociones->nombre;
 				$lista_pedidos[$fecha]['pedidos'][$id]['es_promocion'] 	= 1;
 				$lista_pedidos[$fecha]['pedidos'][$id]['color'] 		= $this->getColorState($pedido->estado_id);
 				$lista_pedidos[$fecha]['pedidos'][$id]['color_nombre'] 	= $pedido->Estados->nombre;
@@ -562,12 +569,17 @@ class MenuController extends ControllerBase
 				break;
 
 			case 3:
-				return 'azul';
+				return 'blue';
 				break;
 
 			case 5:
 				return 'green';
 				break;
+
+			default:
+				return 'black';
+				break;
+
 		}
 
 	}

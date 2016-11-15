@@ -1,6 +1,8 @@
+var delete_state;
+var cuenta_eliminada;
+var mesa_liberada;
+
 $(document).on('ready', function() {
-
-
 
 
 	$('.table-details-button').on('click',function(e){
@@ -42,6 +44,26 @@ $(document).on('ready', function() {
     
     }); 
 
+    $(document).on('change','#filtro-cuenta',function(){
+
+        var filtroMesa = $(this).val();
+
+        if(filtroMesa == 0){
+
+            $(".table-item").show();      
+
+        } else{
+
+            $(".table-item").hide();
+
+            tables = $(".table-item").filter("[data-cuenta='"+filtroMesa+"']");
+
+            tables.show();
+
+        }        
+    
+    }); 
+
     $(document).on('change','#filtro-estado-mesa',function(){
 
         var filtroEstadoMesa = $(this).val();
@@ -56,8 +78,19 @@ $(document).on('ready', function() {
 
             tables = $(".table-item").filter("[data-estado-mesa='"+filtroEstadoMesa+"']");
 
-            tables.show();
 
+            if(tables.length == 0) {
+
+                div = $('<div/>', {
+                    html : '<div class="table-item card text-center"><p class="title-alert">No existen elementos.</p></div>',
+                    'class' : 'alert-elementos'
+                });
+
+                $("#waiter_tables_details_render").append(div);
+            }else {
+
+                tables.show();
+            }
         } 
     
     });     
@@ -134,7 +167,7 @@ $(document).on('ready', function() {
         //mifaces
         $.callAjax(dataIn, url, $(this));        
         e.preventDefault();
-    });     
+    });    
 
 
     $(document).on('click','#btn-validar-pedidos',function(e){
@@ -143,6 +176,10 @@ $(document).on('ready', function() {
         var table_id = $(this).data('table');
         
         var dataIn = new FormData();
+
+
+        console.log(url)
+        console.log(table_id)
 
         $('.checkPedido').each(function(){
 
@@ -162,10 +199,117 @@ $(document).on('ready', function() {
 
     });  
 
-    
+    $(document).on('click','.pedidos-pendientes',function(e){
 
-	
-});
+        var url = $(this).data('url');
+        var cuenta = $(this).data('cuenta');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta',cuenta);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));        
+        e.preventDefault();
+    });   
+
+    
+    $(document).on('click', '#crear-pedido', function(e){
+
+        e.preventDefault();
+        
+        var cuenta_id   = $(this).attr('data-cuenta');
+        var url         = $(this).attr('data-url');
+
+        var dataIn = new FormData();
+
+        dataIn.append('cuenta_id',   cuenta_id);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this)); 
+    });
+
+
+    $(document).on('click','#btn-entregar-pedidos',function(e){
+
+        var url = $(this).data('url');
+        var table_id = $(this).data('table');
+        
+        var dataIn = new FormData();
+
+        $('.checkPedido').each(function(){
+
+            if($(this).is(':checked')){
+                dataIn.append('pedidosValidados[]', $(this).val());   
+            } 
+        });  
+
+        dataIn.append('table_id',table_id);
+
+        //mifaces
+        $.callAjax(dataIn, url, $(this));
+        
+        e.preventDefault();
+
+    });
+    
+    $(document).on('click', '#delete-cuenta', function(e){
+        
+        delete_state        = 'false';
+        cuenta_eliminada    = null;
+
+        var cuenta_id   = $(this).attr('data-cuenta');
+        var url         = $(this).attr('data-url');
+        
+        swal({
+            title: '¿Estás Seguro?',
+            text: "Esta acción es irreversible.",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#bd4141',
+            cancelButtonColor: '#d65cc0',
+            confirmButtonText: 'Aceptar'
+        }).then(function() {
+            //mifaces
+            var dataIn = new FormData();
+  
+            dataIn.append('cuenta_id',   cuenta_id);
+            $.callAjax(dataIn, url, $('#delete-cuenta')); 
+
+        });
+
+        e.preventDefault();
+
+
+    });
+
+    $(document).on('click', '#btn-liberar-mesa', function(){
+        
+        var url         = $(this).attr('data-url');
+        var table_id     = $(this).attr('data-mesaid');
+
+        swal({
+            title: '¿Estás Seguro?',
+            text: "Esta acción es irreversible.",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#eb902e',
+            cancelButtonColor: '#d65cc0',
+            confirmButtonText: 'Aceptar'
+        }).then(function() {
+            //mifaces
+            var dataIn = new FormData();
+
+            dataIn.append('table_id',    table_id);
+
+            $.callAjax(dataIn, url, $('#btn-liberar-mesa')); 
+            
+        });
+
+    });
+
+});	
+
 
   /* Procedimientos Post Ajax Call */
 $(document).ajaxComplete(function(event,xhr,options){
@@ -185,7 +329,6 @@ $(document).ajaxComplete(function(event,xhr,options){
 
          }            
   
-
         if (options.callName == "create-user-modal"){
             openCreateUserModal();
         }
@@ -193,11 +336,42 @@ $(document).ajaxComplete(function(event,xhr,options){
         if (options.callName == 'store-cliente-success'){
 
             closeCreateUserModal();
-        }   
+        }  
+
+        if (options.callName == 'pedidos-pendientes'){
+            openPendingOrdersModal();
+
+        }  
+
+        if(options.callName == "btn-entregar-pedidos"){
+            closePendingOrdersModal();
+
+         }
+
+
+        if(options.callName == 'delete-cuenta-button'){
+            deleteCuenta();
+        }
          
     }
 
 }); 
+
+
+function deleteCuenta() {
+
+    if( delete_state === 'true' ){
+
+
+        $("#cuenta-"+cuenta_eliminada).remove();
+
+        cuenta_eliminada    = null;
+        delete_state        = null;
+
+    } else {
+        console.log('no se ha eliminado');
+    }
+}
 
 function openTableDetailsModal(){
 
@@ -214,6 +388,12 @@ function openBillDetailsModal(){
     $('#bill-details').modal('show');
 } 
 
+function openPendingOrdersModal(){
+
+    $('#pending_orders').modal('show');
+} 
+
+
 function closeBillDetailsModal(){
     $('#bill-details').modal('hide');
 
@@ -225,6 +405,13 @@ function closeCreateUserModal() {
 
     $('#create-client-modal').modal('hide');
 
+    $('body').removeClass('modal-open');
+    $(".modal-backdrop").remove();
+}
+
+function closePendingOrdersModal() {
+
+    $('#pending_orders').modal('hide');
     $('body').removeClass('modal-open');
     $(".modal-backdrop").remove();
 }
