@@ -20,7 +20,7 @@
 				<h1 class="wel-title">¡Bienvenido!</h1>
 
 
-				<p>Estas ubicado en la mesa #{{ mesa.numero }}</p>
+				<p>Estas ubicado en la mesa #{{ mesa }}</p>
 				
 				<h3 class="wel-subtitle">Por Favor, ingresa tu nombre</h3>
 				<p><?php $this->flashSession->output() ?></p>

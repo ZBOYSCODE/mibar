@@ -74,9 +74,9 @@ class ScannerController extends ControllerBase
         
             foreach ($this->request->getUploadedFiles() as $file) {
                
-                $ruta = "files/qr/".$nombre.".jpg";
+                $ruta = "files/qr/".$nombre.".".$file->getExtension();
 
-
+                $mime = $file->getType();
                  
 
 
@@ -88,7 +88,23 @@ class ScannerController extends ControllerBase
                     $data['ruta'] = $ruta;
 
 
-                    //$ruta = $this->ImageResize($ruta, 200, 200);
+                   
+                    
+                    if($mime == 'image/jpeg') {
+
+                        $data['mime'] = "JPG";
+                        $image = imagecreatefromjpeg ( $ruta );
+                        $image = imagescale($image, 1000);
+                        imagejpeg($image, $ruta, 0);
+                    }
+
+                    if($mime == 'image/png') {
+                        $data['mime'] = "PNG";
+                        $image = imagecreatefrompng ( $ruta );
+                        $image = imagescale($image, 1000);
+                        imagepng($image, $ruta, 0);
+                    }
+
 
 
 
@@ -97,6 +113,8 @@ class ScannerController extends ControllerBase
                     if ( $textqr == false ){
 
                         $data['success'] = false;
+
+                        $this->flash->message("error", "Error al leer el código QR, favor intentar nuevamente.");
 
                         $this->contextRedirect("scanner/show");
                     }
@@ -119,6 +137,10 @@ class ScannerController extends ControllerBase
 
                     $data['redirect'] = $this->config->get('application')['publicUrl'].'login';
 
+                    
+
+                    // redirect to login
+
                     $this->contextRedirect('login');
                 
                 } else {
@@ -126,6 +148,7 @@ class ScannerController extends ControllerBase
                 }
             }
 
+            echo "<pre>";
             echo json_encode($data);
         }
     }

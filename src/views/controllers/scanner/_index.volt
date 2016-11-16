@@ -2,13 +2,19 @@
 
 {% block content %} 
 	<div class="card text-center card-full">
-	    <form id="form" method="POST" enctype="multipart/form-data" class="scanner-form">
+
+	    <form id="form" method="POST" enctype="multipart/form-data" class="scanner-form" action='{{ url('scanner/table') }}'>
 	        <fieldset>
 		        <div class="row">
 			    	<div class="wel-logo">
 			        	 {{ image("img/mibar.png", "alt":"Logo", "class":"img-responsive") }}
 			        </div>
 			    </div>
+				
+				<div class="row">
+					<p><?php $this->flashSession->output() ?></p>
+				</div>
+
 		        <div class="row">
 		        	<div class="col-xs-12 col-sm-6">
 		        		<h1 class="title"><b>Paso 1</b></h1>

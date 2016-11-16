@@ -648,12 +648,14 @@
         public function getMesaPorId($param)
         {
             if (!isset($param["id"])) {
+
                 $this->error[] = $this->errors->MISSING_PARAMETERS;
                 return false;
             } else {
-                $result = Mesas::findFirst("id = '{$param["id"]}'");
 
-                if (!$result->count()) {
+                $result = Mesas::findFirstById( $param["id"] );
+
+                if (!$result) {
                     $this->error[] = $this->errors->NO_RECORDS_FOUND;
                     return false;
                 }

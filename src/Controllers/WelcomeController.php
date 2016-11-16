@@ -14,6 +14,8 @@ class WelcomeController extends ControllerBase
     	#js custom
         $this->assets->addJs('js/pages/welcome.js');
 
+
+
     	if ( is_array( $this->session->get("auth-identity") )){
 
     		$this->contextRedirect("menu");
@@ -35,11 +37,17 @@ class WelcomeController extends ControllerBase
 
                 $mesa_actual = $mesa->getMesaPorId($param);
 
-                if($mesa_actual){
-                    $this->view->setVar("mesa", $mesa_actual);
+
+                if($mesa_actual !== false ){
+                    $this->view->setVar("mesa", $mesa_actual->numero );
                 }
                 else{
-                    $this->view->setVar("mesa", " - ");
+
+                    $mesa_defecto = 1;
+
+                    $this->session->set('table_id_tmp', $mesa_defecto);
+
+                    $this->view->setVar("mesa", $mesa_defecto);
                 }
 
 
