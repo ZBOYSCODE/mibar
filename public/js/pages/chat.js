@@ -46,7 +46,7 @@ $(document).ready(function(){
 	
 	socket.on('newMessage', function(data)
 	{
-		chat.append("<b>"+data.nick+'</b>: '+data.msg+"<br>");
+		chat.append("<b><i class='fa fa-chevron-right'></i> "+data.nick+'</b>: '+data.msg+"<br>");
 
 		var altura = chat.height();
 
@@ -68,8 +68,10 @@ $(document).ready(function(){
 				alink.title 	= 'usuario';
 				//alink.href		='#';
 				alink.className = 'chat_usr';
-				alink.appendChild(linkText);
-
+            var icon = document.createElement('i');
+                icon.className = 'fa fa-user';
+                alink.appendChild(icon);
+                alink.appendChild(linkText);
 			users.append(alink);
 		}
 

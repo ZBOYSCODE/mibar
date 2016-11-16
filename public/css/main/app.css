@@ -815,6 +815,78 @@ a.mis-pedidos{
     width: 80%;
   }
 
+  /* CHAT */
+  
+  .logo-chat{
+    height: 70px !important;
+  }
+
+  #contenido-chat .panel .panel-heading{
+    background-color: #521852 !important;
+    background-image: none !important; 
+    color: white; 
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  #send-message{
+    text-align: center;
+  }
+
+  #message{
+    height: 40px;
+    border-radius: 50px;
+  }
+
+  #message:focus{
+    outline: none;
+    border: none !important;
+    -webkit-box-shadow: 0px 2px 15px 0px rgba(214, 92, 192, 1);
+    -moz-box-shadow:    0px 2px 15px 0px rgba(214, 92, 192, 1);
+    box-shadow:         0px 2px 15px 0px rgba(214, 92, 192, 1);
+  }
+
+  .send-message{
+    width: 100%;
+    margin-bottom: 30px !important;
+    height: 40px;
+    border-radius: 30px;
+  }
+
+  #chat{
+    overflow: auto;
+    max-height: 250px;
+    min-height: 250px;
+    color: #521852;
+  }
+  #chat i{
+    font-size: 10px !important;
+  }
+
+  .chat_usr i{
+    margin-right: 5px;
+  }
+
+  #nickContainer{
+    margin: 0 auto;
+  }
+
+  #login-error{
+    display: none;
+    margin: 1em;
+  }
+
+  #chat_abiertos div:hover{
+    background-color: rgba(200,200,200,0.2);
+    cursor: pointer;
+  }
+
+  #users p{
+    display: block;
+    color: #521852 !important;
+    margin-bottom: 0px !important;
+    font-weight: bold;
+  }
    
 
 
