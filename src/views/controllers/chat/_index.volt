@@ -45,7 +45,7 @@
 	<input type="hidden" id='nickname' 	value='{{ username }} - Mesa {{ table }}'>
 	
 	
-	<script src="http://192.168.85.120:8000/socket.io/socket.io.js"></script> 
+	
 	
 
 {% endblock %}

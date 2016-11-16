@@ -1,5 +1,10 @@
 $(document).on('ready', function() {
 
+
+	var nodeServer = 'http://192.168.85.120:8000';
+    var socket = io.connect(nodeServer);
+
+
  	var url 	= $("#frm").val();
 
   	actualizar_info();
@@ -381,6 +386,9 @@ $(document).on('ready', function() {
 
 		fun.success(function (data)
 		{
+
+			console.log(data);
+
 			if(data.success)
 			{
 				swal({
@@ -390,6 +398,9 @@ $(document).on('ready', function() {
 					confirmButtonColor: '#521852'
 
 				}).then(function() {
+
+					socket.emit('new-order', data.cuenta );
+
 					$('#products-modal').modal('hide');
 					actualizar_info();
 				}) 

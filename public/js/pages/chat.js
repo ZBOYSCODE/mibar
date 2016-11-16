@@ -1,8 +1,5 @@
 $(document).ready(function(){
 
-	var nodeServer = 'http://192.168.85.120:8000';
-    var socket = io.connect(nodeServer);
-
 	//var socket 			= io.connect();
 	var form 			= $("#formMessage");
 	var message 		= $("#message");

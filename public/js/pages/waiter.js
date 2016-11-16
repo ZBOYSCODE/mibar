@@ -4,6 +4,8 @@ var mesa_liberada;
 
 $(document).on('ready', function() {
 
+    
+
 
 	$('.table-details-button').on('click',function(e){
 

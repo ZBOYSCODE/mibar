@@ -17,9 +17,9 @@
 
                     <div class="table-item-details">
                         <p class="title">MESA {{ mesa.numero }} </p>
-                        <p class="description">Total Pedidos: {{ pedidosTotales[mesa.id] }}</p>
-                        <p class="description">Pedidos Pendientes: {{ pedidosPendientes[mesa.id] }}</p>
-                        <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
+                        <p class="description">Total Pedidos: <span id='waiter-totalpedidos-{{mesa.id}}'>{{ pedidosTotales[mesa.id] }}</span></p>
+                        <p class="description">Pedidos Pendientes: <span id='waiter-pedidospendientes-{{mesa.id}}'>{{ pedidosPendientes[mesa.id] }}</span></p>
+                        <p id="estado" class="description">Estado: <span id='waiter-estado-{{mesa.id}}'>{{ mesa.EstadosMesa.name }}</span></p>
                     </div>  
                 </div> 
             </div>

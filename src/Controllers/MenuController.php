@@ -257,7 +257,8 @@ class MenuController extends ControllerBase
 
 	        if( $pedidos->createOrder($param) ) {
 
-	        	$data['success'] = true;
+	        	$data['cuenta'] 	= $this->session->get("auth-identity")['cuenta'];
+	        	$data['success'] 	= true;
 
 	        	$this->deleteAllPedidos();
 	        } else {

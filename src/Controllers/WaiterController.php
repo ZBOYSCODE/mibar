@@ -24,6 +24,7 @@ class WaiterController extends ControllerBase
 
     private $ID_CATEGORY_BEBIDAS = 1;
     private $ID_CATEGORY_COMIDAS = 2;
+    PRIVATE $ID_MESERO = 1; # DATO EN BRUTO !!!!!!!!!!
 
     public function initialize(){
 
@@ -50,15 +51,13 @@ class WaiterController extends ControllerBase
     */
     public function indexAction()
     {
-        //DATO EN BRUTO
-        $id_mesero = 1;
 
     	#js custom
         $this->assets->addJs('js/pages/waiter.js');
 
         $datetime = new \DateTime('now');
 
-        $paramMesas = ['funcionario_id' => $id_mesero, 
+        $paramMesas = ['funcionario_id' => $this->ID_MESERO, 
                        'fecha' => $datetime->format('Y-m-d'),
                        'turno' => $datetime->format('H:i:s')];
 
@@ -667,6 +666,47 @@ class WaiterController extends ControllerBase
 
             $this->view->disable();
         }
+    }
+
+    /**
+     * getPendingOrdersByCuenta
+     *
+     * retorna la lista de ordenes pendientes
+     *
+     * @author Sebastián Silva
+     */
+    public function getPendingOrdersByCuentaAction() {
+
+        $cuenta_id = $_POST['cuenta_id'];
+
+        $datetime = new \DateTime('now');
+
+        $paramMesas = ['funcionario_id' => $this->ID_MESERO, 
+                       'fecha' => $datetime->format('Y-m-d'),
+                       'turno' => $datetime->format('H:i:s')];
+
+        $mesas              = $this->meseroBsn->getMesas($paramMesas);
+        $pedidosPendientes  = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
+        $pedidosTotales     = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
+
+
+        $m = array();
+
+        foreach ($mesas as $key => $mesa) {
+
+            $m[$mesa->id]['estado']     = $mesa->EstadosMesa->name;
+            $m[$mesa->id]['numero']     = $mesa->numero;
+            $m[$mesa->id]['seccion']    = $mesa->seccion;
+            $m[$mesa->id]['pedidos_pendientes'] = $pedidosPendientes[$mesa->id];
+            $m[$mesa->id]['pedidosTotales'] = $pedidosTotales[$mesa->id];
+
+        }
+
+        $data = array();
+        $data['success']    = true;
+        $data['datos']      = $m;
+
+        echo json_encode($data);
 
     }
 

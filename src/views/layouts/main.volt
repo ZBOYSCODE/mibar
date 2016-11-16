@@ -51,6 +51,8 @@
         {{ javascript_include('js/plugins/mifaces.js') }}
         {{ javascript_include('js/plugins/jquery.utilidades.js') }}
 
+        <script src="http://192.168.85.120:8000/socket.io/socket.io.js"></script> 
+
         {{ assets.outputJs() }}
 
     </body>
