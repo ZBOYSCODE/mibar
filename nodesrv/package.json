@@ -1,0 +1,16 @@
+{
+	"name": "chatNodejs",
+	"version":"0.1.1",
+	"description": "Chat en Node.js",
+	"main": "app.js",
+	"author": {
+		"name": "Sebastián Silva Carrasco",
+		"email": "sebasilvac88@gmail.com"
+		},
+	"dependencies":{
+		"node":"4.0.0",
+		"express": "~3.2.4",
+		"socket.io": "~0.9.14"
+	}
+
+}

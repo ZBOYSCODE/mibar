@@ -24,6 +24,7 @@ class WaiterController extends ControllerBase
 
     private $ID_CATEGORY_BEBIDAS = 1;
     private $ID_CATEGORY_COMIDAS = 2;
+    PRIVATE $ID_MESERO = 1; # DATO EN BRUTO !!!!!!!!!!
 
     public function initialize(){
 
@@ -50,15 +51,13 @@ class WaiterController extends ControllerBase
     */
     public function indexAction()
     {
-        //DATO EN BRUTO
-        $id_mesero = 1;
 
     	#js custom
         $this->assets->addJs('js/pages/waiter.js');
 
         $datetime = new \DateTime('now');
 
-        $paramMesas = ['funcionario_id' => $id_mesero, 
+        $paramMesas = ['funcionario_id' => $this->ID_MESERO, 
                        'fecha' => $datetime->format('Y-m-d'),
                        'turno' => $datetime->format('H:i:s')];
 
@@ -106,10 +105,22 @@ class WaiterController extends ControllerBase
             $tabObj = new MeseroBSN();
             $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
+            /*
+            echo "<pre>";
+            echo json_encode($tablesDetails);
+            return false;
+            */
+
             #$estados_cuenta = $tabObj->getListEstadosCuenta();
             #$this->view->setVar("estados_cuenta",   $estados_cuenta);
 
             $cuentas = $tabObj->getCuentasByTableId($table_id);
+
+            /*
+            echo "<pre>";
+            echo json_encode($cuentas);
+            return false;
+            */
 
 
             $this->assets->addJs('js/pages/waiter.js');
@@ -186,7 +197,6 @@ class WaiterController extends ControllerBase
     * cambia estado a una serie de pedidos 
     *
     */
-
     public function validateOrdersAction(){   
 
         if($this->request->isAjax()){
@@ -222,7 +232,6 @@ class WaiterController extends ControllerBase
                         $this->mifaces->addToMsg('warning','Los pedidos no han sido cancelados correctamente!');
 
                     }
-
                 }
 
                 if($resultValidacion || $resultCancelacion){
@@ -240,10 +249,13 @@ class WaiterController extends ControllerBase
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
 
-                $tableParams = $tabObj->getMesaPorId($param);
+
+                $tableParams = $tabObj->getMesaPorId(['id' => $post['table_id']]);
         
                 $dataView['detalles'] =  $tablesDetails;
                 $dataView['Mesa'] = $tableParams;
+
+                $dataView['numeroMesa'] = $tableParams->numero;
                
                 $view = "controllers/waiter/tables/details";
              
@@ -334,23 +346,24 @@ class WaiterController extends ControllerBase
             );
             
 
-            if( $mesero->setNewClient( $param ) ) {
+            $cuenta = $mesero->setNewClient( $param );
 
-
-                
-                $this->mifaces->newFaces();
-
-                $view = "controllers/waiter/tables/details";
+            if( $cuenta !== false ) {
 
                 
-                $param['mesa_id'] = $table_id;
+                
 
+                $arr = array();
+                $arr['mesa_id'] = $table_id;
 
 
                 $tabObj = new MeseroBSN();
-                $tablesDetails = $tabObj->getDataCuentasByMesa($param);
+                $tablesDetails = $tabObj->getDataCuentasByMesa($arr);
                 
                 $dataView['detalles']   =  $tablesDetails;
+
+                $dataView['numeroMesa'] = $cuenta->Mesas->numero;
+
 
                 $dataView['cuenta_id']  = $this->request->getPost("cuenta_id", "int");
                 $dataView['table_id']   = $this->request->getPost("table_id", "int");
@@ -360,10 +373,19 @@ class WaiterController extends ControllerBase
                 $dataView['Mesa'] = $tableParams;
 
 
+
+
+                $this->mifaces->newFaces();
+
+                $view = "controllers/waiter/tables/details";
+
                 $toRend = $this->view->getPartial($view, $dataView);
 
                 $this->mifaces->addToRend('waiter_tables_details_render',$toRend);
                 $this->mifaces->run();
+
+
+
 
                 
             } else{
@@ -538,10 +560,13 @@ class WaiterController extends ControllerBase
 
                 $tabObj = new MeseroBSN();
                 $tablesDetails = $tabObj->getDataCuentasByMesa($param);
-                 $tableParams = $tabObj->getMesaPorId($param);
+
+                $tableParams = $tabObj->getMesaPorId(['id' => $post['table_id']]);
                
                 $dataView['detalles'] =  $tablesDetails;   
                 $dataView['Mesa'] = $tableParams;
+
+                $dataView['numeroMesa'] = $tableParams->numero;
 
                 $view = "controllers/waiter/tables/details";
              
@@ -574,41 +599,141 @@ class WaiterController extends ControllerBase
 
             $cuenta_id = $this->request->getPost("cuenta_id", "int");
 
-            
             $this->mifaces->newFaces();
 
             if( !empty($cuenta_id) ){
 
-
-
                 if( $this->meseroBsn->deleteCuenta($cuenta_id) ) {
 
-                    $this->mifaces->addToJsonView('delete_state', 1 );
+                    $this->mifaces->addToMsg('success','Cuenta eliminada correctamente.');
+                    $this->mifaces->addToJsonView('delete_state', "true" );
+                    $this->mifaces->addToJsonView('cuenta_eliminada', $cuenta_id );
                 } else {
 
-                    $this->mifaces->addToJsonView('delete_state', 0 );
+                    $this->mifaces->addToMsg('danger', $this->meseroBsn->error );
+                    $this->mifaces->addToJsonView('delete_state', "false" );
                 }
-
-                
-
-
-                $this->mifaces->addToMsg('success','Cuenta eliminada correctamente.');
-
             }else{
 
-                $this->mifaces->addToJsonView('delete_state', 0 );
+                $this->mifaces->addToJsonView('delete_state', "false" );
+                $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
+            }
+           
+            $this->mifaces->run();
+        } else{
+
+            $this->view->disable();
+        }
+    }
+
+    /**
+     * freetable
+     *
+     * @author Sebastián Silva 
+     */
+    public function freetableAction() {
+
+        if($this->request->isAjax()){
+
+            $table_id = $this->request->getPost("table_id", "int");
+
+            $this->mifaces->newFaces();
+
+            if( !empty($table_id) ){
+
+
+
+                if( $this->meseroBsn->freeTable($table_id) ) {
+
+                    $this->mifaces->addToMsg('success','Mesa liberada correctamente.');
+                    $this->mifaces->addToJsonView('mesa_liberada', $table_id );
+
+                } else {
+
+                    $this->mifaces->addToMsg('danger', $this->meseroBsn->error );
+                    $this->mifaces->addToJsonView('mesa_liberada', "false" );
+                }
+
+
+
+            }else{
 
                 $this->mifaces->addToMsg('danger','Error Inesperado. Refresque la página.');
             }
            
             $this->mifaces->run();
-        
         } else{
 
             $this->view->disable();
-
         }
     }
 
+    /**
+     * getPendingOrdersByCuenta
+     *
+     * retorna la lista de ordenes pendientes
+     *
+     * @author Sebastián Silva
+     */
+    public function getPendingOrdersByCuentaAction() {
+
+        $cuenta_id = $_POST['cuenta_id'];
+
+        $datetime = new \DateTime('now');
+
+        $paramMesas = ['funcionario_id' => $this->ID_MESERO, 
+                       'fecha' => $datetime->format('Y-m-d'),
+                       'turno' => $datetime->format('H:i:s')];
+
+        $mesas              = $this->meseroBsn->getMesas($paramMesas);
+        $pedidosPendientes  = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
+        $pedidosTotales     = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
+
+
+        $m = array();
+
+        foreach ($mesas as $key => $mesa) {
+
+            $m[$mesa->id]['estado']     = $mesa->EstadosMesa->name;
+            $m[$mesa->id]['numero']     = $mesa->numero;
+            $m[$mesa->id]['seccion']    = $mesa->seccion;
+            $m[$mesa->id]['pedidos_pendientes'] = $pedidosPendientes[$mesa->id];
+            $m[$mesa->id]['pedidosTotales'] = $pedidosTotales[$mesa->id];
+
+        }
+
+        $data = array();
+        $data['success']    = true;
+        $data['datos']      = $m;
+
+        echo json_encode($data);
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

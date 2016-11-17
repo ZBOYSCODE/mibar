@@ -32,6 +32,8 @@
     </head>
     <body>
 
+        <input type="hidden" id='url-proyecto' value='{{ url() }}'>
+
 
         {% block content %}
 
@@ -50,6 +52,15 @@
         {{ javascript_include('js/plugins/mifaces.js') }}
         {{ javascript_include('js/plugins/jquery.utilidades.js') }}
         {{ javascript_include('js/main/app.js') }}
+
+        <script src="http://192.168.85.120:8000/socket.io/socket.io.js"></script> 
+
+        <script>
+            var nodeServer = 'http://192.168.85.120:8000';
+            var socket = io.connect(nodeServer);
+        </script>
+
+        {{ javascript_include('js/main/realtime_function.js') }}
 
         {{ assets.outputJs() }}
     </body>

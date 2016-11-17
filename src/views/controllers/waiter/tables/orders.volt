@@ -6,16 +6,13 @@
 			        <button type="button" class="close modal-close" data-dismiss="modal">&times;</button>
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i>PEDIDOS CLIENTE</h4>
 			    </div>
-			     <div class="row user-details card">
-			    	<div class="col-xs-2 col-md-2">
-			    		{{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
-			    	</div>
-			    	<div class="col-xs-7 col-md-7">
-			    		<p>{{cuenta.Clientes.nombre}} {{cuenta.Clientes.apellido}}</p>
-			    	</div>
-			    	<div class="col-xs-3 col-md-3">
-			    		<p>Mesa: {{ cuenta.Mesas.numero }}</p>
-			    	</div>
+			    <div class="row card">
+			        <div class="pull-left nav-user-details-modal">
+			            {{ image("img/avatars/default.png", "alt":"Avatar", "class":"nav-avatar avatar-sm-card img-responsive") }}
+			            <h2 class="nav-subtitle nav-margin-left">{{cuenta.Clientes.nombre ~ " " ~ cuenta.Clientes.apellido}}</h2>
+			        </div>
+			        
+			        <h2 class="pull-right nav-subtitle"> Mesa: {{ cuenta.Mesas.numero }}</h2>
 			    </div>
 			    <div class="modal-body">
 
@@ -23,7 +20,7 @@
 
 
 		            <div class="card text-center">
-		               <h3>No hay Pedidos por Validar.</h3>
+		               <h4>No hay Pedidos por Validar.</h4>
 		            </div>
 		            </div>
 				    </div>
@@ -57,7 +54,7 @@
 							      		<p class="title">{{ title }}</p>
 							      		<div class="row">
 							      			<div class="col-xs-6 col-md-6">
-							      				<p><b><i class="fa fa-calculator"></i> Precio: </b>$<span>{{ pedido.precio }}</span></p>
+							      				<p><b><i class="fa fa-calculator"></i> Precio: </b>$ <span>{{ utility._number_format(pedido.precio) }}</span></p>
 							      			</div>
 							      			<div class="col-xs-6 col-md-6">
 							      			
@@ -78,7 +75,7 @@
 
 			<div class="menu-footer">
 				<div class="row menu-footer-buttons card">
-					<button id="btn-validar-pedidos" class="btn btn-main btnAjax" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos" data-table="{{ cuenta.mesa_id }}">VALIDAR PEDIDOS</button>
+					<button id="btn-validar-pedidos" class="btn btn-main btnSave" data-url="{{url('waiter/validateOrders')}}" data-callname="btn-validar-pedidos" data-table="{{ cuenta.mesa_id }}">VALIDAR PEDIDOS</button>
 				</div>
 			</div>	
 		    {% endif %}

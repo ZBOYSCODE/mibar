@@ -17,18 +17,19 @@
 
                     <div class="table-item-details">
                         <p class="title">MESA {{ mesa.numero }} </p>
-                        <p class="description">Total Pedidos: {{ pedidosTotales[mesa.id] }}</p>
-                        <p class="description">Pedidos Pendientes: {{ pedidosPendientes[mesa.id] }}</p>
-                        <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
-
-                        <a href="{{ url('waiter/tableDetails') }}/{{ mesa.id }}" class='btn btn-main btn-small dpull-right pull-right-top'>Detalle</a>
+                        <p class="description">Total Pedidos: <span id='waiter-totalpedidos-{{mesa.id}}'>{{ pedidosTotales[mesa.id] }}</span></p>
+                        <p class="description">Pedidos Pendientes: <span id='waiter-pedidospendientes-{{mesa.id}}'>{{ pedidosPendientes[mesa.id] }}</span></p>
+                        <p id="estado" class="description">Estado: <span id='waiter-estado-{{mesa.id}}'>{{ mesa.EstadosMesa.name }}</span></p>
                     </div>  
-                    
+                </div> 
+            </div>
+            <div class="row table-item-buttons">
+                <div class="col-xs-6 col-sm-6">
+                    <a id='btn-liberar-mesa' data-mesaid="{{ mesa.id }}" class='pull-left btn btn-main btn-small btn-release' data-url="waiter/freetable">Liberar</a>
                 </div>
-
-                {#
-                    <button type="button" data-href="{{mesa.numero}}" data-mesaid="{{ mesa.id }}" data-cuenta="{{ mesa.cuenta_id }}" class="btn btn-small btn-main pull-right table-order-button" data-url="waiter/tableDetails">Crear Pedido</button>
-                #}
+                <div class="col-xs-6 col-sm-6">
+                    <a href="{{ url('waiter/tableDetails') }}/{{ mesa.id }}" class='btn btn-main btn-small pull-right pull-right-top'>Detalle</a> 
+                </div>
             </div>
         </div>
 

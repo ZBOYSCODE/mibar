@@ -23,6 +23,8 @@
     use App\Models\SubcategoriaProductos;
     use App\Models\CategoriaProductos;
 
+    //DEFINE('PEDIDO_CANCELADO', 6);
+
     /**
      * Modelo de negocio
      *
@@ -474,7 +476,7 @@
                 $where_estado = " AND estado_id = ".$param['estado_id'];
             } else {
 
-                $where_estado = '';
+                $where_estado = ' AND estado_id != 6';# estado anulado
             }
 
             $pedidos = Pedidos::find(
@@ -485,7 +487,7 @@
             );
 
 
-            if( $pedidos->count() == 0) {
+            if( !$pedidos->count() ) {
                 $this->error[] = $this->errors->NO_RECORDS_FOUND;
                 return false;
             }
@@ -531,11 +533,14 @@
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
+
+
             $pedidosPromo = Pedidos::query()
                 ->leftJoin('App\Models\Promociones','prm.id  =
                 App\Models\Pedidos.promocion_id',   'prm')            
                 ->where("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
                 ->andWhere("App\Models\Pedidos.producto_id is NULL")
+                ->andWhere("prm.categoriaproducto_id = {$param["category_id"]}")
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
@@ -547,6 +552,8 @@
                     $val->nombre = $val->Productos->nombre;
                     $val->descripcion = $val->Productos->descripcion;
                     $val->avatar = $val->Productos->avatar;
+                    $val->mesa_id = $val->Cuentas->mesa_id;
+
                     $arr[$val->id] = $val;
 
                 }
@@ -556,6 +563,8 @@
                     $val->nombre = $val->Promociones->nombre;
                     $val->descripcion = $val->Promociones->descripcion;
                     $val->avatar = $val->Promociones->avatar;
+                    $val->mesa_id = $val->Cuentas->mesa_id;
+
                     $arr[$val->id] = $val;
 
                 }
@@ -633,7 +642,9 @@
                 return false;
             }
 
-            $pedidos = Pedidos::find("pago_id is null and cuenta_id = " . $param['cuenta_id']);
+            $pedidos = Pedidos::find("  pago_id is null 
+                                    AND estado_id != ".PEDIDO_CANCELADO."
+                                    AND cuenta_id = " . $param['cuenta_id']);
             if (!$pedidos->count()) {
                 $error[] = $this->errors->NO_RECORDS_FOUND;
                 return false;

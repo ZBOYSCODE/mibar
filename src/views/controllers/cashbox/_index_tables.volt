@@ -7,16 +7,19 @@
     <section class="section-content-top2">
         <div class="nav-filters card tables-filter">
             <div class="row">
-                <div class="col-xs-12 col-sm-12">
+
+                <div class="col-md-6 col-md-offset-3">
                     <div class="nav-filter-item">
-                        <select name="prod-categories" id="prod-categories" class="form-control">
-                            <option value="0">N° Mesa</option>
-                            <option value="0">Mesa 1</option>
-                            <option value="1">Mesa 2</option>
-                            <option value="2">Mesa 3</option>
+                        <select name="select-mesas" id="select-mesas" class="form-control">
+                            <option value="0">Todas</option>
+
+                            {% for mesa in mesas %}
+                                <option value="{{ mesa.id }}">Mesa {{ mesa.numero }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
+                
             </div>
         </div>
     </section>
@@ -41,8 +44,10 @@
                             <div class="table-item-details">
                                 <p class="title">MESA {{mesa.numero}} </p>
                                 <p id="estado" class="description">Estado: {{ mesa.EstadosMesa.name }}</p>
-                                <div class="row">
-                                    <a href="{{ url("cashbox/table/")~mesa.id }}" class="btn btn-small btn-main pull-right" data-table="{{ mesa.id }}" data-url="waiter/tableDetails">Ver Cuentas</a>
+                                <div class="row table-item-buttons">
+                                    <div class="col-xs-12 col-sm-12">
+                                       <a href="{{ url("cashbox/table/")~mesa.id }}" class="btn btn-small btn-main btn-main-margin-bottom-sm btn-font-size-sm pull-right" data-table="{{ mesa.id }}" data-url="waiter/tableDetails">Ver Cuentas</a>
+                                    </div>
                                 </div>
                             </div>
 

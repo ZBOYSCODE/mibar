@@ -1,6 +1,10 @@
 var delete_state;
+var cuenta_eliminada;
+var mesa_liberada;
 
 $(document).on('ready', function() {
+
+    
 
 
 	$('.table-details-button').on('click',function(e){
@@ -76,8 +80,19 @@ $(document).on('ready', function() {
 
             tables = $(".table-item").filter("[data-estado-mesa='"+filtroEstadoMesa+"']");
 
-            tables.show();
 
+            if(tables.length == 0) {
+
+                div = $('<div/>', {
+                    html : '<div class="table-item card text-center"><p class="title-alert">No existen elementos.</p></div>',
+                    'class' : 'alert-elementos'
+                });
+
+                $("#waiter_tables_details_render").append(div);
+            }else {
+
+                tables.show();
+            }
         } 
     
     });     
@@ -164,6 +179,10 @@ $(document).on('ready', function() {
         
         var dataIn = new FormData();
 
+
+        console.log(url)
+        console.log(table_id)
+
         $('.checkPedido').each(function(){
 
             if($(this).is(':checked')){
@@ -237,25 +256,61 @@ $(document).on('ready', function() {
     });
     
     $(document).on('click', '#delete-cuenta', function(e){
-
-        e.preventDefault();
+        
+        delete_state        = 'false';
+        cuenta_eliminada    = null;
 
         var cuenta_id   = $(this).attr('data-cuenta');
         var url         = $(this).attr('data-url');
+        
+        swal({
+            title: '¿Estás Seguro?',
+            text: "Esta acción es irreversible.",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#bd4141',
+            cancelButtonColor: '#d65cc0',
+            confirmButtonText: 'Aceptar'
+        }).then(function() {
+            //mifaces
+            var dataIn = new FormData();
+  
+            dataIn.append('cuenta_id',   cuenta_id);
+            $.callAjax(dataIn, url, $('#delete-cuenta')); 
 
-        var dataIn = new FormData();
+        });
 
-        dataIn.append('cuenta_id',   cuenta_id);
-
-        //mifaces
-        $.callAjax(dataIn, url, $(this)); 
+        e.preventDefault();
 
 
     });
 
-});
+    $(document).on('click', '#btn-liberar-mesa', function(){
+        
+        var url         = $(this).attr('data-url');
+        var table_id     = $(this).attr('data-mesaid');
 
-	
+        swal({
+            title: '¿Estás Seguro?',
+            text: "Esta acción es irreversible.",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#eb902e',
+            cancelButtonColor: '#d65cc0',
+            confirmButtonText: 'Aceptar'
+        }).then(function() {
+            //mifaces
+            var dataIn = new FormData();
+
+            dataIn.append('table_id',    table_id);
+
+            $.callAjax(dataIn, url, $('#btn-liberar-mesa')); 
+            
+        });
+
+    });
+
+});	
 
 
   /* Procedimientos Post Ajax Call */
@@ -304,9 +359,20 @@ $(document).ajaxComplete(function(event,xhr,options){
 
 }); 
 
+
 function deleteCuenta() {
-    
-    console.log(delete_state);
+
+    if( delete_state === 'true' ){
+
+
+        $("#cuenta-"+cuenta_eliminada).remove();
+
+        cuenta_eliminada    = null;
+        delete_state        = null;
+
+    } else {
+        console.log('no se ha eliminado');
+    }
 }
 
 function openTableDetailsModal(){

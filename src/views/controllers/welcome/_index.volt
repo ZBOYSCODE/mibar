@@ -20,9 +20,9 @@
 				<h1 class="wel-title">¡Bienvenido!</h1>
 
 
-				<p>Estas ubicado en la mesa #{{ mesa.numero }}</p>
+				<p>Estas ubicado en la mesa #{{ mesa }}</p>
 				
-				<h3>Por Favor, ingresa tu nombre</h3>
+				<h3 class="wel-subtitle">Por Favor, ingresa tu nombre</h3>
 				<p><?php $this->flashSession->output() ?></p>
 				<form action="acceso/login" method='POST'>
 					<div class="form-group">

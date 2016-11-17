@@ -2,6 +2,8 @@
     
     error_reporting(E_ALL);
 
+    ini_set('memory_limit', '-1');
+
     date_default_timezone_set('America/Santiago');
 
     require __DIR__ . '/../vendor/autoload.php';

@@ -8,16 +8,13 @@
 			        <h4 class="modal-title"><i class="fa fa-list-alt"></i> MI CUENTA</h4>
 			    </div>
 
-			     <div class="row user-details card">
-			    	<div class="col-xs-2 col-md-2">
-			    		{{ image("img/avatars/default.png", "alt":"", "class":"img-responsive") }}
-			    	</div>
-			    	<div class="col-xs-7 col-md-7">
-			    		<p>{{ session.get('auth-identity')['nombre'] }}</p>
-			    	</div>
-			    	<div class="col-xs-3 col-md-3">
-			    		<p>Mesa {{ session.get('auth-identity')['mesa'] }}</p>
-			    	</div>
+			    <div class="row card">
+			        <div class="pull-left nav-user-details-modal">
+			            {{ image("img/avatars/waiter.png", "alt":"Avatar", "class":"nav-avatar avatar-sm-card img-responsive") }}
+			            <h2 class="nav-subtitle">{{ session.get('auth-identity')['nombre'] }}</h2>
+			        </div>
+			        
+			        <h2 class="pull-right nav-subtitle"> Mesa: {{ session.get('auth-identity')['mesa'] }}</h2>
 			    </div>
 
 			    <div class="modal-body ">

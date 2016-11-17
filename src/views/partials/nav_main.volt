@@ -28,11 +28,12 @@
                     <li><a href=""><i class="fa fa-home"></i> Inicio</a></li>
                     <li><a href=""><i class="fa fa-list-alt"></i> Menú</a></li>
 
+                    {# 
                     <li><a href="" class='mi-cuenta' data-callName="ordersButton" data-url="{{ url( 'menu/miCuenta') }}"><i class="fa fa-calculator"></i> Mi Cuenta</a></li>
-
+                    #}
 
                     <li><a href="" class='mis-pedidos' data-callName="ordersButton" data-url="{{ url( 'menu/misPedidos') }}"><i class="fa fa-shopping-cart" ></i> Mis Pedidos</a></li>
-
+                    <li><a href="{{ url('chat') }}"><i class="fa fa-comments"></i></i> Chat</a></li>
 
                     <li><a href="{{ url( 'session/logout') }}"><i class="glyphicon glyphicon-log-out"></i> Salir </a></li>
 
