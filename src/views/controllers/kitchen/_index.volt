@@ -7,9 +7,7 @@
     <section class="section-content-top">
     <div class="row menu-types">
         <div class="col-xs-6 col-sm-6 no-col-padding">
-
-
-            <div class="menu-type-item card"  id='menu-pendientes'>
+            <div class="menu-type-item card"  id='menu-pendientes' data-callName='actualiza-ultima-revision'>
                 <button type="button" id="opcion0" class="active button-active">
                     {{ image("img/icons/bar-pendiente.png", "alt":"Promos", "class":"img-responsive") }}
                     <p>Pendientes / En Proceso</p>

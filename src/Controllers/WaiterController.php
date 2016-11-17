@@ -67,7 +67,6 @@ class WaiterController extends ControllerBase
         $pedidosPendientes  = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
         $pedidosTotales     = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
 
-        
 
         if(!$mesas)
             $mesas = array();

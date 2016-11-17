@@ -16,6 +16,7 @@ class BartenderController extends ControllerBase
 {
 
     private $constant;
+    private $CATEGORIA_BEBESTIBLE = 1;
 
     /**
      * initialize
@@ -46,7 +47,12 @@ class BartenderController extends ControllerBase
         $this->assets->addJs('js/pages/bartender.js');
 
         #traemos todos los pedidos con estado
-        $arr = $this->getData();
+        $arr = $this->getData([]);
+
+        $fecha = date('Y-m-d H:i:s');
+
+        $this->view->setVar('ultima_revision', $fecha);
+        $this->view->setVar('categoria_producto', $this->CATEGORIA_BEBESTIBLE);
 
         $this->view->setVar("orders", $arr);
         $this->view->pick("controllers/bartender/_index");
@@ -55,7 +61,7 @@ class BartenderController extends ControllerBase
     public function renderPageAction(){
 
         # traemos todos los pedidos con estado
-        $arr = $this->getData();
+        $arr = $this->getData([]);
 
         # enviamos los datos a la vista y obtenemos el html listo
         $dataView['orders'] = $arr;
@@ -64,6 +70,12 @@ class BartenderController extends ControllerBase
 
         # ejecutamos miface para renderizar
         $this->mifaces->newFaces();
+
+        $fecha = date('Y-m-d H:i:s');
+        
+        $this->mifaces->addToDataView("ultima_revision", $fecha);
+        $this->mifaces->addToDataView("categoria_producto", $this->CATEGORIA_BEBESTIBLE);
+
         $this->mifaces->addToRend('tables-content',$toRend);
         $this->mifaces->addToDataView("menuNav", "opcion1");
         $this->mifaces->run();
@@ -84,7 +96,20 @@ class BartenderController extends ControllerBase
 
     }
 
-    private function getData(){
+    /**
+     * getData
+     *
+     * @param array $param
+     */
+    private function getData($param){
+
+
+        if( isset($param['fecha_desde']) ) {
+
+            $fecha_desde = $param['fecha_desde'];
+        } else {
+            $fecha_desde = null;
+        }
 
         $param = [
             "nombre" => $this->constant->ESTADO_PEDIDO_EN_PROCESO
@@ -109,12 +134,15 @@ class BartenderController extends ControllerBase
         else {
 
             $paramOrder = [
-                "category_id"    => $category->id ,
-                "estado_id"      => $status->id
+                "category_id"   => $category->id ,
+                "estado_id"     => $status->id ,
+                "fecha_desde"   => $fecha_desde         
             ];
+            
 
             $orders_drinks_pdte = $pedidobsnObj->getOrdersByCategoryStatus($paramOrder);
-
+            
+            
         }
 
         $arr = array();
@@ -313,7 +341,57 @@ class BartenderController extends ControllerBase
             $this->defaultRedirect();
 
         }
-
     } 
 
+    /**
+     * getPendingOrders
+     *
+     * @author Sebastián Silva
+     */
+    public function getPendingOrdersAction() {
+
+        $fecha_desde = $this->request->getPost('fecha_desde');
+
+        $param = array('fecha_desde' => $fecha_desde);
+
+        $datos = $this->getData($param);
+
+        $dataView['orders'] = $datos;
+        $view = "controllers/bartender/tables/element/pedido";
+        $toRend = $this->view->getPartial($view, $dataView);
+
+        $data = array();
+        $data['ultima_revision']    = $fecha_desde;
+        $data['success']            = true;
+        $data['toRend']             = $toRend;
+
+        echo json_encode($data);
+        
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -180,12 +180,13 @@ $(document).on('ready', function() {
         var dataIn = new FormData();
 
 
-        console.log(url)
-        console.log(table_id)
 
-        $('.checkPedido').each(function(){
+        $('.checkPedido').each(function() {
 
-            if($(this).is(':checked')){
+            if($(this).is(':checked')) {
+
+
+
                 dataIn.append('pedidosValidados[]', $(this).val());   
             } else {
                 dataIn.append('pedidosNoValidados[]',$(this).val());    
@@ -327,6 +328,8 @@ $(document).ajaxComplete(function(event,xhr,options){
          }        
 
          if(options.callName == "btn-validar-pedidos"){
+
+            emitPedidosValidados();
             closeBillDetailsModal();
 
          }            
@@ -416,4 +419,9 @@ function closePendingOrdersModal() {
     $('#pending_orders').modal('hide');
     $('body').removeClass('modal-open');
     $(".modal-backdrop").remove();
+}
+
+function emitPedidosValidados() {
+
+    socket.emit('new-valid-orders', {} );
 }

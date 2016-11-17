@@ -9,18 +9,73 @@ $(document).on('ready', function() {
 	 */
 	socket.on('new-order', function(data)
 	{
+		// Vista Waiter
 		if( $("#waiter_tables_details_render").length > 0 ) {
-
-			console.log("Vista Waiter");
-			console.log("se ha creado una nueva orden");
-			
+		
 			actualizar_total_pendientes(data);
 		}
-		
-
 	});
 
 
+	/**
+	 * Vista Bartender y Kitchen
+	 *
+	 * actualiza el listado de pedidos pendientes
+	 */
+	socket.on('new-valid-orders', function(data) {
+
+		// Vista Bartender
+		if( $("#bartender_tables_details_render").length > 0 ) {
+		
+			actualizar_pedidos_pendientes(data);
+		}
+	});
+
+
+	/**
+	 * actualizar_pedidos_pendientes
+	 *
+	 * actualiza la lista de pedidos pendientes
+	 */
+	function actualizar_pedidos_pendientes(data) {
+
+		var datos = {
+			'fecha_desde' : $("#ultima-revision").val()
+		}
+
+
+		if( $("#categoria-producto").val() == 1 ) {
+
+			var ruta = url+"bartender/getPendingOrders";
+		} else {
+
+			var ruta = url+"kitchen/getPendingOrders";
+		}
+
+
+        fun = $.xajax(datos, ruta );
+
+        fun.success(function (data)
+        {
+            if(!data.success) {
+                console.log(data.msg);
+                return false;
+            }
+
+            $("#no_hay_pedidos").remove();
+
+            $("#bartender_tables_details_render").append(data.toRend);
+
+        });
+        
+	}
+
+	/**
+	 * actualizar_total_pendientes
+	 *
+	 * actualiza en vista waiter los datos de las mesas
+	 * estado, total de pedidos y pedidos pendientes
+	 */
 	function actualizar_total_pendientes(cuenta_id){
 
 		var datos = {
