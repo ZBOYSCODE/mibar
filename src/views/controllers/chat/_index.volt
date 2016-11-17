@@ -7,6 +7,9 @@
 
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
+
+					<a href="{{ url('') }}" class="btn btn-main pull-left btn-chat-salir" >Volver al Menú</a>
+						 
 					<div class="wel-logo pull-right">
 			        	 {{ image("img/mibar.png", "alt":"Logo", "class":"img-responsive logo-chat") }}
 			        </div>

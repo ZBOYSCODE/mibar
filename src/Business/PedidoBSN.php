@@ -533,7 +533,7 @@
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
-
+echo "jeje";Exit;
 
             $pedidosPromo = Pedidos::query()
                 ->leftJoin('App\Models\Promociones','prm.id  =

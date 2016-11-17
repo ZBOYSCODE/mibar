@@ -136,6 +136,12 @@ body, html {
   background-color: #d65cc0;
 }
 
+ .btn-chat-salir{
+    position: absolute;
+    top: 22px;
+ }
+  
+
 .btn-secondary{
   background-color: transparent;
   border: 2px solid #fff;
@@ -1117,7 +1123,7 @@ a.mis-pedidos{
   .table-item-details .description {
     font-size: 1em;
     margin-bottom: 5px;
-}
+  }
 
   .table-item-buttons .btn-main{
     font-size: 1em !important;
@@ -1187,6 +1193,7 @@ a.mis-pedidos{
     margin-bottom: 0px;
     margin-top: 10px;
   }
+
 
 }
 

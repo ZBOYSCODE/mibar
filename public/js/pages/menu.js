@@ -83,7 +83,7 @@ $(document).on('ready', function() {
 			if(data.success)
 			{
 
-				$.bootstrapGrowl("Carro actualizado.",{type:'success', align:'center'});
+				alertify.success("Carro actualizado");
 
 				// reset input
 				$(".input_pedidos").val(0);
@@ -92,7 +92,9 @@ $(document).on('ready', function() {
 				actualizar_precio_pedidos();
 				
 			}else{
-				$.bootstrapGrowl(data.msg,{type:'danger', align:'center'});
+				
+				alertify.error(data.msg);
+
 				$.log(data.msg);
 			}
 		});

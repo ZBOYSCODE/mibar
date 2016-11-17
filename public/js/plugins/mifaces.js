@@ -156,7 +156,9 @@ $(function(){
 			cache 		: false,
 			callName	: callName,
 			error: function (request,error) {
-				$.bootstrapGrowl('Error inesperado, repita el procedimiento.');
+				
+				alertify.error('* Error inesperado, intente nuevamente.');
+
 				if (typeof NProgress !== "undefined" && NProgress != null)
 					NProgress.done();
 			},
@@ -207,9 +209,19 @@ $(function(){
 
 					if(result.type=='msg'){
 						$.each(result.msgs, function(index, value) {
-							$.bootstrapGrowl(value, { type: index, align: 'center',width: 'auto' });
+							 //$.bootstrapGrowl(value, { type: index, align: 'center',width: 'auto' });
+
+							if( index == "warning" )
+								alertify.warning(value);
+							else if( index == "success" )
+								alertify.success(value);
+							else if( index == "danger" )
+								alertify.error(value);
+							else
+								alertify.log(value);
+
 							//console.log(index +' '+ value);
-						}); 
+						});
 					}
 
 					if(result.type=='data') {

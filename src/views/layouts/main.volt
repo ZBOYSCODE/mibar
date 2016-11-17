@@ -21,6 +21,8 @@
         {{ stylesheet_link('css/plugins/nprogress.css') }}
         {{ stylesheet_link('css/plugins/animate.css') }}
         {{ stylesheet_link('css/plugins/sweetalert2.min.css') }}
+        {{ stylesheet_link('css/plugins/alertify.core.css') }}
+        {{ stylesheet_link('css/plugins/alertify.default.css')}}
         
         {# CSS CUSTOM #}
         {{ stylesheet_link('css/main/app.css') }}
@@ -45,6 +47,7 @@
         {{ javascript_include('js/plugins/jquery.others-plugins.js') }}
         {{ javascript_include('js/plugins/sweetalert2.min.js') }}
         {{ javascript_include('js/plugins/chosen.jquery.min.js') }}
+        {{ javascript_include('js/plugins/alertify.js') }}
        
         {# CSS CUSTOM #}
         {{ javascript_include('js/main/app.js') }}

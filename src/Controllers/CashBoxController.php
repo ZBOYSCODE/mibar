@@ -381,12 +381,34 @@ class CashBoxController extends ControllerBase
                         //$this->view->setVar('cuentas', $cuentas);
                         $dataView['cuentas']    = $cuentas;
 
+
+                         // Ordenar subtotales de mayor a menor.
+                        arsort($subtotales);
+
+                        // Se ordenan y agrupan los demás campos, en base a los subtotales.
+                        foreach ($subtotales as $key => $val) {
+
+                            $cuentasGroup[$key] = [  'subtotal' => $val, 
+                                                'cliente'  => $clientes[$key],
+                                                'cantidadPedidos' => $cantidadPedidos[$key],
+                                                'cuenta' => $bills[$key]];
+
+                        }
+
                     } else {
                         $dataView['cuentas']    = false;
                         //$this->view->setVar('cuentas', false);
 
                     }
 
+
+
+
+                    if($dataView['cuentas'])
+                        $dataView['cuentasGroup']         = $cuentasGroup;
+                    else 
+                        $dataView['cuentasGroup']         = false;
+                    
 
                     $dataView['subtotales']         = $subtotales;
                     $dataView['cantidadPedidos']    = $cantidadPedidos;
