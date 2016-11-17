@@ -53,10 +53,10 @@
         {{ javascript_include('js/plugins/jquery.utilidades.js') }}
         {{ javascript_include('js/main/app.js') }}
 
-        <script src="http://127.0.0.1:8000/socket.io/socket.io.js"></script> 
+        <script src="http://192.168.85.120:8000/socket.io/socket.io.js"></script> 
 
         <script>
-            var nodeServer = 'http://127.0.0.1:8000';
+            var nodeServer = 'http://192.168.85.120:8000';
             var socket = io.connect(nodeServer);
         </script>
 

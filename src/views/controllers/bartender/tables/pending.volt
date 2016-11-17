@@ -1,4 +1,4 @@
-<div id="waiter_tables_details_render">
+<div id="bartender_tables_details_render">
 
     {% if orders == false %}
 
