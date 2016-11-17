@@ -43,13 +43,7 @@ $(document).ready(function(){
 	
 	socket.on('newMessage', function(data)
 	{
-		chat.append("<b><i class='fa fa-chevron-right'></i> "+data.nick+'</b>: '+data.msg+"<br>");
-
-		var altura = chat.height();
-
-		//console.log(altura);
-
-		chat.scrollTop(altura*1000);
+		newMsg(data.nick, data.msg);
 	});
 
 
@@ -74,6 +68,22 @@ $(document).ready(function(){
 
 	});
 
+	socket.on('loadChat', function(data){
 
+		$.each(data, function(index, mensaje){
+
+			newMsg(mensaje.nick, mensaje.msg)
+
+		});
+	});
+
+	function newMsg(nick, msg) {
+
+		chat.append("<b><i class='fa fa-chevron-right'></i> "+nick+'</b>: '+msg+"<br>");
+
+		var altura = chat.height();
+
+		chat.scrollTop(altura*1000);
+	}
 
 });

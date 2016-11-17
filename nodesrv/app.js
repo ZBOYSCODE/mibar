@@ -2,8 +2,8 @@ var express = require("express"),
 	app = express(),
 	server = require("http").createServer(app),
 	io = require("socket.io").listen(server),
-	nicknames = {};
-
+	nicknames = {},
+	chat = [];
 
 //server.listen(process.env.PORT, process.env.IP);
 server.listen(8000);
@@ -19,7 +19,17 @@ app.get("/", function(req, res){
 // cada vez que alguien se conecte se crea un nuevo socket
 io.sockets.on( ('connection'), function(socket){
 	
+
+	
+
 	socket.on('sendMessage', function(data){
+
+		var msg = {
+			'msg':data,
+			'nick': socket.nickname
+		};
+
+		chat.push(msg);
 
 		io.sockets.emit('newMessage', {msg: data, nick: socket.nickname});
 
@@ -36,6 +46,7 @@ io.sockets.on( ('connection'), function(socket){
 			nicknames[socket.nickname] = 1;
 
 			updateNickNames();
+			sendMsg();
 		}
 
 	});
@@ -65,5 +76,10 @@ io.sockets.on( ('connection'), function(socket){
 	function updateNickNames()
 	{
 		io.sockets.emit('usernames', nicknames);
+	}
+
+	function sendMsg()
+	{
+		io.sockets.emit('loadChat', chat );
 	}
 });
