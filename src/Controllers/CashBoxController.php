@@ -359,6 +359,8 @@ class CashBoxController extends ControllerBase
 
                     $cuentas = $this->cajaBsn->getListaCuentasPorPagar(array('mesa_id' => $mesa_id));
 
+                    $bills = [];
+
                     if ($cuentas) {
                         foreach ($cuentas as $var) {
                             $param = array('cuenta_id' => $var->id);
@@ -376,6 +378,8 @@ class CashBoxController extends ControllerBase
                             if (!$cantidadPedidos[$var->id]) {
                                 $cantidadPedidos[$var->id] = 0;
                             }
+
+                            $bills[$var->id] = $var;
                         }
 
                         //$this->view->setVar('cuentas', $cuentas);
@@ -408,7 +412,7 @@ class CashBoxController extends ControllerBase
                         $dataView['cuentasGroup']         = $cuentasGroup;
                     else 
                         $dataView['cuentasGroup']         = false;
-                    
+
 
                     $dataView['subtotales']         = $subtotales;
                     $dataView['cantidadPedidos']    = $cantidadPedidos;

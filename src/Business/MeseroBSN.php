@@ -603,6 +603,9 @@
                 );
 
 
+            }
+
+
                 $result = Cuentas::query()
                         ->columns(['cuenta_id' => 'App\Models\Cuentas.id',
                                    'subtotal'  => 'SUM(p.precio)',
@@ -617,16 +620,14 @@
 
                 foreach ($result as $key => $val) {
 
-                    if(isset($arr[$val->cuenta_id]) AND 
-                        $val->cantidad){
+                    if(isset($arr[$val->cuenta_id])){
 
-                        $arr[$cuenta->id]['subtotal'] = $val->subtotal;
-                        $arr[$cuenta->id]['cantidad'] = $val->cantidad;
+
+                        $arr[$val->cuenta_id]['subtotal'] = $val->subtotal;
+                        $arr[$val->cuenta_id]['cantidad'] = $val->cantidad;
                     }
 
                 }
-
-            }
 
 
             return $arr;
