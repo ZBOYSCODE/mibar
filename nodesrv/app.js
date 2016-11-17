@@ -71,6 +71,14 @@ io.sockets.on( ('connection'), function(socket){
 
 	});
 
+	socket.on('new-valid-orders', function(data) {
+
+		console.log("nuevos pedidos validados");
+		console.log(data);
+		
+		io.sockets.emit('new-valid-orders', data);
+	});
+
 
 
 	function updateNickNames()

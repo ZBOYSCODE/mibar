@@ -70,6 +70,9 @@ $(document).ready(function(){
 
 	socket.on('loadChat', function(data){
 
+
+		chat.html('');
+
 		$.each(data, function(index, mensaje){
 
 			newMsg(mensaje.nick, mensaje.msg)

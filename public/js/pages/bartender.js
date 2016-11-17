@@ -1,4 +1,6 @@
 var pedido_eliminado;
+var ultima_revision;
+var categoria_producto;
 
 $(document).on('ready', function() {
 
@@ -90,6 +92,10 @@ $(document).on('ready', function() {
 
                 renderPage();
             }
+
+            if(options.callName == "actualiza-ultima-revision") {
+                updateUltimaRevision();
+            }
         }
 
     });
@@ -135,7 +141,7 @@ $(document).on('ready', function() {
         var url = $("#url-bartender").val();
 
         //mifaces
-        $.callAjax(null, url+"/renderPage", $("#url-bartender"));  
+        $.callAjax(null, url+"/renderPage", $("#menu-pendientes") );  
     }
 
     function renderPageListos() {
@@ -146,6 +152,11 @@ $(document).on('ready', function() {
         $.callAjax(null, url+"/renderPageListos", $("#url-bartender"));  
     }
 
+    function updateUltimaRevision(){
+
+        $("#ultima-revision").val(ultima_revision);
+        $("#categoria-producto").val(categoria_producto);
+    }
 
     function openPedidoDetailsModal(){
 

@@ -393,6 +393,8 @@ $(document).on('ready', function() {
 
 			if(data.success)
 			{
+				socket.emit('new-order', data.cuenta );
+
 				swal({
 					title:'¡Pedido Concretado!',
 					text: 'Atenderemos su solicitud a la brevedad.',
@@ -400,8 +402,6 @@ $(document).on('ready', function() {
 					confirmButtonColor: '#521852'
 
 				}).then(function() {
-
-					socket.emit('new-order', data.cuenta );
 
 					$('#products-modal').modal('hide');
 					actualizar_info();

@@ -225,9 +225,11 @@ $(function(){
 					}
 
 					if(result.type=='data') {
-						var key = Object.keys(result.dataview)[0];
-						var value = result.dataview[key];
-						eval(key +" = '"+ value +"'");
+
+						$.each(result.dataview, function(key, value){
+
+							eval(key +" = '"+ value +"'");
+						});
 					}
 					
 					if(result.type=='dataSelect'){

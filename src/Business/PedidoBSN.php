@@ -521,6 +521,16 @@
             }
 
 
+            if( isset($param['fecha_desde']) ) {
+
+                $where = " App\Models\Pedidos.created_at > '{$param['fecha_desde']}' ";
+            } else {
+
+                $where = " 1=1 ";
+            }
+
+
+            //var_dump($where);
 
             $pedidosProd = Pedidos::query()
                 ->leftJoin('App\Models\Productos', 'prd.id   = App\Models\Pedidos.producto_id',    'prd')
@@ -530,6 +540,7 @@
                 ->where("cat.id = '{$param["category_id"]}' ")
                 ->andWhere("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
                 ->andWhere("App\Models\Pedidos.promocion_id is NULL")
+                ->andWhere($where)
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
@@ -541,6 +552,7 @@
                 ->where("App\Models\Pedidos.estado_id = '{$param["estado_id"]}' ")
                 ->andWhere("App\Models\Pedidos.producto_id is NULL")
                 ->andWhere("prm.categoriaproducto_id = {$param["category_id"]}")
+                ->andWhere($where)
                 ->orderBy("App\Models\Pedidos.created_at ASC")
                 ->execute();
 
