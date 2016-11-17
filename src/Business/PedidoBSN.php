@@ -569,6 +569,8 @@
 
                 }
 
+                ksort($arr);
+
                 return $arr;
 
 
