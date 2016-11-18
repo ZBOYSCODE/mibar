@@ -83,7 +83,8 @@ $(document).on('ready', function() {
 		}
 
 
-        fun = $.xajax(datos, url+"waiter/getPendingOrdersByCuenta");
+        //fun = $.xajax(datos, url+"waiter/getPendingOrdersByCuenta");
+        fun = $.xajax(datos, url+"waiter/getMesaByCuenta");
 
         fun.success(function (data)
         {
@@ -92,12 +93,27 @@ $(document).on('ready', function() {
                 return false;
             }
 
-            $.each( data.datos, function(mesa_id, mesa){
+            //actualizamos solo la mesa correspondiente y agregamos animacion
+
+            $("#waiter-totalpedidos-"+data.mesa_id).text(data.mesa.pedidosTotales);
+			$("#waiter-pedidospendientes-"+data.mesa_id).text(data.mesa.pedidos_pendientes);
+			$("#waiter-estado-"+data.mesa_id).text(data.mesa.estado);
+			
+			$("#table-item-"+data.mesa_id).addClass("item-new-socket");
+			$("#table-item-"+data.mesa_id).addClass("animated");
+			$("#table-item-"+data.mesa_id).addClass("pulse");
+
+           /* 
+           $.each( data.datos, function(mesa_id, mesa){
 
             	$("#waiter-totalpedidos-"+mesa_id).text(mesa.pedidosTotales);
 				$("#waiter-pedidospendientes-"+mesa_id).text(mesa.pedidos_pendientes);
 				$("#waiter-estado-"+mesa_id).text(mesa.estado);
+
+				$("#table-item-"+mesa_id).addClass("animated");
+				$("#table-item-"+mesa_id).addClass("pulse");
             });
+            */
 
         });
 	}

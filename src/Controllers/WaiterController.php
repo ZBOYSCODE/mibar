@@ -709,6 +709,66 @@ class WaiterController extends ControllerBase
 
     }
 
+    /**
+     * @osanmartin
+     * trae las mesas dada una cuenta
+     *
+     */
+    public function getMesaByCuentaAction() {
+
+
+        $cuenta_id = $_POST['cuenta_id'];
+
+        $datetime = new \DateTime('now');
+
+        $paramMesas = ['funcionario_id' => $this->ID_MESERO, 
+                       'fecha' => $datetime->format('Y-m-d'),
+                       'turno' => $datetime->format('H:i:s')];
+
+        $mesas              = $this->meseroBsn->getMesas($paramMesas);
+        $pedidosPendientes  = $this->meseroBsn->getPedidosPendientesMesasFuncionario($paramMesas);
+        $pedidosTotales     = $this->meseroBsn->getPedidosTotalesMesasFuncionario($paramMesas);
+
+        $paramCuenta['cuenta_id'] = $cuenta_id;
+
+        $mesaSelected       = $this->meseroBsn->getMesaByCuenta($paramCuenta);
+
+
+        $m = array();
+
+        foreach ($mesas as $key => $mesa) {
+
+            $m[$mesa->id]['estado']     = $mesa->EstadosMesa->name;
+            $m[$mesa->id]['numero']     = $mesa->numero;
+            $m[$mesa->id]['seccion']    = $mesa->seccion;
+            $m[$mesa->id]['pedidos_pendientes'] = $pedidosPendientes[$mesa->id];
+            $m[$mesa->id]['pedidosTotales'] = $pedidosTotales[$mesa->id];
+
+        }
+
+        if($mesaSelected == false){
+
+            $data = array();
+            $data['success'] = false;
+
+        }
+        else{
+            $key = $mesaSelected->getFirst()->id;
+            $mesa = $m[$key];
+
+            $data = array();
+            $data['success']   = true;
+            $data['mesa']      = $mesa;
+            $data['mesa_id']   = $key;
+        }
+
+        
+
+        echo json_encode($data);
+
+
+    }
+
 }
 
 

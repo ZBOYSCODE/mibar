@@ -13,8 +13,8 @@ use Phalcon\Mvc\User\Component;
 class Constant extends Component
 {
 
-    public $PEDIDO_BEBIDA = "Bebidas";
-    public $PEDIDO_COMIDA = "Comidas";
+    public $PEDIDO_BEBIDA = "Bebestible";
+    public $PEDIDO_COMIDA = "Comestible";
     public $ESTADO_PEDIDO_PENDIENTE    = "Pendiente";
     public $ESTADO_PEDIDO_ENTREGADO    = "Entregado";
     public $ESTADO_PEDIDO_CONCRETADO    = "Concretado";

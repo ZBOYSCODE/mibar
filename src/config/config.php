@@ -2,10 +2,10 @@
 return new \Phalcon\Config([
     'database' => [
         'adapter'  => 'Mysql',
-       'host'      => '64.79.70.108',
-       'username'  => 'testing',
-       'password'  => 'Z3nt1#.',
-       'dbname'    => 'mibar'
+       'host'      => 'localhost',//'64.79.70.108',
+       'username'  => 'root',//'testing',
+       'password'  => '',//'Z3nt1#.',
+       'dbname'    => 'mibar2'
     ],
     'application' => [
         'controllersDir'    => APP_DIR.'/controllers/',
@@ -23,7 +23,8 @@ return new \Phalcon\Config([
     'amazon' => [
         'AWSAccessKeyId'    => '',
         'AWSSecretKey'      => ''
-    ], 
+    ],
+    'socketIP' => "192.168.1.139:8000", 
     'noAuth'        => [         
         'welcome'   => array('*'    =>  true),
         'menu'      => array('*'    =>  true),

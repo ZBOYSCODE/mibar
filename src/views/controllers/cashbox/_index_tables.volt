@@ -28,7 +28,11 @@
 
         {% if mesas == false %}
 
-            <h3>No hay mesas con cuentas</h3>
+
+            <div class="table-item card">
+                <h3>No hay mesas con cuentas</h3>
+            </div>
+            
 
         {% else %}
             {% for mesa in mesas %}

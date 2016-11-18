@@ -194,6 +194,7 @@
 
 
             $mesas = $this->getMesas($param);
+
             $pedidosPendientes = $result;
 
             foreach ($mesas as $val) {
@@ -211,7 +212,9 @@
                 }
             }
 
+
             return $arr;
+
 
         }
 
@@ -242,14 +245,11 @@
                     ->where("fm.funcionario_id = {$param['funcionario_id']}")
                     ->andWhere("fm.activo = {$this->ESTADO_MESA_ACTIVA}")
                     ->andWhere("App\Models\Pedidos.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
+                    ->andWhere("c.estado <> 0")
                     ->groupBy(" m.id ")
                     ->execute();
 
 
-            if(!$result->count()){
-                $this->error[] = $this->errors->NO_RECORDS_FOUND;
-                return false;
-            }
 
             $mesas = $this->getMesas($param);
             $pedidosTotales = $result;
@@ -259,6 +259,7 @@
                 $arr[$val->id] = 0;
 
             }
+   
 
             foreach ($pedidosTotales as $key => $val) {
 
@@ -610,8 +611,8 @@
                         ->columns(['cuenta_id' => 'App\Models\Cuentas.id',
                                    'subtotal'  => 'SUM(p.precio)',
                                    'cantidad'  => 'COUNT(p.id)'] )
-                        ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")                        
                         ->leftJoin("App\Models\Pedidos","App\Models\Cuentas.id = p.cuenta_id","p")
+                        ->leftJoin("App\Models\Mesas","App\Models\Cuentas.mesa_id = m.id","m")
                         ->where("m.id = {$param['mesa_id']}")
                         ->andWhere("p.estado_id <> {$this->ESTADO_PEDIDO_CANCELADO}")
                         ->groupBy(" App\Models\Cuentas.id ")
@@ -890,7 +891,7 @@
          */
         private function existenPedidosImpagos($cuenta_id) {
 
-            $pedidos = Pedidos::find(" cuenta_id = {$cuenta_id} AND pago_id is null");
+            $pedidos = Pedidos::find(" cuenta_id = {$cuenta_id} AND pago_id is null AND estado_id <> 6");
 
             if(!$pedidos->count()) {
 
@@ -1021,6 +1022,28 @@
                 $this->error[] = "Error al liberar mesa, Intente nuevamente.";
                 return false;
             }
+        }
+
+
+
+        /**
+         * @osanmartin
+         *
+         *
+         */
+        public function getMesaByCuenta($param){
+
+            $result = Mesas::query()
+                ->leftJoin('App\Models\Cuentas','c.mesa_id = App\Models\Mesas.id','c')
+                ->where("c.id = {$param['cuenta_id']}")
+                ->execute();
+
+            if($result->count())
+                return $result;
+            else{
+                return false;
+            }
+
         }
 
     }

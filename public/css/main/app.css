@@ -620,6 +620,10 @@ div.menu-types > div:last-child{
 
 /* ================== Waiter ======================*/
 
+.item-new-socket {
+  background-color: #6f3f6f;
+}
+
 .nav-avatar{
   border-radius: 50%;
   border: 4px solid white;

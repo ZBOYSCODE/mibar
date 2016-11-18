@@ -4,7 +4,7 @@
     {% for mesa in mesas %}
 
 
-        <div class="table-item card" data-mesa="{{mesa.id}}" data-estado-mesa="{{mesa.estado_mesa_id}}">
+        <div id="table-item-{{mesa.id}}" class="table-item card" data-mesa="{{mesa.id}}" data-estado-mesa="{{mesa.estado_mesa_id}}">
             <div class="row">
 
                 <div class="col-xs-4 col-sm-4">
