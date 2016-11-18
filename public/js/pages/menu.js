@@ -1,6 +1,5 @@
 $(document).on('ready', function() {
 
-
 	//var nodeServer = 'http://192.168.85.120:8000';
     //var socket = io.connect(nodeServer);
 

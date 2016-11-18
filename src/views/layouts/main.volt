@@ -54,6 +54,7 @@
         {{ javascript_include('js/plugins/mifaces.js') }}
         {{ javascript_include('js/plugins/jquery.utilidades.js') }}
 
+
         <script src="http://{{ config.get('socketIP') }}/socket.io/socket.io.js"></script> 
 
         <script>
