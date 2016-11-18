@@ -135,12 +135,14 @@ class ScannerController extends ControllerBase
                 
                 } else {
                     $data['success'] = false;
+
+                    $this->flash->message("error", "Es necesario que subas una código QR.");
+                    $this->contextRedirect("scanner/show");
                 }
             }
 
 
-            $this->flash->message("error", "Es necesario que subas una código QR.");
-            $this->contextRedirect("scanner/show");
+            
 
             echo "<pre>";
             echo json_encode($data);
