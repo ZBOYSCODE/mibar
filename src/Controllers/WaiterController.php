@@ -156,7 +156,7 @@ class WaiterController extends ControllerBase
                 
                 $cuenta_id = $post['cuenta'];
                 $param['cuenta_id'] = $cuenta_id;
-                $param['estado_id'] = 1; 
+                $param['estado_id'] = 1;
 
 
                 $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
@@ -484,7 +484,7 @@ class WaiterController extends ControllerBase
 
                 $cuenta_id = $post['cuenta'];
                 $param['cuenta_id'] = $cuenta_id;
-                $param['estado_id'] = $status->id; 
+                $param['estado_id'] = 3; 
 
                 $pedidosCuenta  = $this->pedidoBsn->getAllOrders($param);
                 $cuenta         = $this->cajaBsn->getCuentaById($param);
