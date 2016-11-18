@@ -25,7 +25,7 @@
             </div>
             <div class="row table-item-buttons">
                 <div class="col-xs-6 col-sm-6">
-                    <a id='btn-liberar-mesa' data-mesaid="{{ mesa.id }}" class='pull-left btn btn-main btn-small btn-release' data-url="waiter/freetable">Liberar</a>
+                    <a id='btn-liberar-mesa' data-mesaid="{{ mesa.id }}" class='pull-left btn btn-main btn-small btn-release' data-url="waiter/freetable" data-callName='liberar-mesa' >Liberar</a>
                 </div>
                 <div class="col-xs-6 col-sm-6">
                     <a href="{{ url('waiter/tableDetails') }}/{{ mesa.id }}" class='btn btn-main btn-small pull-right pull-right-top'>Detalle</a> 

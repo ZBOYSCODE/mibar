@@ -1006,6 +1006,15 @@
             
 
             if ( $this->updateEstadoMesaById($table_id, $this->ESTADO_MESA_DISPONIBLE) ){
+
+                foreach ($cuentas as $cuenta) {
+                    
+                    $cuenta->estado = 0;
+                    $cuenta->save();  
+
+                }
+                             
+
                 return true;
             } else {
                 # error al liberar mesa

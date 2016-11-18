@@ -357,10 +357,24 @@ $(document).ajaxComplete(function(event,xhr,options){
         if(options.callName == 'delete-cuenta-button'){
             deleteCuenta();
         }
+
+        if(options.callName == 'liberar-mesa'){
+            liberar_mesa()
+        }
          
     }
 
 }); 
+
+
+function liberar_mesa(){
+
+    if( mesa_liberada == 'false' ){
+        return false;
+    }
+
+    $("#waiter-estado-"+mesa_liberada).text('Disponible');
+};
 
 
 function deleteCuenta() {
