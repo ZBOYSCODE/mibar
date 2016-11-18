@@ -154,6 +154,7 @@ class KitchenController extends ControllerBase
                     $arr[ $orden->created_at ][$orden->cuenta_id]['fecha2']      = date('H:i' ,strtotime( $orden->created_at));
                     $arr[ $orden->created_at ][$orden->cuenta_id]['orden'][]    = $orden;
                     $arr[ $orden->created_at ][$orden->cuenta_id]['mesa_id']    = $orden->mesa_id;
+                    $arr[ $orden->created_at ][$orden->cuenta_id]['mesa_numero']    = $orden->Cuentas->Mesas->numero;
                 }
             }
         }

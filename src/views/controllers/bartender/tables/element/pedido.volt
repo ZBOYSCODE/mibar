@@ -17,7 +17,7 @@
                 
                 
                 <div class='text-left'>
-                    <h3>Mesa {{ orden['mesa_id'] }} - {{ orden['fecha2'] }}Hrs.</h3>
+                    <h3>Mesa {{ orden['mesa_numero'] }} - {{ orden['fecha2'] }}Hrs.</h3>
                     
                 </div>
 

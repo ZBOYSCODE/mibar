@@ -3,5 +3,5 @@
     <input type="hidden" id='ultima-revision' value='{{ ultima_revision }}'>
     <input type="hidden" id='categoria-producto' value='{{ categoria_producto }}'>
     
-    {{ partial("partials/tables/element/pedido") }}
+    {{ partial("controllers/bartender/tables/element/pedido") }}
 </div>
